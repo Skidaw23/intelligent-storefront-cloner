@@ -1,16 +1,11 @@
-{% include 'shogun-content-handler' %}
 <!doctype html>
 <html class="js" lang="{{ request.locale.iso_code }}">
-<script defer src="https://shown.io/metrics/On9xlYlg9e" type="text/javascript"></script>
   <head>
- {%- render 'layouthub_header' -%}
- {%- render 'ecom_header' -%}
  {%- comment -%} INTELLIGENT STOREFRONT CLONER - ARCHITECTURE INTEGRATION {%- endcomment -%}
  {%- render 'theme-architecture-core' -%}
  {%- render 'responsive-manager' -%}
  {%- render 'performance-monitor' -%}
  {%- render 'seo-optimizer' -%}
- {%- render 'ab-testing-framework' -%}
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -54,11 +49,8 @@
       <script src="{{ 'animations.js' | asset_url }}" defer="defer"></script>
     {%- endif -%}
 
-    {%- comment -%} Royal Equips Theme Assets {%- endcomment -%}
-    <script src="{{ 'modern-core.js' | asset_url }}" defer="defer"></script>
-    <script src="{{ 'royal-constants.js' | asset_url }}" defer="defer"></script>
-    <script src="{{ 'royal-global.js' | asset_url }}" defer="defer"></script>
-    <script src="{{ 'royal-equips.js' | asset_url }}" defer="defer"></script>
+    {%- comment -%} Theme Core Assets {%- endcomment -%}
+    <script src="{{ 'global.js' | asset_url }}" defer="defer"></script>
 
     {{ content_for_header }}
 
@@ -293,16 +285,8 @@
 
     {{ 'base.css' | asset_url | stylesheet_tag }}
     
-    {%- comment -%} Royal Equips Theme Styles {%- endcomment -%}
-    {{ 'modern-base.css' | asset_url | stylesheet_tag }}
-    {{ 'royal-base.css' | asset_url | stylesheet_tag }}
-    {{ 'royal-equips.css' | asset_url | stylesheet_tag }}
-    {{ '3d-product-viewer.css' | asset_url | stylesheet_tag }}
-    {{ 'section-brand-story.css' | asset_url | stylesheet_tag }}
-    {{ 'section-hero-video.css' | asset_url | stylesheet_tag }}
-    {{ 'section-lifestyle-imagery.css' | asset_url | stylesheet_tag }}
-    {{ 'section-newsletter.css' | asset_url | stylesheet_tag }}
-    {{ 'section-product-grid.css' | asset_url | stylesheet_tag }}
+    {%- comment -%} Theme Core Styles {%- endcomment -%}
+    {{ 'base.css' | asset_url | stylesheet_tag }}
     
     <link rel="stylesheet" href="{{ 'component-cart-items.css' | asset_url }}" media="print" onload="this.media='all'">
 
@@ -422,6 +406,5 @@
     {%- if settings.cart_type == 'drawer' -%}
       <script src="{{ 'cart-drawer.js' | asset_url }}" defer="defer"></script>
     {%- endif -%}
-  {%- render "ecom_footer"-%}{%- render 'layouthub_footer' -%} 
  </body>
 </html>
