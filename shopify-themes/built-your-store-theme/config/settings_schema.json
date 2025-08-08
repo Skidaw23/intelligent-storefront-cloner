@@ -167,6 +167,45 @@
         "id": "custom_js_global",
         "label": "Global Custom JavaScript",
         "info": "Add custom JavaScript that loads globally across the theme."
+      },
+      {
+        "type": "header",
+        "content": "🧪 A/B Testing & Optimization"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_ab_testing",
+        "label": "Enable A/B Testing Framework",
+        "default": false,
+        "info": "Activate advanced A/B testing capabilities for optimization."
+      },
+      {
+        "type": "range",
+        "id": "ab_traffic_allocation",
+        "label": "Default Traffic Allocation",
+        "min": 10,
+        "max": 100,
+        "step": 10,
+        "unit": "%",
+        "default": 50,
+        "info": "Percentage of traffic to include in A/B tests by default."
+      },
+      {
+        "type": "range",
+        "id": "ab_confidence_threshold",
+        "label": "Statistical Confidence Threshold",
+        "min": 90,
+        "max": 99,
+        "step": 1,
+        "unit": "%",
+        "default": 95,
+        "info": "Required confidence level for test results."
+      },
+      {
+        "type": "text",
+        "id": "ab_analytics_endpoint",
+        "label": "Analytics Endpoint URL",
+        "info": "Custom endpoint for A/B test data collection (optional)."
       }
     ]
   },
