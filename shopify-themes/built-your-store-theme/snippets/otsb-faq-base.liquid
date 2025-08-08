@@ -1,0 +1,350 @@
+{% liquid
+  assign screen_md = 768
+  assign screen_lg = 1024
+  assign show_image = false
+  if section.settings.image != blank
+    assign show_image = true
+  endif
+  if must_image_or_placeholder == true
+    assign show_image = true
+  endif
+  if settings.heading_base_size != blank
+    assign heading_base_size = settings.heading_base_size | times: 0.0225
+  else
+    assign heading_base_size = 100 | times: 0.0225
+  endif
+  assign heading_size = section.settings.heading_size | times: 0.01 | times: heading_base_size
+  if settings.lang_direction contains request.locale.iso_code
+    assign is_rtl = true
+  else
+    assign is_rtl = false
+  endif
+%}
+{%- style -%}
+  #shopify-section-{{ section.id }} .otsb__root .otsb-rte h1,
+  #shopify-section-{{ section.id }} .otsb__root .otsb-rte h2,
+  #shopify-section-{{ section.id }} .otsb__root .otsb-rte h3,
+  #shopify-section-{{ section.id }} .otsb__root .otsb-rte h4,
+  #shopify-section-{{ section.id }} .otsb__root .otsb-rte h5,
+  #shopify-section-{{ section.id }} .otsb__root .otsb-rte h6 {
+    line-height: calc(1 + .3/max(1,var(--font-heading-scale)));
+  }
+  #shopify-section-{{ section.id }} .otsb__root .otsb-rte h1 {
+    font-size: calc(var(--font-heading-scale) * 3rem);
+    @media (min-width: {{screen_md}}px) {
+      font-size: calc(var(--font-heading-scale) * 4rem);
+    }
+  }
+  #shopify-section-{{ section.id }} .otsb__root .otsb-rte h2 {
+    font-size: calc(var(--font-heading-scale) * 2rem);
+    @media (min-width: {{screen_md}}px) {
+      font-size: calc(var(--font-heading-scale) * 2.4rem);
+    }
+  }
+  #shopify-section-{{ section.id }} .otsb__root .otsb-rte h3 {
+    font-size: calc(var(--font-heading-scale) * 1.7rem);
+    @media (min-width: {{screen_md}}px) {
+      font-size: calc(var(--font-heading-scale) * 1.8rem);
+    }
+  }
+  #shopify-section-{{ section.id }} .otsb__root .otsb-rte h4 {
+    font-size: calc(var(--font-heading-scale) * 1.5rem);
+  }
+  #shopify-section-{{ section.id }} .otsb__root .otsb-rte h5 {
+    font-size: calc(var(--font-heading-scale) * 1.2rem);
+    @media (min-width: {{screen_md}}px) {
+      font-size: calc(var(--font-heading-scale) * 1.3rem);
+    }
+  }
+  #shopify-section-{{ section.id }} .otsb__root .otsb-rte h6 {
+    font-size: 0.67em;
+  }
+  #shopify-section-{{ section.id }} .otsb__root {
+    background: {{ section.settings.background_color_light }};
+    --colors-text-link: {{ section.settings.color_text_link.red }}, {{ section.settings.color_text_link.green }}, {{ section.settings.color_text_link.blue }};
+    --colors-heading: {{ section.settings.color_heading.red }}, {{ section.settings.color_heading.green }}, {{ section.settings.color_heading.blue }};
+    --colors-line-and-border: {{ section.settings.color_line.red }}, {{ section.settings.color_line.green }}, {{ section.settings.color_line.blue }};
+  }
+  #shopify-section-{{ section.id }} .otsb__root .otsb-faq-item {
+    color: {{ section.settings.color_text }}
+  }
+
+  .otsb__root .heading--{{ section.id }} {
+    font-size: {{ heading_size | times: 0.6 }}rem;
+  }
+  @media (min-width: 768px) {
+    .otsb__root .heading--{{ section.id }} {
+      font-size: {{ heading_size }}rem;
+    }
+  }
+{%- endstyle -%}
+{% if request.design_mode %}
+  <style>
+    .otsb_nope {
+      display: none !important;
+      height: 0 !important;
+      overflow: hidden !important;
+      visibility: hidden !important;
+      width: 0 !important;
+      opacity: 0 !important;
+    }
+    ._otsb_warning {
+      position: relative;
+      box-shadow: 0rem 0.1875rem 0.0625rem -0.0625rem rgba(26, 26, 26, 0.07);
+      border-radius: 1rem;
+    }
+    ._otsb_warning::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 0;
+      box-shadow: 0.0625rem 0rem 0rem 0rem rgba(0, 0, 0, 0.13) inset, -0.0625rem 0rem 0rem 0rem rgba(0, 0, 0, 0.13) inset, 0rem -0.0625rem 0rem 0rem rgba(0, 0, 0, 0.17) inset, 0rem 0.0625rem 0rem 0rem rgba(204, 204, 204, 0.5) inset;
+      border-radius: 1rem;
+      pointer-events: none;
+      mix-blend-mode: luminosity;
+    }
+  </style>
+  <div x-data="otsb_script_require" class="page-width" style="margin-top:36px;margin-bottom:36px">
+    <div class="_otsb_warning">
+      <div style="border-top-left-radius:1rem;border-top-right-radius:1rem;border:1px solid #fcaf0a;background:#fcb827;padding:1rem">
+        <div style="align-items:center;gap:8px;display:flex;flex-direction:row;flex-wrap:nowrap;justify-content:space-between">
+          <div style="display:flex;gap:4px;flex-direction:row;flex-wrap:nowrap;justify-content:space-between">
+            <span style="display:block;height:20px;width:20px;max-height:100%;max-width:100%;margin:auto">
+              <svg viewBox="0 0 20 20" class="Polaris-Icon__Svg" focusable="false" aria-hidden="true"><path d="M10 6.75a.75.75 0 0 1 .75.75v3.5a.75.75 0 1 1-1.5 0v-3.5a.75.75 0 0 1 .75-.75Z"></path><path d="M11 13.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path><path fill-rule="evenodd" d="M10 3.5c-1.045 0-1.784.702-2.152 1.447a449.26 449.26 0 0 1-2.005 3.847l-.028.052a403.426 403.426 0 0 0-2.008 3.856c-.372.752-.478 1.75.093 2.614.57.863 1.542 1.184 2.464 1.184h7.272c.922 0 1.895-.32 2.464-1.184.57-.864.465-1.862.093-2.614-.21-.424-1.113-2.147-2.004-3.847l-.032-.061a429.497 429.497 0 0 1-2.005-3.847c-.368-.745-1.107-1.447-2.152-1.447Zm-.808 2.112c.404-.816 1.212-.816 1.616 0 .202.409 1.112 2.145 2.022 3.88a418.904 418.904 0 0 1 2.018 3.875c.404.817 0 1.633-1.212 1.633h-7.272c-1.212 0-1.617-.816-1.212-1.633.202-.408 1.113-2.147 2.023-3.883a421.932 421.932 0 0 0 2.017-3.872Z"></path></svg>
+            </span>
+            <h2 style="overflow-wrap:anywhere;word-break:normal;font-size:100%;font-weight:650;line-height:1.25;color:rgb(37,26,0)">App Embeds Are Disabled</h2>
+          </div>
+        </div>
+      </div>
+      <div style="padding:1rem;color:rgb(37,26,0)">
+        <p>To use this section, the app embeds of OT: Theme Sections must be enabled in the theme editor. Please follow these steps to activate them:</p>
+        <ul>
+          <li>In the left panel, click the last icon that says <b>“App embeds”</b>.</li>
+          <li>Enter <b>“OT”</b> on the search bar to quickly find and embed the apps from OT: Theme Sections.</li>
+          <li>Turn on the Toggle buttons of "Section Builder Script" and "Section Builder Style", then click <b>Save</b>.</li>
+        </ul>
+        <p>Please refer to the User Guide <a href="https://support.omnithemes.com/blogs/ot-theme-sections-get-started/1-embed-app-to-shopify-theme" target="_blank">here</a></p>
+        <p>For further support: feel free to contact us at <a href="mailto:support@omnithemes.com">support@omnithemes.com</a>!</p>
+      </div>
+    </div>
+  </div>
+{% endif %}
+<div class="otsb__root otsb_nope" x-data="otsb_script_1">
+{% render 'otsb-section-divider' %}
+
+<div class="pb-[{{ section.settings.padding_bottom_mobile }}px] pt-[{{ section.settings.padding_top_mobile }}px] md:pb-[{{ section.settings.padding_bottom }}px] md:pt-[{{ section.settings.padding_top }}px]">
+  {% liquid
+    assign otsb_faq_container_classes = ''
+    if section.settings.desktop_layout == "1" and show_image == false
+      assign otsb_faq_container_classes = ' pr-5 pl-5'
+      if section.settings.make_full_page_width
+        assign otsb_faq_container_classes = otsb_faq_container_classes | append: ' page-width'
+      else
+        assign otsb_faq_container_classes = otsb_faq_container_classes | append: ' max-w-3xl md:pl-0 md:pr-0'
+      endif
+    else
+      unless section.settings.make_full_page_width
+        assign otsb_faq_container_classes = otsb_faq_container_classes | append: ' page-width'
+      endunless
+    endif
+  %}
+  <div class="otsb-faq-container {{ otsb_faq_container_classes }} ml-auto mr-auto relative">
+    {% if show_image %}
+      <div class="flex gap-y-7{% if is_rtl %} ltr{% endif %}{% if section.settings.desktop_layout == "1" %} lg:gap-16{% else %} lg:gap-9{% endif %}{% if section.settings.image_alignment == "right" %} lg:flex-row-reverse{% else %} lg:flex-row{% endif %}{% if section.settings.image_alignment_mobile == "right" %} flex-col-reverse{% else %} flex-col{% endif %}">
+        {% style %}
+          @media screen and (min-width: {{ screen_lg }}px) {
+            {% if section.settings.desktop_height == 'auto' %}
+              .otsb__root .natural-image-{{ section.id }} {
+                height: 0;
+                padding-bottom: {{ 1 | divided_by: section.settings.image.aspect_ratio | times: 100 }}%
+              }
+            {% endif %}
+          }
+          {% if section.settings.mobile_height == 'auto' %}
+            @media screen and (max-width: {{ screen_lg }}px) {
+              .otsb__root .natural-image-mobile-{{ section.id }} {
+                height: 0;
+                padding-bottom: {{ 1 | divided_by: section.settings.image.aspect_ratio | times: 100 }}%
+              }
+            }
+          {% endif %}
+          .otsb__root .faq__image__{{ section.id }} {
+            height: {{ section.settings.mobile_height }};
+            @media (min-width: {{ screen_lg }}px) {
+              {% if section.settings.desktop_height == 'adapt' %}
+              height: 100%;
+              {% else %}
+              height: {{ section.settings.desktop_height }}
+              {% endif %}
+            }
+          }
+        {% endstyle %}
+        <div class="otsb-faq-image{% if section.settings.desktop_layout == "1" %} lg:w-1/2{% else %} lg:w-1/3{% endif %}">
+          {% liquid
+            assign otsb_faq_image_classes = 'relative faq__image__' | append: section.id
+            if section.settings.mobile_height == 'auto'
+              assign otsb_faq_image_classes = otsb_faq_image_classes | append: ' natural-image-mobile-' | append: section.id
+            endif
+            if section.settings.desktop_height == 'auto'
+              assign otsb_faq_image_classes = otsb_faq_image_classes | append: ' natural-image-' | append: section.id
+            endif
+          %}
+          <div class="{{ otsb_faq_image_classes }}">
+            <div class="overflow-hidden absolute top-0 left-0 h-full w-full{% if section.settings.full_width %} md:rounded-none{% else %}{% if section.settings.edges_type == 'rounded_corners' %} md:rounded-lg{% endif %}{% endif %}{% unless section.settings.full_width_mobile %}{% if section.settings.edges_type == 'rounded_corners' %} rounded-lg{% endif %}{% endunless %}">
+              <parallax-image class="h-full w-full">
+                <parallax-movement
+                  x-data="xParallax"
+                  x-intersect.once.margin.200px="load({{ settings.disable_parallax_effect }})"
+                >
+                {% if section.settings.image != blank %}
+                  <img
+                    class="w-full h-full object-cover"
+                    srcset="
+                      {{ section.settings.image | image_url: width: 450 }} 450w,
+                      {{ section.settings.image | image_url: width: 750 }} 750w,
+                      {{ section.settings.image | image_url: width: 900 }} 900w,
+                      {{ section.settings.image | image_url: width: 1100 }} 1100w,
+                      {{ section.settings.image | image_url: width: 1500 }} 1500w,
+                      {{ section.settings.image | image_url }} {{ section.settings.image.width }}w
+                    "
+                    src="{{ section.settings.image | image_url: width: 1500 }}"
+                    alt="{{ section.settings.image.alt | escape }}"
+                    loading="{% if section.settings.is_lazyload %}lazy{%  else %}eager{% endif %}"
+                    sizes="(min-width: {{screen_lg}}px){% if section.settings.full_width %} 35vw{% else %} {{ settings.page_width | divided_by: 3 }}px{% endif %}, (min-width: {{screen_md}}px) 50vw, 100vw"
+                    width="{{ section.settings.image.width }}"
+                    height="{{ section.settings.image.height }}"
+                    style="object-position: {{ section.settings.image.presentation.focal_point }}"
+                  >
+                {% else %}
+                  {{ 'image' | placeholder_svg_tag: 'otsb-faq-placeholder w-full h-full object-cover bg-[#F2F2F2] text-[#acacac]' }}
+                {% endif %}
+                </parallax-movement>
+              </parallax-image>
+            </div>
+          </div>
+        </div>
+    {% endif %}
+    {% liquid
+      assign otsb_faq_wrapper_classes = ''
+      if is_rtl
+        assign otsb_faq_wrapper_classes = 'otsb-rtl'
+      endif
+      if show_image
+        if section.settings.desktop_layout == "1"
+          assign otsb_faq_wrapper_classes = otsb_faq_wrapper_classes | append: ' lg:w-1/2'
+        else
+          assign otsb_faq_wrapper_classes = otsb_faq_wrapper_classes | append: ' lg:w-2/3'
+        endif
+      endif
+    %}
+    <div class="otsb-faq-wrapper {{ otsb_faq_wrapper_classes }}">
+      <div class="mb-5 text-{{ section.settings.heading_alignment }}{% unless section.settings.heading_alignment contains 'center' %} flex items-center{% endunless %} otsb-heading-{{ section.settings.heading_alignment }}">
+        {%- if section.settings.heading != blank -%}
+          <{{ section.settings.heading_tag }} class="heading--{{ section.id }} otsb-section-header otsb-h2 block leading-tight flex-auto otsb-p-break-words">
+            {{- section.settings.heading | escape -}}
+          </{{ section.settings.heading_tag }}>
+        {%- endif -%}
+        {%- if section.settings.show_view_all and section.settings.view_all_position == 'top' -%}
+          <div class="flex justify-center pt-0.5 pb-0.5 md:pb-2.5 md:pt-2.5">
+            <a
+              {% if section.settings.button_link %}
+                href="{{ section.settings.button_link }}"
+                {%- if section.settings.open_new_window %} target="_blank"{% endif -%}
+              {% else %}
+                role="link" aria-disabled="true"
+              {% endif %}
+              class="otsb-nav-link font-medium otsb-effect-inline relative flex items-center otsb-hover-text-link empty:otsb-hidden cursor-pointer{% if section.settings.button_link == blank %} opacity-70 hover:cursor-not-allowed{% endif %}"
+            >
+              View all FAQs
+              <span class="w-2 h-2 inline-block ml-1.5 mt-0.5 rtl:rotate-180 rtl:mr-1.5 rtl:ml-0 rtl:mt-0">
+                {% render 'otsb-icon-alls' , icon: 'icon-double-arrow' %}
+              </span>
+            </a>
+          </div>
+        {%- endif -%}
+      </div>
+
+      <div class="{% if section.settings.desktop_layout == "2" %}md:otsb-grid md:grid-cols-2 gap-x-7{% endif %}">
+        {%- for block in section.blocks -%}
+          {% if block.settings.heading and block.settings.row_content %}
+            <div
+              class="otsb-faq-item{% unless section.settings.row_background %} border-b md:pt-0{% unless forloop.index > 1 %} border-t{% endunless %}{% if forloop.index == 2 and section.settings.desktop_layout == "2" %} md:border-t{% endif %}{% endunless %}"
+              x-data="{open: false}"
+              {% if section.settings.collapsible %}
+                :class="open && 'border-[rgba(var(--colors-heading,0,0,0))]'"
+              {% endif %}
+              {{ block.shopify_attributes }}
+            >
+              <div class="p-3 md:px-4 lg:px-5 lg:py-[22px]{% if section.settings.row_background %} border-0 bg-[rgba(var(--colors-text,82,81,81),0.05)] md:mt-4{% endif %}">
+                <button
+                  class="otsb-faq-collapsible relative text-left block w-full{% if section.settings.collapsible %} cursor-pointer{% endif %} flex items-center"
+                  {% if section.settings.collapsible %}
+                    @click="open = !open"
+                  {% endif %}
+                >
+                  {%- unless block.settings.icon == 'none' -%}
+                    <div class="flex items-center">
+                      <span class="inline-block mr-2 md:mr-3 h-5 w-5 md:h-7 md:w-7 rtl:ml-2 rtl:mr-0">
+                        {% if block.settings.custom_icon == blank %}
+                          {% render 'otsb-icon-labels-bags', icon: block.settings.icon %}
+                        {% else %}
+                          {{ block.settings.custom_icon }}
+                        {% endif %}
+                      </span>
+                    </div>
+                  {%- endunless -%}
+                  <p class="{% if section.settings.desktop_layout == "1" and show_image == false and section.settings.make_full_page_width %} otsb-h3{% else %}md:text-[110%]{% endif %} min-h-[20px] md:min-h-[28px] flex items-center max-w-full{% if section.settings.collapsible %} pr-6 rtl:pl-6 rtl:pr-0{% endif %}">
+                    {{ block.settings.heading | default: block.settings.page.title }}
+                  </p>
+                  {%- if section.settings.collapsible -%}
+                    <span
+                      class="w-4 duration-300 inline-block absolute{% if settings.lang_direction contains request.locale.iso_code %} left-2 md:left-4{% else %} right-2 md:right-4{% endif %}"
+                      :class="open && 'rotate-180'"
+                    >
+                      {% render 'otsb-icon-alls', icon: 'icon-caret' %}
+                    </span>
+                  {%- endif -%}
+                </button>
+                <div
+                  class="otsb-faq-content"
+                  {% if section.settings.collapsible %}
+                    x-show="open"
+                    x-cloak
+                    x-collapse
+                  {% endif %}
+                >
+                  <div class="otsb-rte leading-normal pt-2 otsb-rte">
+                    {{ block.settings.row_content }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+        {%- endfor -%}
+      </div>
+
+      {%- if section.settings.show_view_all and section.settings.view_all_position == 'bottom' -%}
+        <div class="flex justify-center pt-4 pb-0.5 md:pb-2.5 md:pt-7">
+          <a
+            {% if section.settings.button_link %}
+              href="{{ section.settings.button_link }}"
+              {%- if section.settings.open_new_window %} target="_blank"{% endif -%}
+            {% else %}
+              role="link" aria-disabled="true"
+            {% endif %}
+            class="otsb-nav-link font-medium otsb-effect-inline relative flex items-center otsb-hover-text-link empty:otsb-hidden cursor-pointer{% if section.settings.button_link == blank %} opacity-70 hover:cursor-not-allowed{% endif %}"
+          >
+            View all FAQs<span class="w-2 h-2 inline-block ml-1.5 mt-0.5 rtl:rotate-180 rtl:mr-1.5 rtl:ml-0 rtl:mt-0">
+              {% render 'otsb-icon-alls' , icon: 'icon-double-arrow' %}
+            </span>
+          </a>
+        </div>
+      {%- endif -%}
+    </div>
+    {% if show_image %}</div>{% endif %}
+  </div>
+</div>
+</div>

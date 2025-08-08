@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": "../../Shopify-Theme-Cloner"
+		},
+		{
+			"path": ".."
+		},
+		{
+			"path": "../../Downloads/shopify-themes"
+		}
+	],
+	"settings": {
+		"powershell.cwd": "intelligent-storefront-cloner"
+	}
+}
