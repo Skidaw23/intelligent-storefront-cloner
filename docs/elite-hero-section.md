@@ -79,10 +79,10 @@ The Elite Hero section is a luxury automotive-themed hero banner inspired by the
 
 ### Files Structure
 ```
-sections/elite-hero.liquid    - Main section template
-assets/elite-hero.css         - Section styling
-assets/elite-hero.js          - Interactive functionality
-assets/royal-equips-placeholders.css - Brand placeholder styles
+shopify-themes/royal-equips-theme/sections/elite-hero.liquid    - Main section template
+shopify-themes/royal-equips-theme/assets/elite-hero.css         - Section styling
+shopify-themes/royal-equips-theme/assets/elite-hero.js          - Interactive functionality
+shopify-themes/royal-equips-theme/assets/royal-equips-placeholders.css - Brand placeholder styles
 ```
 
 ### Dependencies
