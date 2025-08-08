@@ -1,0 +1,550 @@
+{{ 'section-brand-story.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="royal-brand-story section-{{ section.id }}-padding color-{{ section.settings.color_scheme }}">
+  <div class="page-width">
+    {%- if section.settings.heading != blank or section.settings.description != blank -%}
+      <div class="royal-brand-story__header" data-reveal="fade-in">
+        {%- if section.settings.heading != blank -%}
+          <h2 class="royal-heading-1 royal-brand-story__heading">
+            {{ section.settings.heading }}
+          </h2>
+        {%- endif -%}
+        
+        {%- if section.settings.description != blank -%}
+          <div class="royal-body royal-brand-story__description">
+            {{ section.settings.description }}
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- if section.settings.layout == 'timeline' -%}
+      <div class="royal-timeline" data-reveal="slide-in-up" data-reveal-delay="200">
+        <div class="royal-timeline__track">
+          {%- for block in section.blocks -%}
+            {%- case block.type -%}
+              {%- when 'milestone' -%}
+                <div class="royal-timeline__milestone" 
+                     data-milestone-id="{{ block.id }}"
+                     data-animate-delay="{{ forloop.index | times: 200 }}">
+                  <div class="royal-timeline__marker">
+                    <div class="royal-timeline__marker-dot"></div>
+                    <div class="royal-timeline__marker-pulse"></div>
+                  </div>
+                  
+                  <div class="royal-timeline__content">
+                    <div class="royal-timeline__year royal-heading-3">
+                      {{ block.settings.year }}
+                    </div>
+                    
+                    {%- if block.settings.title != blank -%}
+                      <h3 class="royal-timeline__title royal-heading-2">
+                        {{ block.settings.title }}
+                      </h3>
+                    {%- endif -%}
+                    
+                    {%- if block.settings.description != blank -%}
+                      <div class="royal-timeline__description royal-body">
+                        {{ block.settings.description }}
+                      </div>
+                    {%- endif -%}
+                    
+                    {%- if block.settings.image != blank -%}
+                      <div class="royal-timeline__media">
+                        <img
+                          srcset="
+                            {%- if block.settings.image.width >= 375 -%}{{ block.settings.image | image_url: width: 375 }} 375w,{%- endif -%}
+                            {%- if block.settings.image.width >= 750 -%}{{ block.settings.image | image_url: width: 750 }} 750w,{%- endif -%}
+                            {%- if block.settings.image.width >= 1100 -%}{{ block.settings.image | image_url: width: 1100 }} 1100w,{%- endif -%}
+                            {{ block.settings.image | image_url }} {{ block.settings.image.width }}w
+                          "
+                          src="{{ block.settings.image | image_url: width: 750 }}"
+                          alt="{{ block.settings.image.alt | default: block.settings.title | escape }}"
+                          class="royal-timeline__image"
+                          loading="lazy"
+                          width="{{ block.settings.image.width }}"
+                          height="{{ block.settings.image.height }}"
+                        >
+                      </div>
+                    {%- endif -%}
+                    
+                    {%- if block.settings.link_text != blank and block.settings.link_url != blank -%}
+                      <div class="royal-timeline__action">
+                        <a href="{{ block.settings.link_url }}" class="royal-btn royal-btn--secondary">
+                          {{ block.settings.link_text }}
+                          <svg class="royal-btn__arrow" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                            <path d="M8.22 2.97a.75.75 0 011.06 0L13.53 7.22a.75.75 0 010 1.06L9.28 12.53a.75.75 0 01-1.06-1.06L11.69 8 8.22 4.53a.75.75 0 010-1.06z"/>
+                          </svg>
+                        </a>
+                      </div>
+                    {%- endif -%}
+                  </div>
+                </div>
+            {%- endcase -%}
+          {%- endfor -%}
+        </div>
+        
+        {%- if section.settings.show_timeline_nav -%}
+          <div class="royal-timeline__navigation">
+            <button class="royal-timeline__nav-btn royal-timeline__nav-btn--prev" aria-label="Previous milestone">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+              </svg>
+            </button>
+            <button class="royal-timeline__nav-btn royal-timeline__nav-btn--next" aria-label="Next milestone">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+              </svg>
+            </button>
+          </div>
+        {%- endif -%}
+      </div>
+    {%- else -%}
+      {%- comment -%} Grid Layout {%- endcomment -%}
+      <div class="royal-brand-story__grid royal-grid royal-grid--{{ section.settings.columns_desktop }}" 
+           data-reveal="slide-in-up" 
+           data-reveal-delay="200">
+        
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+            {%- when 'story_card' -%}
+              <div class="royal-story-card royal-card" 
+                   data-card-id="{{ block.id }}"
+                   data-animate-delay="{{ forloop.index | times: 150 }}"
+                   data-tilt>
+                
+                {%- if block.settings.image != blank -%}
+                  <div class="royal-story-card__media">
+                    <img
+                      srcset="
+                        {%- if block.settings.image.width >= 375 -%}{{ block.settings.image | image_url: width: 375 }} 375w,{%- endif -%}
+                        {%- if block.settings.image.width >= 750 -%}{{ block.settings.image | image_url: width: 750 }} 750w,{%- endif -%}
+                        {%- if block.settings.image.width >= 1100 -%}{{ block.settings.image | image_url: width: 1100 }} 1100w,{%- endif -%}
+                        {{ block.settings.image | image_url }} {{ block.settings.image.width }}w
+                      "
+                      src="{{ block.settings.image | image_url: width: 750 }}"
+                      alt="{{ block.settings.image.alt | default: block.settings.title | escape }}"
+                      class="royal-story-card__image"
+                      loading="lazy"
+                      width="{{ block.settings.image.width }}"
+                      height="{{ block.settings.image.height }}"
+                    >
+                  </div>
+                {%- endif -%}
+                
+                <div class="royal-story-card__content">
+                  {%- if block.settings.year != blank -%}
+                    <div class="royal-story-card__year royal-caption">
+                      {{ block.settings.year }}
+                    </div>
+                  {%- endif -%}
+                  
+                  {%- if block.settings.title != blank -%}
+                    <h3 class="royal-story-card__title royal-heading-3">
+                      {{ block.settings.title }}
+                    </h3>
+                  {%- endif -%}
+                  
+                  {%- if block.settings.description != blank -%}
+                    <div class="royal-story-card__description royal-body">
+                      {{ block.settings.description }}
+                    </div>
+                  {%- endif -%}
+                  
+                  {%- if block.settings.link_text != blank and block.settings.link_url != blank -%}
+                    <div class="royal-story-card__action">
+                      <a href="{{ block.settings.link_url }}" class="royal-btn royal-btn--secondary">
+                        {{ block.settings.link_text }}
+                      </a>
+                    </div>
+                  {%- endif -%}
+                </div>
+              </div>
+          {%- endcase -%}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    {%- if section.settings.show_cta -%}
+      <div class="royal-brand-story__cta" data-reveal="fade-in" data-reveal-delay="600">
+        {%- if section.settings.cta_heading != blank -%}
+          <h3 class="royal-heading-2 royal-brand-story__cta-heading">
+            {{ section.settings.cta_heading }}
+          </h3>
+        {%- endif -%}
+        
+        {%- if section.settings.cta_description != blank -%}
+          <div class="royal-body royal-brand-story__cta-description">
+            {{ section.settings.cta_description }}
+          </div>
+        {%- endif -%}
+        
+        {%- if section.settings.cta_button_text != blank -%}
+          <div class="royal-brand-story__cta-action">
+            <a href="{{ section.settings.cta_button_url }}" 
+               class="royal-btn royal-btn--{{ section.settings.cta_button_style }}"
+               data-magnetic>
+              {{ section.settings.cta_button_text }}
+              <svg class="royal-btn__arrow" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M8.22 2.97a.75.75 0 011.06 0L13.53 7.22a.75.75 0 010 1.06L9.28 12.53a.75.75 0 01-1.06-1.06L11.69 8 8.22 4.53a.75.75 0 010-1.06z"/>
+              </svg>
+            </a>
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const timeline = document.querySelector('.royal-timeline');
+    if (!timeline) return;
+
+    // Timeline navigation
+    const navBtns = timeline.querySelectorAll('.royal-timeline__nav-btn');
+    const milestones = timeline.querySelectorAll('.royal-timeline__milestone');
+    let currentIndex = 0;
+
+    function showMilestone(index) {
+      milestones.forEach((milestone, i) => {
+        milestone.classList.toggle('active', i === index);
+      });
+      
+      // Smooth scroll to milestone
+      if (milestones[index]) {
+        milestones[index].scrollIntoView({
+          behavior: 'smooth',
+          block: 'center',
+          inline: 'center'
+        });
+      }
+    }
+
+    // Navigation button handlers
+    navBtns.forEach(btn => {
+      btn.addEventListener('click', function() {
+        if (this.classList.contains('royal-timeline__nav-btn--prev')) {
+          currentIndex = Math.max(0, currentIndex - 1);
+        } else {
+          currentIndex = Math.min(milestones.length - 1, currentIndex + 1);
+        }
+        showMilestone(currentIndex);
+        
+        // Update navigation button states
+        navBtns[0].disabled = currentIndex === 0;
+        navBtns[1].disabled = currentIndex === milestones.length - 1;
+      });
+    });
+
+    // Initialize timeline
+    if (milestones.length > 0) {
+      showMilestone(0);
+      navBtns[0].disabled = true;
+      navBtns[1].disabled = milestones.length <= 1;
+    }
+
+    // Auto-advance timeline (optional)
+    if (timeline.dataset.autoAdvance === 'true') {
+      setInterval(() => {
+        if (currentIndex < milestones.length - 1) {
+          currentIndex++;
+          showMilestone(currentIndex);
+        } else {
+          currentIndex = 0;
+          showMilestone(currentIndex);
+        }
+        
+        // Update nav buttons
+        navBtns[0].disabled = currentIndex === 0;
+        navBtns[1].disabled = currentIndex === milestones.length - 1;
+      }, 5000);
+    }
+
+    // Intersection observer for milestone animations
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.3 });
+
+    milestones.forEach(milestone => {
+      observer.observe(milestone);
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Brand Story",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "default": "Our Heritage",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "default": "<p>Discover the journey that shaped Royal Equips into the premium automotive technology brand we are today.</p>",
+      "label": "Description"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "options": [
+        {
+          "value": "timeline",
+          "label": "Timeline"
+        },
+        {
+          "value": "grid",
+          "label": "Grid"
+        }
+      ],
+      "default": "timeline",
+      "label": "Layout style"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 3,
+      "label": "Number of columns (grid layout)",
+      "info": "Only applies to grid layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_timeline_nav",
+      "default": true,
+      "label": "Show timeline navigation",
+      "info": "Only applies to timeline layout"
+    },
+    {
+      "type": "header",
+      "content": "Call to Action"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cta",
+      "default": true,
+      "label": "Show call to action section"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "cta_heading",
+      "default": "Join Our Journey",
+      "label": "CTA heading"
+    },
+    {
+      "type": "richtext",
+      "id": "cta_description",
+      "default": "<p>Experience the future of automotive excellence with Royal Equips premium products.</p>",
+      "label": "CTA description"
+    },
+    {
+      "type": "text",
+      "id": "cta_button_text",
+      "default": "Shop Now",
+      "label": "CTA button text"
+    },
+    {
+      "type": "url",
+      "id": "cta_button_url",
+      "label": "CTA button URL"
+    },
+    {
+      "type": "select",
+      "id": "cta_button_style",
+      "options": [
+        {
+          "value": "primary",
+          "label": "Primary"
+        },
+        {
+          "value": "secondary",
+          "label": "Secondary"
+        },
+        {
+          "value": "metallic",
+          "label": "Metallic"
+        }
+      ],
+      "default": "primary",
+      "label": "CTA button style"
+    },
+    {
+      "type": "header",
+      "content": "Section Settings"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "background-1"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 80
+    }
+  ],
+  "blocks": [
+    {
+      "type": "milestone",
+      "name": "Timeline Milestone",
+      "settings": [
+        {
+          "type": "text",
+          "id": "year",
+          "default": "2020",
+          "label": "Year"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "title",
+          "default": "Company Founded",
+          "label": "Title"
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "default": "<p>Royal Equips was born from a vision to revolutionize automotive technology and deliver premium solutions to discerning drivers.</p>",
+          "label": "Description"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "link_text",
+          "label": "Link text"
+        },
+        {
+          "type": "url",
+          "id": "link_url",
+          "label": "Link URL"
+        }
+      ]
+    },
+    {
+      "type": "story_card",
+      "name": "Story Card",
+      "settings": [
+        {
+          "type": "text",
+          "id": "year",
+          "label": "Year"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "title",
+          "default": "Innovation Story",
+          "label": "Title"
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "default": "<p>A milestone moment in our journey of excellence and innovation.</p>",
+          "label": "Description"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "link_text",
+          "label": "Link text"
+        },
+        {
+          "type": "url",
+          "id": "link_url",
+          "label": "Link URL"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Brand Story",
+      "blocks": [
+        {
+          "type": "milestone",
+          "settings": {
+            "year": "2020",
+            "title": "Company Founded",
+            "description": "<p>Royal Equips was born from a vision to revolutionize automotive technology.</p>"
+          }
+        },
+        {
+          "type": "milestone",
+          "settings": {
+            "year": "2021",
+            "title": "First Innovation",
+            "description": "<p>Launched our groundbreaking precision engineering solutions.</p>"
+          }
+        },
+        {
+          "type": "milestone",
+          "settings": {
+            "year": "2023",
+            "title": "Global Expansion",
+            "description": "<p>Expanded internationally, bringing premium quality worldwide.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

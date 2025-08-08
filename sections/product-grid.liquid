@@ -1,0 +1,496 @@
+{{ 'section-product-grid.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="royal-product-grid section-{{ section.id }}-padding color-{{ section.settings.color_scheme }}">
+  <div class="page-width">
+    {%- if section.settings.heading != blank or section.settings.description != blank -%}
+      <div class="royal-product-grid__header" data-reveal="fade-in">
+        {%- if section.settings.heading != blank -%}
+          <h2 class="royal-heading-1 royal-product-grid__heading">
+            {{ section.settings.heading }}
+          </h2>
+        {%- endif -%}
+        
+        {%- if section.settings.description != blank -%}
+          <div class="royal-body royal-product-grid__description">
+            {{ section.settings.description }}
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="royal-product-grid__content">
+      {%- if section.settings.collection != blank and section.settings.collection.products.size > 0 -%}
+        {%- assign products = section.settings.collection.products -%}
+        {%- if section.settings.products_to_show > 0 -%}
+          {%- assign products = products | slice: 0, section.settings.products_to_show -%}
+        {%- endif -%}
+        
+        <div class="royal-product-grid__grid royal-grid royal-grid--{{ section.settings.columns_desktop }}" 
+             data-columns-mobile="{{ section.settings.columns_mobile }}"
+             data-reveal="slide-in-up" 
+             data-reveal-delay="200">
+          
+          {%- for product in products -%}
+            <div class="royal-product-card" 
+                 data-product-id="{{ product.id }}"
+                 data-animate-delay="{{ forloop.index | times: 100 }}">
+              
+              <div class="royal-product-card__media" data-tilt>
+                <a href="{{ product.url }}" class="royal-product-card__link">
+                  {%- if product.featured_media -%}
+                    {%- assign image_alt = product.featured_media.alt | default: product.title | escape -%}
+                    <img
+                      srcset="
+                        {%- if product.featured_media.width >= 165 -%}{{ product.featured_media | image_url: width: 165 }} 165w,{%- endif -%}
+                        {%- if product.featured_media.width >= 360 -%}{{ product.featured_media | image_url: width: 360 }} 360w,{%- endif -%}
+                        {%- if product.featured_media.width >= 533 -%}{{ product.featured_media | image_url: width: 533 }} 533w,{%- endif -%}
+                        {%- if product.featured_media.width >= 720 -%}{{ product.featured_media | image_url: width: 720 }} 720w,{%- endif -%}
+                        {%- if product.featured_media.width >= 940 -%}{{ product.featured_media | image_url: width: 940 }} 940w,{%- endif -%}
+                        {%- if product.featured_media.width >= 1066 -%}{{ product.featured_media | image_url: width: 1066 }} 1066w,{%- endif -%}
+                        {{ product.featured_media | image_url }} {{ product.featured_media.width }}w
+                      "
+                      src="{{ product.featured_media | image_url: width: 533 }}"
+                      sizes="(min-width: {{ settings.page_width }}px) {{ settings.page_width | minus: 130 | divided_by: 4 }}px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)"
+                      alt="{{ image_alt }}"
+                      class="royal-product-card__image"
+                      loading="lazy"
+                      width="{{ product.featured_media.width }}"
+                      height="{{ product.featured_media.height }}"
+                    >
+                    
+                    {%- comment -%} Hover image {%- endcomment -%}
+                    {%- if product.media.size > 1 and section.settings.show_hover_image -%}
+                      <img
+                        srcset="
+                          {%- if product.media[1].width >= 165 -%}{{ product.media[1] | image_url: width: 165 }} 165w,{%- endif -%}
+                          {%- if product.media[1].width >= 360 -%}{{ product.media[1] | image_url: width: 360 }} 360w,{%- endif -%}
+                          {%- if product.media[1].width >= 533 -%}{{ product.media[1] | image_url: width: 533 }} 533w,{%- endif -%}
+                          {%- if product.media[1].width >= 720 -%}{{ product.media[1] | image_url: width: 720 }} 720w,{%- endif -%}
+                          {{ product.media[1] | image_url }} {{ product.media[1].width }}w
+                        "
+                        src="{{ product.media[1] | image_url: width: 533 }}"
+                        alt="{{ product.media[1].alt | default: product.title | escape }}"
+                        class="royal-product-card__image royal-product-card__image--hover"
+                        loading="lazy"
+                        width="{{ product.media[1].width }}"
+                        height="{{ product.media[1].height }}"
+                      >
+                    {%- endif -%}
+                  {%- else -%}
+                    {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg royal-product-card__image' }}
+                  {%- endif -%}
+                </a>
+
+                {%- comment -%} Product badges {%- endcomment -%}
+                <div class="royal-product-card__badges">
+                  {%- if product.compare_at_price > product.price -%}
+                    <span class="royal-badge royal-badge--sale">
+                      {{ 'products.product.on_sale' | t }}
+                    </span>
+                  {%- endif -%}
+                  
+                  {%- if product.available == false -%}
+                    <span class="royal-badge royal-badge--sold-out">
+                      {{ 'products.product.sold_out' | t }}
+                    </span>
+                  {%- endif -%}
+                  
+                  {%- for tag in product.tags -%}
+                    {%- if tag contains 'badge:' -%}
+                      {%- assign badge_text = tag | remove: 'badge:' -%}
+                      <span class="royal-badge royal-badge--custom">
+                        {{ badge_text }}
+                      </span>
+                      {%- break -%}
+                    {%- endif -%}
+                  {%- endfor -%}
+                </div>
+
+                {%- comment -%} Quick actions {%- endcomment -%}
+                <div class="royal-product-card__actions">
+                  {%- if section.settings.enable_quick_view -%}
+                    <button class="royal-product-action royal-product-action--quickview" 
+                            data-product-id="{{ product.id }}"
+                            aria-label="{{ 'products.product.quick_view' | t: product: product.title }}">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+                      </svg>
+                    </button>
+                  {%- endif -%}
+                  
+                  {%- if section.settings.enable_wishlist -%}
+                    <button class="royal-product-action royal-product-action--wishlist" 
+                            data-product-id="{{ product.id }}"
+                            aria-label="{{ 'products.product.add_to_wishlist' | t: product: product.title }}">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                      </svg>
+                    </button>
+                  {%- endif -%}
+
+                  {%- if section.settings.enable_quick_add and product.available -%}
+                    <button class="royal-product-action royal-product-action--add-to-cart" 
+                            data-product-id="{{ product.id }}"
+                            data-variant-id="{{ product.selected_or_first_available_variant.id }}"
+                            aria-label="{{ 'products.product.add_to_cart' | t: product: product.title }}">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M7 4V2C7 1.45 7.45 1 8 1H16C16.55 1 17 1.45 17 2V4H20C20.55 4 21 4.45 21 5S20.55 6 20 6H19V19C19 20.1 18.1 21 17 21H7C5.9 21 5 20.1 5 19V6H4C3.45 6 3 5.55 3 5S3.45 4 4 4H7ZM9 3V4H15V3H9ZM7 6V19H17V6H7Z"/>
+                      </svg>
+                    </button>
+                  {%- endif -%}
+                </div>
+
+                {%- comment -%} 3D Model indicator {%- endcomment -%}
+                {%- if product.media contains 'model' -%}
+                  <div class="royal-product-card__3d-indicator">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                    </svg>
+                    <span>3D</span>
+                  </div>
+                {%- endif -%}
+              </div>
+
+              <div class="royal-product-card__info">
+                {%- if section.settings.show_vendor and product.vendor != blank -%}
+                  <div class="royal-product-card__vendor royal-caption">
+                    {{ product.vendor }}
+                  </div>
+                {%- endif -%}
+
+                <h3 class="royal-product-card__title royal-heading-3">
+                  <a href="{{ product.url }}" class="royal-product-card__title-link">
+                    {{ product.title }}
+                  </a>
+                </h3>
+
+                {%- if section.settings.show_description and product.description != blank -%}
+                  <div class="royal-product-card__description royal-body">
+                    {{ product.description | truncate: 100 }}
+                  </div>
+                {%- endif -%}
+
+                <div class="royal-product-card__price">
+                  {% render 'price', product: product, use_variant: true, show_badges: false %}
+                </div>
+
+                {%- if section.settings.show_rating -%}
+                  <div class="royal-product-card__rating">
+                    {%- render 'product-rating', product: product -%}
+                  </div>
+                {%- endif -%}
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+
+        {%- if section.settings.show_view_all and section.settings.collection -%}
+          <div class="royal-product-grid__view-all" data-reveal="fade-in" data-reveal-delay="400">
+            <a href="{{ section.settings.collection.url }}" class="royal-btn royal-btn--secondary">
+              {{ section.settings.view_all_text | default: 'View All Products' }}
+              <svg class="royal-btn__arrow" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M8.22 2.97a.75.75 0 011.06 0L13.53 7.22a.75.75 0 010 1.06L9.28 12.53a.75.75 0 01-1.06-1.06L11.69 8 8.22 4.53a.75.75 0 010-1.06z"/>
+              </svg>
+            </a>
+          </div>
+        {%- endif -%}
+      {%- else -%}
+        <div class="royal-product-grid__placeholder">
+          <div class="royal-grid royal-grid--4">
+            {%- for i in (1..8) -%}
+              <div class="royal-product-card royal-product-card--placeholder" data-animate-delay="{{ forloop.index | times: 100 }}">
+                <div class="royal-product-card__media">
+                  {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                </div>
+                <div class="royal-product-card__info">
+                  <h3 class="royal-product-card__title royal-heading-3">Sample Product {{ i }}</h3>
+                  <div class="royal-product-card__price">$99.99</div>
+                </div>
+              </div>
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const productGrid = document.querySelector('.royal-product-grid');
+    if (!productGrid) return;
+
+    // Quick view functionality
+    const quickViewButtons = productGrid.querySelectorAll('.royal-product-action--quickview');
+    quickViewButtons.forEach(button => {
+      button.addEventListener('click', function(e) {
+        e.preventDefault();
+        const productId = this.dataset.productId;
+        if (window.RoyalEquips && window.RoyalEquips.prototype.openQuickView) {
+          window.RoyalEquips.prototype.openQuickView(productId);
+        }
+      });
+    });
+
+    // Quick add to cart functionality
+    const addToCartButtons = productGrid.querySelectorAll('.royal-product-action--add-to-cart');
+    addToCartButtons.forEach(button => {
+      button.addEventListener('click', function(e) {
+        e.preventDefault();
+        const variantId = this.dataset.variantId;
+        
+        // Show loading state
+        this.classList.add('loading');
+        
+        // Add to cart
+        fetch('/cart/add.js', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            id: variantId,
+            quantity: 1
+          })
+        })
+        .then(response => response.json())
+        .then(data => {
+          this.classList.remove('loading');
+          // Trigger cart update event
+          if (window.theme && window.theme.PubSub) {
+            window.theme.PubSub.publish(window.theme.PubSub.EVENTS.CART_UPDATED, data);
+          }
+          
+          // Show success feedback
+          this.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>';
+          setTimeout(() => {
+            this.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4V2C7 1.45 7.45 1 8 1H16C16.55 1 17 1.45 17 2V4H20C20.55 4 21 4.45 21 5S20.55 6 20 6H19V19C19 20.1 18.1 21 17 21H7C5.9 21 5 20.1 5 19V6H4C3.45 6 3 5.55 3 5S3.45 4 4 4H7ZM9 3V4H15V3H9ZM7 6V19H17V6H7Z"/></svg>';
+          }, 2000);
+        })
+        .catch(error => {
+          this.classList.remove('loading');
+          console.error('Error adding to cart:', error);
+        });
+      });
+    });
+
+    // Wishlist functionality
+    const wishlistButtons = productGrid.querySelectorAll('.royal-product-action--wishlist');
+    wishlistButtons.forEach(button => {
+      button.addEventListener('click', function(e) {
+        e.preventDefault();
+        const productId = this.dataset.productId;
+        
+        // Toggle wishlist state
+        this.classList.toggle('active');
+        
+        // Store wishlist in localStorage
+        let wishlist = JSON.parse(localStorage.getItem('royal-wishlist') || '[]');
+        if (this.classList.contains('active')) {
+          wishlist.push(productId);
+        } else {
+          wishlist = wishlist.filter(id => id !== productId);
+        }
+        localStorage.setItem('royal-wishlist', JSON.stringify(wishlist));
+      });
+    });
+
+    // Initialize wishlist states
+    const wishlist = JSON.parse(localStorage.getItem('royal-wishlist') || '[]');
+    wishlistButtons.forEach(button => {
+      const productId = button.dataset.productId;
+      if (wishlist.includes(productId)) {
+        button.classList.add('active');
+      }
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Product Grid",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "default": "Featured Products",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "default": "<p>Discover our premium collection of automotive technology and accessories.</p>",
+      "label": "Description"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 2,
+      "max": 50,
+      "step": 1,
+      "default": 8,
+      "label": "Maximum products to show",
+      "info": "Set to 0 to show all products"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "default": 4,
+      "label": "Number of columns on desktop"
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "options": [
+        {
+          "value": "1",
+          "label": "1 column"
+        },
+        {
+          "value": "2",
+          "label": "2 columns"
+        }
+      ],
+      "default": "2",
+      "label": "Number of columns on mobile"
+    },
+    {
+      "type": "header",
+      "content": "Product Card Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "default": false,
+      "label": "Show vendor"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_description",
+      "default": false,
+      "label": "Show product description"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_rating",
+      "default": true,
+      "label": "Show product rating",
+      "info": "To display a rating, add a product rating app. [Learn more](https://help.shopify.com/manual/online-store/themes/theme-structure/theme-features#featured-product-rating)"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_hover_image",
+      "default": true,
+      "label": "Show second image on hover"
+    },
+    {
+      "type": "header",
+      "content": "Interactive Features"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_quick_view",
+      "default": true,
+      "label": "Enable quick view"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_quick_add",
+      "default": true,
+      "label": "Enable quick add to cart"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_wishlist",
+      "default": true,
+      "label": "Enable wishlist"
+    },
+    {
+      "type": "header",
+      "content": "Call to Action"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "default": true,
+      "label": "Show 'View all' button"
+    },
+    {
+      "type": "text",
+      "id": "view_all_text",
+      "default": "View All Products",
+      "label": "View all button text"
+    },
+    {
+      "type": "header",
+      "content": "Section Settings"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "background-1"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 80
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Grid"
+    }
+  ]
+}
+{% endschema %}
