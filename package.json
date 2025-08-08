@@ -1,0 +1,18 @@
+{
+  "name": "shopify-mcp-server",
+  "version": "1.0.0",
+  "description": "Local server for deploying the 3D scroll product section to Shopify.",
+  "main": "mcp_shopify_server.js",
+  "scripts": {
+    "start": "node mcp_shopify_server.js"
+  },
+  "dependencies": {
+    "chokidar": "^3.5.3",
+    "dotenv": "^16.1.4",
+    "express": "^4.18.2",
+    "node-fetch": "^3.3.2"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

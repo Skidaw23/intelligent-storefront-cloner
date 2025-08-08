@@ -1,0 +1,77 @@
+{% comment %}
+  Product 3D Scroll Showcase section
+
+  This section renders a scroll-driven 3D product viewer.  A sequence of images
+  stored in your theme's assets folder is loaded lazily and animated as the user
+  scrolls through the page.  Each frame should be named sequentially as
+  `frame1.jpg`, `frame2.jpg`, … up to the total number of frames specified in
+  the section settings.  Place all frames in a folder under `/assets`.
+
+  Section settings:
+    - frames_path: relative folder path under the assets directory containing
+      your image sequence (e.g. "product_frames/earbuds").
+    - frame_count: how many frames are in your sequence.
+    - enable_touch_drag: enable rotation by dragging on touch devices.
+
+  The base URL for the frames is computed at render time using the first frame
+  path, and passed to the JavaScript through a data attribute.
+{% endcomment %}
+
+<link rel="stylesheet" href="{{ 'product-3d-scroll.css' | asset_url }}" />
+{% assign first_frame_path = section.settings.frames_path | append: '/frame1.jpg' %}
+{% assign base_url = first_frame_path | asset_url | replace: 'frame1.jpg', '' %}
+<section id="product-3d-scroll-{{ section.id }}" class="product-3d-scroll-wrapper">
+  <div
+    class="scroll-frames"
+    data-frame-count="{{ section.settings.frame_count }}"
+    data-base-url="{{ base_url }}"
+    data-section-id="{{ section.id }}"
+  >
+    <img
+      alt="{{ product.title }} rotation frame"
+      width="100%"
+      height="auto"
+      loading="lazy"
+    />
+  </div>
+</section>
+
+<script src="{{ 'product-3d-scroll.js' | asset_url }}" defer></script>
+{% if section.settings.enable_touch_drag %}
+  <script>
+    window['product3dTouch{{ section.id }}'] = true;
+  </script>
+{% endif %}
+
+{% schema %}
+{
+  "name": "3D Scroll Product Showcase",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "frames_path",
+      "label": "Frames folder path",
+      "default": "product_frames/earbuds"
+    },
+    {
+      "type": "number",
+      "id": "frame_count",
+      "label": "Number of frames",
+      "default": 36
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_touch_drag",
+      "label": "Enable touch drag to rotate",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "3D Scroll Product Showcase",
+      "category": "Product"
+    }
+  ]
+}
+{% endschema %}

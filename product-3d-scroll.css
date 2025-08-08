@@ -1,0 +1,26 @@
+/* Styles for the 3D scroll product showcase */
+.product-3d-scroll-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.product-3d-scroll-wrapper .scroll-frames {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.product-3d-scroll-wrapper img {
+  width: 100%;
+  height: auto;
+  max-height: 100vh;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+}
