@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "allowJs": true,
+    "outDir": "./assets",
+    "rootDir": "./assets",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "declaration": false,
+    "declarationMap": false,
+    "sourceMap": true,
+    "removeComments": true,
+    "noEmitOnError": true,
+    "paths": {
+      "@/*": ["./assets/*"],
+      "@components/*": ["./assets/ts/components/*"],
+      "@utils/*": ["./assets/ts/utils/*"],
+      "@types/*": ["./assets/ts/types/*"]
+    }
+  },
+  "include": [
+    "assets/ts/**/*",
+    "assets/js/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "assets/**/*.bundle.js",
+    "assets/**/*.min.js"
+  ]
+}

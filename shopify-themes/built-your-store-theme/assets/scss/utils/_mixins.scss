@@ -1,0 +1,281 @@
+// =============================================================================
+// ROLEX LUXURY MIXINS - Advanced Design Patterns
+// =============================================================================
+
+// Responsive Breakpoint Mixin
+@mixin rolex-media($breakpoint) {
+  @if map-has-key($rolex-breakpoints, $breakpoint) {
+    $breakpoint-value: map-get($rolex-breakpoints, $breakpoint);
+    
+    @if $breakpoint-value == 0 {
+      @content;
+    } @else {
+      @media (min-width: $breakpoint-value) {
+        @content;
+      }
+    }
+  } @else {
+    @warn "Invalid breakpoint: #{$breakpoint}. Available breakpoints: #{map-keys($rolex-breakpoints)}";
+  }
+}
+
+// Luxury Button Mixin
+@mixin rolex-button($variant: primary, $size: medium) {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  font-family: map-get($rolex-fonts, primary);
+  font-weight: map-get($rolex-font-weights, medium);
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+  transition: all map-get($rolex-transitions, luxury);
+  overflow: hidden;
+  
+  // Size variations
+  @if $size == small {
+    padding: map-get($rolex-spacing, 2) map-get($rolex-spacing, 4);
+    font-size: map-get($rolex-font-sizes, sm);
+    border-radius: map-get($rolex-radii, sm);
+  } @else if $size == medium {
+    padding: map-get($rolex-spacing, 3) map-get($rolex-spacing, 6);
+    font-size: map-get($rolex-font-sizes, base);
+    border-radius: map-get($rolex-radii, base);
+  } @else if $size == large {
+    padding: map-get($rolex-spacing, 4) map-get($rolex-spacing, 8);
+    font-size: map-get($rolex-font-sizes, lg);
+    border-radius: map-get($rolex-radii, md);
+  }
+  
+  // Variant styles
+  @if $variant == primary {
+    background: linear-gradient(135deg, var(--rolex-green), var(--rolex-gold));
+    color: var(--rolex-pearl-white);
+    box-shadow: map-get($rolex-shadows, md);
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: map-get($rolex-shadows, lg);
+    }
+  } @else if $variant == secondary {
+    background: transparent;
+    color: var(--rolex-deep-black);
+    border: 2px solid var(--rolex-deep-black);
+    
+    &:hover {
+      background: var(--rolex-deep-black);
+      color: var(--rolex-pearl-white);
+    }
+  } @else if $variant == luxury {
+    background: linear-gradient(135deg, var(--rolex-gold), var(--rolex-champagne));
+    color: var(--rolex-deep-black);
+    box-shadow: map-get($rolex-shadows, luxury);
+    
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: map-get($rolex-shadows, 2xl);
+    }
+  }
+  
+  // Shimmer effect for luxury variant
+  @if $variant == luxury {
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.3),
+        transparent
+      );
+      transition: left 600ms;
+    }
+    
+    &:hover::before {
+      left: 100%;
+    }
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+}
+
+// Luxury Typography Mixin
+@mixin rolex-heading($level: h1, $style: default) {
+  font-family: map-get($rolex-fonts, primary);
+  font-weight: map-get($rolex-font-weights, bold);
+  line-height: map-get($rolex-line-heights, tight);
+  color: var(--rolex-deep-black);
+  
+  @if $level == h1 {
+    font-size: map-get($rolex-font-sizes, 6xl);
+    
+    @include rolex-media(lg) {
+      font-size: map-get($rolex-font-sizes, 8xl);
+    }
+  } @else if $level == h2 {
+    font-size: map-get($rolex-font-sizes, 4xl);
+    
+    @include rolex-media(lg) {
+      font-size: map-get($rolex-font-sizes, 6xl);
+    }
+  } @else if $level == h3 {
+    font-size: map-get($rolex-font-sizes, 3xl);
+    
+    @include rolex-media(lg) {
+      font-size: map-get($rolex-font-sizes, 4xl);
+    }
+  }
+  
+  @if $style == luxury {
+    background: linear-gradient(135deg, var(--rolex-gold), var(--rolex-green));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  } @else if $style == premium {
+    position: relative;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 60px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--rolex-gold), var(--rolex-green));
+    }
+  }
+}
+
+// Container Mixin with Luxury Spacing
+@mixin rolex-container($breakpoint: xl) {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: map-get($rolex-spacing, 4);
+  padding-right: map-get($rolex-spacing, 4);
+  
+  @if map-has-key($rolex-container-max-widths, $breakpoint) {
+    max-width: map-get($rolex-container-max-widths, $breakpoint);
+  }
+  
+  @include rolex-media(md) {
+    padding-left: map-get($rolex-spacing, 6);
+    padding-right: map-get($rolex-spacing, 6);
+  }
+  
+  @include rolex-media(xl) {
+    padding-left: map-get($rolex-spacing, 8);
+    padding-right: map-get($rolex-spacing, 8);
+  }
+}
+
+// Luxury Card Mixin
+@mixin rolex-card($variant: default) {
+  background: var(--rolex-pearl-white);
+  border-radius: map-get($rolex-radii, xl);
+  overflow: hidden;
+  transition: all map-get($rolex-transitions, luxury);
+  
+  @if $variant == default {
+    box-shadow: map-get($rolex-shadows, md);
+    
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: map-get($rolex-shadows, xl);
+    }
+  } @else if $variant == premium {
+    background: linear-gradient(135deg, var(--rolex-off-white), var(--rolex-champagne));
+    box-shadow: map-get($rolex-shadows, luxury);
+    border: 1px solid rgba(163, 126, 44, 0.2);
+    
+    &:hover {
+      transform: translateY(-6px) rotateX(2deg);
+      box-shadow: map-get($rolex-shadows, 2xl);
+    }
+  } @else if $variant == glass {
+    background: rgba(248, 248, 246, 0.8);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+    
+    &:hover {
+      background: rgba(248, 248, 246, 0.9);
+      transform: translateY(-2px);
+    }
+  }
+}
+
+// Animation Mixins
+@mixin rolex-fade-in($duration: 800ms, $delay: 0ms) {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: rolex-fade-in $duration cubic-bezier(0.25, 0.46, 0.45, 0.94) #{$delay} forwards;
+}
+
+@keyframes rolex-fade-in {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@mixin rolex-scale-in($duration: 600ms, $delay: 0ms) {
+  opacity: 0;
+  transform: scale(0.8);
+  animation: rolex-scale-in $duration cubic-bezier(0.25, 0.46, 0.45, 0.94) #{$delay} forwards;
+}
+
+@keyframes rolex-scale-in {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+// Luxury Gradient Backgrounds
+@mixin rolex-gradient($direction: 135deg, $variant: primary) {
+  @if $variant == primary {
+    background: linear-gradient(#{$direction}, var(--rolex-green), var(--rolex-gold));
+  } @else if $variant == dark {
+    background: linear-gradient(#{$direction}, var(--rolex-deep-black), var(--rolex-charcoal));
+  } @else if $variant == light {
+    background: linear-gradient(#{$direction}, var(--rolex-pearl-white), var(--rolex-champagne));
+  } @else if $variant == premium {
+    background: linear-gradient(#{$direction}, var(--rolex-gold), var(--rolex-champagne), var(--rolex-platinum));
+  }
+}
+
+// Aspect Ratio Mixin (for product images)
+@mixin rolex-aspect-ratio($ratio: 1) {
+  position: relative;
+  
+  &::before {
+    content: '';
+    display: block;
+    padding-top: percentage(calc(1 / $ratio));
+  }
+  
+  > * {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
