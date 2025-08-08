@@ -49,11 +49,8 @@
       <script src="{{ 'animations.js' | asset_url }}" defer="defer"></script>
     {%- endif -%}
 
-    {%- comment -%} Royal Equips Theme Assets {%- endcomment -%}
-    <script src="{{ 'modern-core.js' | asset_url }}" defer="defer"></script>
-    <script src="{{ 'royal-constants.js' | asset_url }}" defer="defer"></script>
-    <script src="{{ 'royal-global.js' | asset_url }}" defer="defer"></script>
-    <script src="{{ 'royal-equips.js' | asset_url }}" defer="defer"></script>
+    {%- comment -%} Theme Core Assets {%- endcomment -%}
+    <script src="{{ 'global.js' | asset_url }}" defer="defer"></script>
 
     {{ content_for_header }}
 
@@ -288,16 +285,8 @@
 
     {{ 'base.css' | asset_url | stylesheet_tag }}
     
-    {%- comment -%} Royal Equips Theme Styles {%- endcomment -%}
-    {{ 'modern-base.css' | asset_url | stylesheet_tag }}
-    {{ 'royal-base.css' | asset_url | stylesheet_tag }}
-    {{ 'royal-equips.css' | asset_url | stylesheet_tag }}
-    {{ '3d-product-viewer.css' | asset_url | stylesheet_tag }}
-    {{ 'section-brand-story.css' | asset_url | stylesheet_tag }}
-    {{ 'section-hero-video.css' | asset_url | stylesheet_tag }}
-    {{ 'section-lifestyle-imagery.css' | asset_url | stylesheet_tag }}
-    {{ 'section-newsletter.css' | asset_url | stylesheet_tag }}
-    {{ 'section-product-grid.css' | asset_url | stylesheet_tag }}
+    {%- comment -%} Theme Core Styles {%- endcomment -%}
+    {{ 'base.css' | asset_url | stylesheet_tag }}
     
     <link rel="stylesheet" href="{{ 'component-cart-items.css' | asset_url }}" media="print" onload="this.media='all'">
 
