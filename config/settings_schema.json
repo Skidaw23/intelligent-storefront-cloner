@@ -64,7 +64,7 @@
       {
         "type": "color_scheme_group",
         "id": "color_schemes",
-        "label": "Color scheme groups",
+        "role": "colors",
         "definition": [
           {
             "type": "color",
@@ -115,7 +115,7 @@
       {
         "type": "font_picker",
         "id": "type_header_font",
-        "default": "eurostile_extended_2",
+        "default": "assistant_n4",
         "label": "Font",
         "info": "Selecting a different font can affect the speed of your store. [Learn more about system fonts.](https://help.shopify.com/manual/online-store/os/store-speed/improving-speed#fonts)"
       },
@@ -136,7 +136,7 @@
       {
         "type": "font_picker",
         "id": "type_body_font",
-        "default": "roboto",
+        "default": "assistant_n4",
         "label": "Font",
         "info": "Selecting a different font can affect the speed of your store. [Learn more about system fonts.](https://help.shopify.com/manual/online-store/os/store-speed/improving-speed#fonts)"
       },
@@ -512,7 +512,7 @@
         "step": 2,
         "unit": "px",
         "label": "Shadow blur",
-        "default": 5
+        "default": 6
       }
     ]
   },
