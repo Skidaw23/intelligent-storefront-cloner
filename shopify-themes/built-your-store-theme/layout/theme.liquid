@@ -1,16 +1,11 @@
-{% include 'shogun-content-handler' %}
 <!doctype html>
 <html class="js" lang="{{ request.locale.iso_code }}">
-<script defer src="https://shown.io/metrics/On9xlYlg9e" type="text/javascript"></script>
   <head>
- {%- render 'layouthub_header' -%}
- {%- render 'ecom_header' -%}
  {%- comment -%} INTELLIGENT STOREFRONT CLONER - ARCHITECTURE INTEGRATION {%- endcomment -%}
  {%- render 'theme-architecture-core' -%}
  {%- render 'responsive-manager' -%}
  {%- render 'performance-monitor' -%}
  {%- render 'seo-optimizer' -%}
- {%- render 'ab-testing-framework' -%}
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -422,6 +417,5 @@
     {%- if settings.cart_type == 'drawer' -%}
       <script src="{{ 'cart-drawer.js' | asset_url }}" defer="defer"></script>
     {%- endif -%}
-  {%- render "ecom_footer"-%}{%- render 'layouthub_footer' -%} 
  </body>
 </html>
