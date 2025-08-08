@@ -1,0 +1,1174 @@
+{% comment %}
+==============================================
+INTELLIGENT STOREFRONT CLONER - ADVANCED NEWSLETTER
+==============================================
+Modern newsletter signup section with advanced architecture patterns.
+Features A/B testing integration, conversion optimization, and analytics.
+
+Features:
+- Multiple design variants
+- A/B testing integration
+- Conversion tracking
+- Social proof elements
+- Advanced form validation
+- Analytics integration
+==============================================
+{% endcomment %}
+
+{% render 'theme-architecture-core' %}
+{% render 'component-factory' %}
+{% render 'ab-testing-framework' %}
+
+{{ 'section-newsletter-advanced.css' | asset_url | stylesheet_tag }}
+
+{% liquid
+  comment 'Newsletter Configuration'
+  assign newsletter_layout = section.settings.newsletter_layout | default: 'centered'
+  assign show_social_proof = section.settings.show_social_proof
+  assign subscriber_count = section.settings.subscriber_count | default: 10000
+  assign show_privacy_note = section.settings.show_privacy_note
+  assign enable_popup = section.settings.enable_popup_version
+  assign incentive_type = section.settings.incentive_type | default: 'none'
+  assign discount_code = section.settings.discount_code
+  assign discount_value = section.settings.discount_value | default: 10
+  
+  comment 'A/B Testing Configuration'
+  assign ab_test_id = 'newsletter_' | append: section.id
+  assign ab_test_enabled = section.settings.enable_ab_testing
+%}
+
+{%- style -%}
+  .section-{{ section.id }} {
+    --newsletter-padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    --newsletter-padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+    --newsletter-border-radius: {{ section.settings.border_radius | default: 12 }}px;
+    --newsletter-max-width: {{ section.settings.max_width | default: 600 }}px;
+    --newsletter-background-opacity: {{ section.settings.background_opacity | default: 100 | divided_by: 100.0 }};
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }} {
+      --newsletter-padding-top: {{ section.settings.padding_top }}px;
+      --newsletter-padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  {% comment %} Custom color scheme {% endcomment %}
+  {% if section.settings.color_scheme == 'custom' %}
+    .section-{{ section.id }}.color-custom {
+      --color-background: {{ section.settings.custom_background.red }}, {{ section.settings.custom_background.green }}, {{ section.settings.custom_background.blue }};
+      --color-foreground: {{ section.settings.custom_text.red }}, {{ section.settings.custom_text.green }}, {{ section.settings.custom_text.blue }};
+      --color-button: {{ section.settings.custom_button.red }}, {{ section.settings.custom_button.green }}, {{ section.settings.custom_button.blue }};
+      --color-button-text: {{ section.settings.custom_button_text.red }}, {{ section.settings.custom_button_text.green }}, {{ section.settings.custom_button_text.blue }};
+    }
+  {% endif %}
+{%- endstyle -%}
+
+<section 
+  class="advanced-newsletter section-{{ section.id }}-padding color-{{ section.settings.color_scheme }}"
+  data-section-type="advanced-newsletter"
+  data-section-id="{{ section.id }}"
+  data-newsletter-layout="{{ newsletter_layout }}"
+  {% if section.settings.section_anchor != blank %}id="{{ section.settings.section_anchor }}"{% endif %}
+  {% if ab_test_enabled %}data-ab-test="{{ ab_test_id }}"{% endif %}
+>
+  <div class="container container--{{ section.settings.container_width | default: 'standard' }}">
+    
+    {% comment %} Background Image/Pattern {% endcomment %}
+    {% if section.settings.background_image %}
+      <div class="newsletter__background-image">
+        <img 
+          src="{{ section.settings.background_image | image_url: width: 1200 }}"
+          alt="{{ section.settings.background_image.alt | escape }}"
+          loading="lazy"
+          width="{{ section.settings.background_image.width }}"
+          height="{{ section.settings.background_image.height }}"
+        >
+      </div>
+    {% endif %}
+
+    <div class="newsletter__container newsletter__container--{{ newsletter_layout }}">
+      
+      {% comment %} Icon/Logo {% endcomment %}
+      {% if section.settings.show_icon %}
+        <div class="newsletter__icon" data-aos="zoom-in" data-aos-delay="100">
+          {% if section.settings.custom_icon %}
+            <img src="{{ section.settings.custom_icon | image_url: width: 80 }}" alt="Newsletter icon" width="80" height="80">
+          {% else %}
+            <svg class="newsletter__default-icon" width="60" height="60" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M2 6L10 10L18 6L10 2L2 6Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M2 6V18C2 18.5304 2.21071 19.0391 2.58579 19.4142C2.96086 19.7893 3.46957 20 4 20H16C16.5304 20 17.0391 19.7893 17.4142 19.4142C17.7893 19.0391 18 18.5304 18 18V6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M10 10V16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          {% endif %}
+        </div>
+      {% endif %}
+
+      {% comment %} Content Section {% endcomment %}
+      <div class="newsletter__content">
+        
+        {% if section.settings.eyebrow_text != blank %}
+          <div class="newsletter__eyebrow" data-aos="fade-up" data-aos-delay="200">
+            {{ section.settings.eyebrow_text }}
+          </div>
+        {% endif %}
+
+        {% if section.settings.heading != blank %}
+          <{{ section.settings.heading_tag | default: 'h2' }} class="newsletter__heading" data-aos="fade-up" data-aos-delay="300">
+            {{ section.settings.heading }}
+          </{{ section.settings.heading_tag | default: 'h2' }}>
+        {% endif %}
+
+        {% if section.settings.description != blank %}
+          <div class="newsletter__description rte" data-aos="fade-up" data-aos-delay="400">
+            {{ section.settings.description }}
+          </div>
+        {% endif %}
+
+        {% comment %} Social Proof {% endcomment %}
+        {% if show_social_proof %}
+          <div class="newsletter__social-proof" data-aos="fade-up" data-aos-delay="450">
+            {% if section.settings.social_proof_type == 'subscriber_count' %}
+              <div class="newsletter__subscriber-count">
+                <span class="newsletter__count-number">{{ subscriber_count | number_with_delimiter }}</span>
+                <span class="newsletter__count-text">{{ section.settings.subscriber_text | default: 'subscribers and counting' }}</span>
+              </div>
+            {% elsif section.settings.social_proof_type == 'testimonial' %}
+              <div class="newsletter__testimonial">
+                {% if section.settings.testimonial_avatar %}
+                  <img 
+                    src="{{ section.settings.testimonial_avatar | image_url: width: 40 }}" 
+                    alt="{{ section.settings.testimonial_name | escape }}"
+                    class="newsletter__testimonial-avatar"
+                    width="40" height="40"
+                  >
+                {% endif %}
+                <div class="newsletter__testimonial-content">
+                  {% if section.settings.testimonial_text != blank %}
+                    <p class="newsletter__testimonial-text">"{{ section.settings.testimonial_text }}"</p>
+                  {% endif %}
+                  {% if section.settings.testimonial_name != blank %}
+                    <cite class="newsletter__testimonial-name">{{ section.settings.testimonial_name }}</cite>
+                  {% endif %}
+                </div>
+              </div>
+            {% endif %}
+          </div>
+        {% endif %}
+
+        {% comment %} Newsletter Form {% endcomment %}
+        <div class="newsletter__form-container" data-aos="fade-up" data-aos-delay="500">
+          
+          {% comment %} A/B Test Variants {% endcomment %}
+          {% if ab_test_enabled %}
+            <script>
+              // Register A/B test for newsletter section
+              window.abTestQueue = window.abTestQueue || [];
+              window.abTestQueue.push({
+                id: '{{ ab_test_id }}',
+                name: 'Newsletter {{ section.id }} Test',
+                variants: ['control', 'variant_a', 'variant_b'],
+                trafficAllocation: 0.5,
+                goals: ['newsletter_signup', 'form_submit'],
+                metadata: {
+                  section_id: '{{ section.id }}',
+                  section_name: '{{ section.settings.heading | escape }}',
+                  layout: '{{ newsletter_layout }}'
+                }
+              });
+            </script>
+          {% endif %}
+
+          <form 
+            class="newsletter__form newsletter__form--{{ section.settings.form_layout | default: 'horizontal' }}"
+            action="{{ routes.account_url }}"
+            method="post"
+            data-newsletter-form
+            data-ab-test="{{ ab_test_id }}"
+            data-ab-goal="newsletter_signup"
+            novalidate
+          >
+            <input type="hidden" name="form_type" value="customer">
+            <input type="hidden" name="utf8" value="✓">
+            <input type="hidden" name="tags" value="newsletter">
+            
+            {% comment %} Incentive Message {% endcomment %}
+            {% if incentive_type != 'none' %}
+              <div class="newsletter__incentive">
+                {% case incentive_type %}
+                  {% when 'discount' %}
+                    <span class="newsletter__incentive-text">
+                      🎉 Get {{ discount_value }}% off your first order!
+                    </span>
+                  {% when 'free_shipping' %}
+                    <span class="newsletter__incentive-text">
+                      🚚 Unlock free shipping on your next order
+                    </span>
+                  {% when 'exclusive_content' %}
+                    <span class="newsletter__incentive-text">
+                      ⭐ Get exclusive access to new products and sales
+                    </span>
+                {% endcase %}
+              </div>
+            {% endif %}
+
+            <div class="newsletter__form-fields">
+              
+              {% comment %} Name Field (Optional) {% endcomment %}
+              {% if section.settings.collect_name %}
+                <div class="newsletter__field">
+                  <label for="newsletter-name-{{ section.id }}" class="newsletter__label{% if section.settings.hide_labels %} visually-hidden{% endif %}">
+                    {{ 'customer.register.first_name' | t | default: 'First name' }}
+                  </label>
+                  <input
+                    type="text"
+                    id="newsletter-name-{{ section.id }}"
+                    name="customer[first_name]"
+                    class="newsletter__input"
+                    placeholder="{{ section.settings.name_placeholder | default: 'Your first name' }}"
+                    {% if section.settings.require_name %}required{% endif %}
+                    autocomplete="given-name"
+                    aria-describedby="newsletter-name-error-{{ section.id }}"
+                  >
+                  <span id="newsletter-name-error-{{ section.id }}" class="newsletter__error" role="alert"></span>
+                </div>
+              {% endif %}
+
+              {% comment %} Email Field {% endcomment %}
+              <div class="newsletter__field newsletter__field--email">
+                <label for="newsletter-email-{{ section.id }}" class="newsletter__label{% if section.settings.hide_labels %} visually-hidden{% endif %}">
+                  {{ 'customer.register.email' | t | default: 'Email address' }}
+                </label>
+                <input
+                  type="email"
+                  id="newsletter-email-{{ section.id }}"
+                  name="customer[email]"
+                  class="newsletter__input newsletter__input--email"
+                  placeholder="{{ section.settings.email_placeholder | default: 'Enter your email' }}"
+                  required
+                  autocomplete="email"
+                  aria-describedby="newsletter-email-error-{{ section.id }}"
+                  data-validation="email"
+                >
+                <span id="newsletter-email-error-{{ section.id }}" class="newsletter__error" role="alert"></span>
+              </div>
+
+              {% comment %} Submit Button using Component Factory {% endcomment %}
+              {% liquid
+                assign button_factory_type = section.settings.button_style | default: 'primary'
+                assign button_factory_size = section.settings.button_size | default: 'lg'
+                assign button_factory_text = section.settings.button_text | default: 'Subscribe'
+                assign button_factory_classes = 'newsletter__submit'
+                assign button_factory_loading = true
+              %}
+              <button 
+                type="submit"
+                class="{{ button_classes }}"
+                data-submit-button
+                aria-describedby="newsletter-submit-status-{{ section.id }}"
+              >
+                <span class="newsletter__submit-text">{{ button_factory_text }}</span>
+                <span class="newsletter__submit-loading" aria-hidden="true">
+                  <svg class="newsletter__spinner" width="20" height="20" viewBox="0 0 24 24">
+                    <circle class="newsletter__spinner-path" cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-miterlimit="10"/>
+                  </svg>
+                </span>
+              </button>
+            </div>
+
+            {% comment %} Status Messages {% endcomment %}
+            <div id="newsletter-submit-status-{{ section.id }}" class="newsletter__status" role="status" aria-live="polite"></div>
+
+            {% comment %} Privacy Notice {% endcomment %}
+            {% if show_privacy_note %}
+              <div class="newsletter__privacy">
+                {% if section.settings.privacy_text != blank %}
+                  {{ section.settings.privacy_text }}
+                {% else %}
+                  <small>
+                    {{ 'customer.privacy_policy' | t | default: 'We respect your privacy. Unsubscribe at any time.' }}
+                    {% if shop.privacy_policy %}
+                      <a href="{{ shop.privacy_policy.url }}" target="_blank" rel="noopener">
+                        {{ 'customer.privacy_policy_link' | t | default: 'Privacy Policy' }}
+                      </a>
+                    {% endif %}
+                  </small>
+                {% endif %}
+              </div>
+            {% endif %}
+
+            {% comment %} Success State {% endcomment %}
+            <div class="newsletter__success" data-success-message>
+              <div class="newsletter__success-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div class="newsletter__success-content">
+                <h3 class="newsletter__success-title">
+                  {{ section.settings.success_title | default: 'Thank you for subscribing!' }}
+                </h3>
+                <p class="newsletter__success-text">
+                  {{ section.settings.success_message | default: 'Check your email for confirmation and your special offer.' }}
+                </p>
+                
+                {% if incentive_type == 'discount' and discount_code != blank %}
+                  <div class="newsletter__discount-code">
+                    <strong>Your discount code: <code>{{ discount_code }}</code></strong>
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+          </form>
+
+          {% comment %} Alternative signup methods {% endcomment %}
+          {% if section.settings.show_social_signup %}
+            <div class="newsletter__social-signup">
+              <div class="newsletter__divider">
+                <span>{{ 'customer.login.or' | t | default: 'or' }}</span>
+              </div>
+              
+              <div class="newsletter__social-buttons">
+                {% if section.settings.facebook_signup %}
+                  <button type="button" class="newsletter__social-button newsletter__social-button--facebook">
+                    <svg width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                    {{ 'customer.login.facebook' | t | default: 'Continue with Facebook' }}
+                  </button>
+                {% endif %}
+                
+                {% if section.settings.google_signup %}
+                  <button type="button" class="newsletter__social-button newsletter__social-button--google">
+                    <svg width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+                    {{ 'customer.login.google' | t | default: 'Continue with Google' }}
+                  </button>
+                {% endif %}
+              </div>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+
+      {% comment %} Trust Indicators {% endcomment %}
+      {% if section.settings.show_trust_indicators %}
+        <div class="newsletter__trust-indicators" data-aos="fade-up" data-aos-delay="600">
+          {% for block in section.blocks %}
+            {% case block.type %}
+              {% when 'trust_badge' %}
+                {% if block.settings.badge_image %}
+                  <div class="newsletter__trust-badge" {{ block.shopify_attributes }}>
+                    <img 
+                      src="{{ block.settings.badge_image | image_url: width: 60 }}" 
+                      alt="{{ block.settings.badge_text | escape }}"
+                      width="60" height="30"
+                      loading="lazy"
+                    >
+                    {% if block.settings.badge_text != blank %}
+                      <span class="newsletter__trust-text">{{ block.settings.badge_text }}</span>
+                    {% endif %}
+                  </div>
+                {% endif %}
+              {% when 'feature' %}
+                <div class="newsletter__feature" {{ block.shopify_attributes }}>
+                  {% if block.settings.feature_icon != blank %}
+                    <div class="newsletter__feature-icon">
+                      {% render 'icon', icon: block.settings.feature_icon %}
+                    </div>
+                  {% endif %}
+                  {% if block.settings.feature_text != blank %}
+                    <span class="newsletter__feature-text">{{ block.settings.feature_text }}</span>
+                  {% endif %}
+                </div>
+            {% endcase %}
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% comment %} Advanced Newsletter JavaScript {% endcomment %}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const newsletterSection = document.querySelector('[data-section-id="{{ section.id }}"]');
+    if (!newsletterSection) return;
+
+    // Initialize Advanced Newsletter
+    class AdvancedNewsletter {
+      constructor(container) {
+        this.container = container;
+        this.sectionId = container.dataset.sectionId;
+        this.form = container.querySelector('[data-newsletter-form]');
+        this.submitButton = container.querySelector('[data-submit-button]');
+        this.statusEl = container.querySelector('.newsletter__status');
+        this.successEl = container.querySelector('[data-success-message]');
+        this.abTestId = container.dataset.abTest;
+        
+        this.init();
+      }
+
+      init() {
+        if (this.form) {
+          this.setupFormValidation();
+          this.setupFormSubmission();
+          this.setupA11yFeatures();
+        }
+
+        this.trackImpression();
+        {% if section.settings.enable_popup_version %}
+          this.initPopupVersion();
+        {% endif %}
+      }
+
+      setupFormValidation() {
+        const inputs = this.form.querySelectorAll('input[required]');
+        
+        inputs.forEach(input => {
+          input.addEventListener('blur', () => this.validateField(input));
+          input.addEventListener('input', () => this.clearFieldError(input));
+        });
+      }
+
+      validateField(input) {
+        const value = input.value.trim();
+        const errorEl = document.getElementById(input.getAttribute('aria-describedby'));
+        let isValid = true;
+        let errorMessage = '';
+
+        // Required field validation
+        if (input.hasAttribute('required') && !value) {
+          isValid = false;
+          errorMessage = `${input.labels[0]?.textContent || 'This field'} is required`;
+        }
+
+        // Email validation
+        if (input.type === 'email' && value) {
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!emailRegex.test(value)) {
+            isValid = false;
+            errorMessage = 'Please enter a valid email address';
+          }
+        }
+
+        // Display error
+        if (!isValid) {
+          input.classList.add('newsletter__input--error');
+          input.setAttribute('aria-invalid', 'true');
+          if (errorEl) errorEl.textContent = errorMessage;
+        } else {
+          input.classList.remove('newsletter__input--error');
+          input.setAttribute('aria-invalid', 'false');
+          if (errorEl) errorEl.textContent = '';
+        }
+
+        return isValid;
+      }
+
+      clearFieldError(input) {
+        input.classList.remove('newsletter__input--error');
+        input.setAttribute('aria-invalid', 'false');
+        const errorEl = document.getElementById(input.getAttribute('aria-describedby'));
+        if (errorEl) errorEl.textContent = '';
+      }
+
+      async setupFormSubmission() {
+        this.form.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          
+          // Validate all fields
+          const inputs = this.form.querySelectorAll('input[required]');
+          let allValid = true;
+          
+          inputs.forEach(input => {
+            if (!this.validateField(input)) {
+              allValid = false;
+            }
+          });
+
+          if (!allValid) {
+            this.showStatus('Please correct the errors above', 'error');
+            return;
+          }
+
+          // Track form attempt
+          this.trackEvent('newsletter_form_attempt', {
+            section_id: this.sectionId
+          });
+
+          await this.submitForm();
+        });
+      }
+
+      async submitForm() {
+        const formData = new FormData(this.form);
+        
+        // Show loading state
+        this.setSubmitButtonLoading(true);
+        this.showStatus('Subscribing...', 'loading');
+
+        try {
+          const response = await fetch(this.form.action, {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+            },
+            body: formData
+          });
+
+          if (response.ok) {
+            this.handleSuccess();
+          } else {
+            throw new Error('Subscription failed');
+          }
+        } catch (error) {
+          this.handleError(error);
+        } finally {
+          this.setSubmitButtonLoading(false);
+        }
+      }
+
+      handleSuccess() {
+        // Track successful subscription
+        this.trackEvent('newsletter_signup_success', {
+          section_id: this.sectionId,
+          email: this.form.querySelector('input[type="email"]').value
+        });
+
+        // Track A/B test goal
+        if (this.abTestId && window.abTest) {
+          window.abTest.trackGoal(this.abTestId, 'newsletter_signup');
+        }
+
+        // Show success state
+        this.showStatus('', '');
+        this.form.style.display = 'none';
+        this.successEl.style.display = 'block';
+        this.successEl.focus();
+
+        // Fire custom event for other scripts
+        document.dispatchEvent(new CustomEvent('newsletter:subscribed', {
+          detail: {
+            sectionId: this.sectionId,
+            email: this.form.querySelector('input[type="email"]').value
+          }
+        }));
+
+        // Reset form after delay
+        setTimeout(() => {
+          this.form.reset();
+        }, 5000);
+      }
+
+      handleError(error) {
+        console.error('Newsletter subscription error:', error);
+        
+        this.trackEvent('newsletter_signup_error', {
+          section_id: this.sectionId,
+          error: error.message
+        });
+
+        this.showStatus('Something went wrong. Please try again.', 'error');
+      }
+
+      setSubmitButtonLoading(loading) {
+        const textEl = this.submitButton.querySelector('.newsletter__submit-text');
+        const loadingEl = this.submitButton.querySelector('.newsletter__submit-loading');
+        
+        if (loading) {
+          this.submitButton.disabled = true;
+          this.submitButton.classList.add('newsletter__submit--loading');
+          textEl.style.opacity = '0';
+          loadingEl.style.opacity = '1';
+        } else {
+          this.submitButton.disabled = false;
+          this.submitButton.classList.remove('newsletter__submit--loading');
+          textEl.style.opacity = '1';
+          loadingEl.style.opacity = '0';
+        }
+      }
+
+      showStatus(message, type) {
+        this.statusEl.textContent = message;
+        this.statusEl.className = `newsletter__status newsletter__status--${type}`;
+        
+        if (message) {
+          this.statusEl.setAttribute('aria-live', 'assertive');
+        }
+      }
+
+      setupA11yFeatures() {
+        // Keyboard navigation enhancements
+        this.form.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' && e.target.type !== 'submit') {
+            e.preventDefault();
+            
+            // Find next focusable element
+            const inputs = Array.from(this.form.querySelectorAll('input, button'));
+            const currentIndex = inputs.indexOf(e.target);
+            const nextInput = inputs[currentIndex + 1];
+            
+            if (nextInput) {
+              nextInput.focus();
+            } else {
+              this.submitButton.focus();
+            }
+          }
+        });
+
+        // Screen reader announcements
+        const headingEl = this.container.querySelector('.newsletter__heading');
+        if (headingEl) {
+          headingEl.setAttribute('role', 'heading');
+          headingEl.setAttribute('aria-level', '2');
+        }
+      }
+
+      {% if section.settings.enable_popup_version %}
+      initPopupVersion() {
+        // Simple popup logic - could be enhanced
+        const hasSeenPopup = sessionStorage.getItem('newsletter_popup_seen');
+        
+        if (!hasSeenPopup) {
+          setTimeout(() => {
+            this.showPopup();
+          }, {{ section.settings.popup_delay | default: 30000 }});
+        }
+      }
+
+      showPopup() {
+        // Create popup modal
+        const popup = document.createElement('div');
+        popup.className = 'newsletter__popup';
+        popup.innerHTML = this.container.outerHTML;
+        popup.setAttribute('role', 'dialog');
+        popup.setAttribute('aria-modal', 'true');
+        popup.setAttribute('aria-labelledby', 'popup-title');
+        
+        document.body.appendChild(popup);
+        document.body.classList.add('newsletter-popup-open');
+        
+        sessionStorage.setItem('newsletter_popup_seen', 'true');
+        
+        // Initialize popup form
+        new AdvancedNewsletter(popup.querySelector('[data-section-type="advanced-newsletter"]'));
+      }
+      {% endif %}
+
+      trackImpression() {
+        // Track section impression
+        this.trackEvent('newsletter_section_viewed', {
+          section_id: this.sectionId,
+          layout: '{{ newsletter_layout }}'
+        });
+
+        // Track A/B test impression
+        if (this.abTestId && window.ABTestingFramework) {
+          // This is automatically handled by the A/B testing framework
+        }
+      }
+
+      trackEvent(eventName, properties) {
+        // Google Analytics 4
+        if (typeof gtag !== 'undefined') {
+          gtag('event', eventName, {
+            event_category: 'Newsletter',
+            ...properties
+          });
+        }
+
+        // Shopify Analytics
+        if (typeof analytics !== 'undefined' && analytics.track) {
+          analytics.track(eventName, {
+            category: 'Newsletter',
+            ...properties
+          });
+        }
+
+        if ({{ settings.debug_mode }}) {
+          console.log('📧 Newsletter Event:', eventName, properties);
+        }
+      }
+    }
+
+    new AdvancedNewsletter(newsletterSection);
+
+    {% if settings.debug_mode %}
+      console.log('📧 Advanced Newsletter Section Loaded');
+      console.log('🎯 A/B Test ID:', '{{ ab_test_id }}');
+      console.log('📐 Layout:', '{{ newsletter_layout }}');
+    {% endif %}
+  });
+</script>
+
+{% schema %}
+{
+  "name": "📧 Advanced Newsletter",
+  "tag": "section",
+  "class": "section-newsletter-advanced",
+  "settings": [
+    {
+      "type": "header",
+      "content": "📐 Layout & Design"
+    },
+    {
+      "type": "select",
+      "id": "newsletter_layout",
+      "label": "Newsletter Layout",
+      "options": [
+        { "value": "centered", "label": "Centered" },
+        { "value": "left", "label": "Left Aligned" },
+        { "value": "right", "label": "Right Aligned" },
+        { "value": "split", "label": "Split Layout" },
+        { "value": "card", "label": "Card Style" }
+      ],
+      "default": "centered"
+    },
+    {
+      "type": "select",
+      "id": "container_width",
+      "label": "Container Width",
+      "options": [
+        { "value": "narrow", "label": "Narrow" },
+        { "value": "standard", "label": "Standard" },
+        { "value": "wide", "label": "Wide" }
+      ],
+      "default": "standard"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Content Max Width",
+      "min": 400,
+      "max": 800,
+      "step": 20,
+      "unit": "px",
+      "default": 600
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "label": "Border Radius",
+      "min": 0,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background Image"
+    },
+    {
+      "type": "range",
+      "id": "background_opacity",
+      "label": "Background Opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "header",
+      "content": "✏️ Content"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_icon",
+      "label": "Show Icon",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "custom_icon",
+      "label": "Custom Icon",
+      "info": "Leave empty to use default email icon"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow_text",
+      "label": "Eyebrow Text",
+      "placeholder": "NEWSLETTER"
+    },
+    {
+      "type": "richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "<p>Stay in the loop</p>"
+    },
+    {
+      "type": "select",
+      "id": "heading_tag",
+      "label": "Heading HTML Tag",
+      "options": [
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" },
+        { "value": "div", "label": "DIV" }
+      ],
+      "default": "h2"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>Subscribe to our newsletter for exclusive offers, style tips, and the latest updates.</p>"
+    },
+    {
+      "type": "header",
+      "content": "📝 Form Settings"
+    },
+    {
+      "type": "select",
+      "id": "form_layout",
+      "label": "Form Layout",
+      "options": [
+        { "value": "horizontal", "label": "Horizontal (Side by side)" },
+        { "value": "vertical", "label": "Vertical (Stacked)" }
+      ],
+      "default": "horizontal"
+    },
+    {
+      "type": "checkbox",
+      "id": "collect_name",
+      "label": "Collect First Name",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "require_name",
+      "label": "Require First Name",
+      "default": false,
+      "info": "Only applies when collecting name"
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_labels",
+      "label": "Hide Form Labels",
+      "default": false,
+      "info": "Uses placeholders instead"
+    },
+    {
+      "type": "text",
+      "id": "name_placeholder",
+      "label": "Name Placeholder",
+      "default": "Your first name"
+    },
+    {
+      "type": "text",
+      "id": "email_placeholder",
+      "label": "Email Placeholder",
+      "default": "Enter your email"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text",
+      "default": "Subscribe"
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "Button Style",
+      "options": [
+        { "value": "primary", "label": "Primary" },
+        { "value": "secondary", "label": "Secondary" },
+        { "value": "outline", "label": "Outline" }
+      ],
+      "default": "primary"
+    },
+    {
+      "type": "select",
+      "id": "button_size",
+      "label": "Button Size",
+      "options": [
+        { "value": "sm", "label": "Small" },
+        { "value": "md", "label": "Medium" },
+        { "value": "lg", "label": "Large" }
+      ],
+      "default": "lg"
+    },
+    {
+      "type": "header",
+      "content": "🎁 Incentives & Offers"
+    },
+    {
+      "type": "select",
+      "id": "incentive_type",
+      "label": "Signup Incentive",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "discount", "label": "Discount Code" },
+        { "value": "free_shipping", "label": "Free Shipping" },
+        { "value": "exclusive_content", "label": "Exclusive Content" }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "range",
+      "id": "discount_value",
+      "label": "Discount Percentage",
+      "min": 5,
+      "max": 50,
+      "step": 5,
+      "unit": "%",
+      "default": 10,
+      "info": "Only applies when incentive is discount"
+    },
+    {
+      "type": "text",
+      "id": "discount_code",
+      "label": "Discount Code",
+      "info": "The actual discount code customers receive"
+    },
+    {
+      "type": "header",
+      "content": "🏆 Social Proof"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_social_proof",
+      "label": "Show Social Proof",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "social_proof_type",
+      "label": "Social Proof Type",
+      "options": [
+        { "value": "subscriber_count", "label": "Subscriber Count" },
+        { "value": "testimonial", "label": "Customer Testimonial" }
+      ],
+      "default": "subscriber_count"
+    },
+    {
+      "type": "number",
+      "id": "subscriber_count",
+      "label": "Subscriber Count",
+      "default": 10000
+    },
+    {
+      "type": "text",
+      "id": "subscriber_text",
+      "label": "Subscriber Count Text",
+      "default": "subscribers and counting"
+    },
+    {
+      "type": "image_picker",
+      "id": "testimonial_avatar",
+      "label": "Testimonial Avatar"
+    },
+    {
+      "type": "text",
+      "id": "testimonial_name",
+      "label": "Customer Name"
+    },
+    {
+      "type": "textarea",
+      "id": "testimonial_text",
+      "label": "Testimonial Text",
+      "placeholder": "I love getting their newsletter updates!"
+    },
+    {
+      "type": "header",
+      "content": "🔒 Privacy & Trust"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_privacy_note",
+      "label": "Show Privacy Notice",
+      "default": true
+    },
+    {
+      "type": "richtext",
+      "id": "privacy_text",
+      "label": "Custom Privacy Text",
+      "info": "Leave empty to use default privacy notice"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_trust_indicators",
+      "label": "Show Trust Indicators",
+      "default": false,
+      "info": "Add trust badges and features using blocks below"
+    },
+    {
+      "type": "header",
+      "content": "✅ Success Messages"
+    },
+    {
+      "type": "text",
+      "id": "success_title",
+      "label": "Success Title",
+      "default": "Thank you for subscribing!"
+    },
+    {
+      "type": "textarea",
+      "id": "success_message",
+      "label": "Success Message",
+      "default": "Check your email for confirmation and your special offer."
+    },
+    {
+      "type": "header",
+      "content": "📱 Social Signup"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_social_signup",
+      "label": "Enable Social Signup",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "facebook_signup",
+      "label": "Facebook Signup",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "google_signup",
+      "label": "Google Signup",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "🎯 A/B Testing"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_ab_testing",
+      "label": "Enable A/B Testing",
+      "default": false,
+      "info": "Test different versions to optimize conversions"
+    },
+    {
+      "type": "header",
+      "content": "📱 Popup Version"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_popup_version",
+      "label": "Enable Popup Version",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "popup_delay",
+      "label": "Popup Delay",
+      "min": 5000,
+      "max": 60000,
+      "step": 5000,
+      "unit": "ms",
+      "default": 30000,
+      "info": "Time before popup appears"
+    },
+    {
+      "type": "header",
+      "content": "🎨 Design & Colors"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color Scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "📱 Responsive & Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "label": "Top Padding",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom Padding",
+      "default": 60
+    },
+    {
+      "type": "header",
+      "content": "⚙️ Advanced Settings"
+    },
+    {
+      "type": "text",
+      "id": "section_anchor",
+      "label": "Section Anchor ID"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "trust_badge",
+      "name": "🏆 Trust Badge",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "badge_image",
+          "label": "Badge Image"
+        },
+        {
+          "type": "text",
+          "id": "badge_text",
+          "label": "Badge Text"
+        }
+      ]
+    },
+    {
+      "type": "feature",
+      "name": "⭐ Feature",
+      "settings": [
+        {
+          "type": "text",
+          "id": "feature_icon",
+          "label": "Feature Icon",
+          "info": "Enter icon name (e.g., 'shield', 'lock', 'heart')"
+        },
+        {
+          "type": "text",
+          "id": "feature_text",
+          "label": "Feature Text",
+          "placeholder": "No spam, unsubscribe anytime"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "📧 Advanced Newsletter",
+      "settings": {
+        "heading": "<p>Stay in the loop</p>",
+        "description": "<p>Subscribe to our newsletter for exclusive offers, style tips, and the latest updates.</p>",
+        "show_social_proof": true,
+        "incentive_type": "discount",
+        "discount_value": 15
+      },
+      "blocks": [
+        {
+          "type": "feature",
+          "settings": {
+            "feature_icon": "shield",
+            "feature_text": "No spam, unsubscribe anytime"
+          }
+        },
+        {
+          "type": "feature", 
+          "settings": {
+            "feature_icon": "heart",
+            "feature_text": "Exclusive member offers"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

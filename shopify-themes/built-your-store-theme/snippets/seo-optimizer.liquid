@@ -1,0 +1,567 @@
+{% comment %}
+==============================================
+INTELLIGENT STOREFRONT CLONER - SEO OPTIMIZER
+==============================================
+Advanced SEO optimization system with structured data, meta tags,
+and search engine optimization features.
+
+Features:
+- Dynamic meta tag generation
+- Structured data (JSON-LD)
+- Open Graph and Twitter Cards
+- Canonical URL management
+- Sitemap optimization
+- Core Web Vitals SEO
+==============================================
+{% endcomment %}
+
+{% liquid
+  comment 'SEO Configuration'
+  assign seo_enabled = true
+  assign generate_structured_data = true
+  assign enable_social_meta = true
+  assign debug_seo = settings.debug_mode | default: false
+  
+  comment 'Page Type Detection'
+  assign is_product_page = template contains 'product'
+  assign is_collection_page = template contains 'collection'
+  assign is_blog_page = template contains 'blog'
+  assign is_article_page = template contains 'article'
+  assign is_page_template = template contains 'page'
+  assign is_home_page = template == 'index'
+  assign is_search_page = template contains 'search'
+  
+  comment 'SEO Data Preparation'
+  assign seo_title = page_title
+  assign seo_description = page_description | default: shop.description
+  assign seo_keywords = ''
+  assign seo_image = ''
+  assign canonical_url = canonical_url
+  assign page_type = 'website'
+%}
+
+{% comment %} DYNAMIC SEO TITLE GENERATION {% endcomment %}
+{% liquid
+  if is_product_page and product
+    assign seo_title = product.title | append: ' | ' | append: shop.name
+    assign seo_description = product.description | strip_html | truncate: 160
+    assign seo_keywords = product.tags | join: ', '
+    assign seo_image = product.featured_media | image_url: width: 1200
+    assign page_type = 'product'
+  elsif is_collection_page and collection
+    assign seo_title = collection.title | append: ' Collection | ' | append: shop.name
+    assign seo_description = collection.description | strip_html | truncate: 160
+    assign seo_image = collection.featured_image | image_url: width: 1200
+    assign page_type = 'website'
+  elsif is_article_page and article
+    assign seo_title = article.title | append: ' | ' | append: blog.title | append: ' | ' | append: shop.name
+    assign seo_description = article.excerpt | default: article.content | strip_html | truncate: 160
+    assign seo_keywords = article.tags | join: ', '
+    assign seo_image = article.image | image_url: width: 1200
+    assign page_type = 'article'
+  elsif is_blog_page and blog
+    assign seo_title = blog.title | append: ' | ' | append: shop.name
+    assign seo_description = blog.description | strip_html | truncate: 160
+    assign page_type = 'blog'
+  elsif is_page_template and page
+    assign seo_title = page.title | append: ' | ' | append: shop.name
+    assign seo_description = page.content | strip_html | truncate: 160
+    assign page_type = 'website'
+  elsif is_home_page
+    assign seo_title = shop.name | append: ' - ' | append: shop.description
+    assign seo_description = shop.description
+    assign page_type = 'website'
+  endif
+  
+  comment 'Fallback image'
+  if seo_image == blank
+    assign seo_image = settings.share_image | default: shop.brand.logo | image_url: width: 1200
+  endif
+%}
+
+{% comment %} META TAGS - BASIC SEO {% endcomment %}
+<meta name="description" content="{{ seo_description | escape }}">
+{% if seo_keywords != blank %}<meta name="keywords" content="{{ seo_keywords | escape }}">{% endif %}
+<meta name="author" content="{{ shop.name }}">
+<meta name="robots" content="index, follow{% if template contains 'search' %}, noarchive{% endif %}">
+
+{% comment %} Canonical URL {% endcomment %}
+<link rel="canonical" href="{{ canonical_url }}">
+
+{% comment %} Language and Region {% endcomment %}
+<meta name="language" content="{{ request.locale.iso_code }}">
+<meta name="geo.region" content="{{ shop.address.country_code }}">
+{% if shop.address.city %}<meta name="geo.placename" content="{{ shop.address.city }}">{% endif %}
+
+{% comment %} OPEN GRAPH META TAGS {% endcomment %}
+{% if enable_social_meta %}
+  <meta property="og:site_name" content="{{ shop.name }}">
+  <meta property="og:type" content="{{ page_type }}">
+  <meta property="og:title" content="{{ seo_title | escape }}">
+  <meta property="og:description" content="{{ seo_description | escape }}">
+  <meta property="og:url" content="{{ canonical_url }}">
+  <meta property="og:locale" content="{{ request.locale.iso_code | replace: '-', '_' }}">
+  
+  {% if seo_image %}
+    <meta property="og:image" content="{{ seo_image }}">
+    <meta property="og:image:secure_url" content="{{ seo_image }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="{{ seo_title | escape }}">
+  {% endif %}
+
+  {% comment %} Product-specific Open Graph {% endcomment %}
+  {% if is_product_page and product %}
+    <meta property="product:brand" content="{{ product.vendor | escape }}">
+    <meta property="product:availability" content="{% if product.available %}in stock{% else %}out of stock{% endif %}">
+    <meta property="product:condition" content="new">
+    <meta property="product:price:amount" content="{{ product.price | money_without_currency }}">
+    <meta property="product:price:currency" content="{{ cart.currency.iso_code }}">
+    {% if product.compare_at_price > product.price %}
+      <meta property="product:sale_price:amount" content="{{ product.price | money_without_currency }}">
+      <meta property="product:sale_price:currency" content="{{ cart.currency.iso_code }}">
+    {% endif %}
+  {% endif %}
+
+  {% comment %} Article-specific Open Graph {% endcomment %}
+  {% if is_article_page and article %}
+    <meta property="article:author" content="{{ article.author }}">
+    <meta property="article:published_time" content="{{ article.created_at | date: '%Y-%m-%dT%H:%M:%S%z' }}">
+    <meta property="article:modified_time" content="{{ article.updated_at | date: '%Y-%m-%dT%H:%M:%S%z' }}">
+    <meta property="article:section" content="{{ blog.title }}">
+    {% for tag in article.tags %}
+      <meta property="article:tag" content="{{ tag }}">
+    {% endfor %}
+  {% endif %}
+{% endif %}
+
+{% comment %} TWITTER CARD META TAGS {% endcomment %}
+{% if enable_social_meta %}
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@{{ settings.social_twitter_handle | remove: '@' }}">
+  <meta name="twitter:creator" content="@{{ settings.social_twitter_handle | remove: '@' }}">
+  <meta name="twitter:title" content="{{ seo_title | escape }}">
+  <meta name="twitter:description" content="{{ seo_description | escape }}">
+  {% if seo_image %}<meta name="twitter:image" content="{{ seo_image }}">{% endif %}
+  
+  {% if is_product_page and product %}
+    <meta name="twitter:label1" content="Price">
+    <meta name="twitter:data1" content="{{ product.price | money }}">
+    <meta name="twitter:label2" content="Availability">
+    <meta name="twitter:data2" content="{% if product.available %}In Stock{% else %}Out of Stock{% endif %}">
+  {% endif %}
+{% endif %}
+
+{% comment %} STRUCTURED DATA (JSON-LD) {% endcomment %}
+{% if generate_structured_data %}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "{{ shop.url }}#organization",
+        "name": "{{ shop.name | escape }}",
+        "url": "{{ shop.url }}",
+        {% if shop.description %}"description": "{{ shop.description | escape }}",{% endif %}
+        {% if seo_image %}"logo": "{{ seo_image }}",{% endif %}
+        {% if shop.address %}
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "{{ shop.address.address1 | escape }}{% if shop.address.address2 %}, {{ shop.address.address2 | escape }}{% endif %}",
+          "addressLocality": "{{ shop.address.city | escape }}",
+          "addressRegion": "{{ shop.address.province | escape }}",
+          "postalCode": "{{ shop.address.zip | escape }}",
+          "addressCountry": "{{ shop.address.country_code }}"
+        },
+        {% endif %}
+        "sameAs": [
+          {% if settings.social_facebook_url %}"{{ settings.social_facebook_url }}"{% endif %}
+          {% if settings.social_twitter_url and settings.social_facebook_url %},{% endif %}
+          {% if settings.social_twitter_url %}"{{ settings.social_twitter_url }}"{% endif %}
+          {% if settings.social_instagram_url and (settings.social_facebook_url or settings.social_twitter_url) %},{% endif %}
+          {% if settings.social_instagram_url %}"{{ settings.social_instagram_url }}"{% endif %}
+          {% if settings.social_youtube_url and (settings.social_facebook_url or settings.social_twitter_url or settings.social_instagram_url) %},{% endif %}
+          {% if settings.social_youtube_url %}"{{ settings.social_youtube_url }}"{% endif %}
+        ]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "{{ shop.url }}#website",
+        "url": "{{ shop.url }}",
+        "name": "{{ shop.name | escape }}",
+        "publisher": {
+          "@id": "{{ shop.url }}#organization"
+        },
+        {% if is_home_page == false %}
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "{{ routes.search_url }}?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        },
+        {% endif %}
+        "inLanguage": "{{ request.locale.iso_code }}"
+      }
+      {% if is_product_page and product %}
+      ,{
+        "@type": "Product",
+        "@id": "{{ product.url | prepend: shop.url }}#product",
+        "name": "{{ product.title | escape }}",
+        "description": "{{ product.description | strip_html | escape }}",
+        "url": "{{ product.url | prepend: shop.url }}",
+        {% if product.featured_media %}
+        "image": [
+          {% for media in product.media limit: 5 %}
+            "{{ media | image_url: width: 1200 }}"{% unless forloop.last %},{% endunless %}
+          {% endfor %}
+        ],
+        {% endif %}
+        "brand": {
+          "@type": "Brand",
+          "name": "{{ product.vendor | escape }}"
+        },
+        "manufacturer": {
+          "@type": "Organization",
+          "name": "{{ product.vendor | escape }}"
+        },
+        "sku": "{{ product.selected_or_first_available_variant.sku | escape }}",
+        "gtin": "{{ product.selected_or_first_available_variant.barcode | escape }}",
+        "offers": {
+          "@type": "Offer",
+          "url": "{{ product.url | prepend: shop.url }}",
+          "priceCurrency": "{{ cart.currency.iso_code }}",
+          "price": "{{ product.price | money_without_currency }}",
+          {% if product.compare_at_price > product.price %}
+          "priceValidUntil": "{{ 'now' | date: '%Y' | plus: 1 }}-12-31",
+          {% endif %}
+          "availability": "https://schema.org/{% if product.available %}InStock{% else %}OutOfStock{% endif %}",
+          "seller": {
+            "@id": "{{ shop.url }}#organization"
+          }
+        },
+        {% if product.metafields.reviews.rating.value %}
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "{{ product.metafields.reviews.rating.value | round: 1 }}",
+          "reviewCount": "{{ product.metafields.reviews.rating_count.value | default: 1 }}"
+        },
+        {% endif %}
+        "category": "{{ collection.title | escape }}"
+      }
+      {% elsif is_article_page and article %}
+      ,{
+        "@type": "Article",
+        "@id": "{{ article.url | prepend: shop.url }}#article",
+        "headline": "{{ article.title | escape }}",
+        "description": "{{ article.excerpt | default: article.content | strip_html | truncate: 160 | escape }}",
+        "url": "{{ article.url | prepend: shop.url }}",
+        {% if article.image %}
+        "image": {
+          "@type": "ImageObject",
+          "url": "{{ article.image | image_url: width: 1200 }}",
+          "width": 1200,
+          "height": 630
+        },
+        {% endif %}
+        "datePublished": "{{ article.created_at | date: '%Y-%m-%dT%H:%M:%S%z' }}",
+        "dateModified": "{{ article.updated_at | date: '%Y-%m-%dT%H:%M:%S%z' }}",
+        "author": {
+          "@type": "Person",
+          "name": "{{ article.author | escape }}"
+        },
+        "publisher": {
+          "@id": "{{ shop.url }}#organization"
+        },
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": "{{ article.url | prepend: shop.url }}"
+        },
+        "articleSection": "{{ blog.title | escape }}",
+        "keywords": "{{ article.tags | join: ', ' | escape }}",
+        "inLanguage": "{{ request.locale.iso_code }}"
+      }
+      {% elsif is_collection_page and collection %}
+      ,{
+        "@type": "CollectionPage",
+        "@id": "{{ collection.url | prepend: shop.url }}#collection",
+        "name": "{{ collection.title | escape }}",
+        "description": "{{ collection.description | strip_html | escape }}",
+        "url": "{{ collection.url | prepend: shop.url }}",
+        {% if collection.featured_image %}
+        "image": "{{ collection.featured_image | image_url: width: 1200 }}",
+        {% endif %}
+        "mainEntity": {
+          "@type": "ItemList",
+          "numberOfItems": "{{ collection.products_count }}",
+          "itemListElement": [
+            {% for product in collection.products limit: 10 %}
+              {
+                "@type": "Product",
+                "position": "{{ forloop.index }}",
+                "name": "{{ product.title | escape }}",
+                "url": "{{ product.url | prepend: shop.url }}",
+                {% if product.featured_media %}
+                "image": "{{ product.featured_media | image_url: width: 300 }}",
+                {% endif %}
+                "offers": {
+                  "@type": "Offer",
+                  "price": "{{ product.price | money_without_currency }}",
+                  "priceCurrency": "{{ cart.currency.iso_code }}",
+                  "availability": "https://schema.org/{% if product.available %}InStock{% else %}OutOfStock{% endif %}"
+                }
+              }{% unless forloop.last %},{% endunless %}
+            {% endfor %}
+          ]
+        }
+      }
+      {% elsif is_home_page %}
+      ,{
+        "@type": "WebPage",
+        "@id": "{{ shop.url }}#homepage",
+        "url": "{{ shop.url }}",
+        "name": "{{ shop.name | escape }}",
+        "description": "{{ shop.description | escape }}",
+        "isPartOf": {
+          "@id": "{{ shop.url }}#website"
+        },
+        "about": {
+          "@id": "{{ shop.url }}#organization"
+        },
+        "mainEntity": {
+          "@type": "ItemList",
+          "name": "Featured Products",
+          "itemListElement": [
+            {% assign featured_products = collections.featured-products.products | default: collections.all.products %}
+            {% for product in featured_products limit: 8 %}
+              {
+                "@type": "Product",
+                "position": "{{ forloop.index }}",
+                "name": "{{ product.title | escape }}",
+                "url": "{{ product.url | prepend: shop.url }}"
+              }{% unless forloop.last %},{% endunless %}
+            {% endfor %}
+          ]
+        }
+      }
+      {% endif %}
+      {% if is_search_page %}
+      ,{
+        "@type": "SearchResultsPage",
+        "@id": "{{ canonical_url }}#searchresults",
+        "url": "{{ canonical_url }}",
+        "name": "Search Results for \"{{ search.terms | escape }}\"",
+        "mainEntity": {
+          "@type": "ItemList",
+          "numberOfItems": "{{ search.results_count }}",
+          "itemListElement": [
+            {% for item in search.results limit: 10 %}
+              {
+                "@type": "{% if item.object_type == 'product' %}Product{% elsif item.object_type == 'article' %}Article{% else %}Thing{% endif %}",
+                "position": "{{ forloop.index }}",
+                "name": "{{ item.title | escape }}",
+                "url": "{{ item.url | prepend: shop.url }}"
+              }{% unless forloop.last %},{% endunless %}
+            {% endfor %}
+          ]
+        }
+      }
+      {% endif %}
+    ]
+  }
+  </script>
+{% endif %}
+
+{% comment %} BREADCRUMB STRUCTURED DATA {% endcomment %}
+{% unless template == 'index' %}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "{{ shop.url }}"
+      }
+      {% if is_collection_page and collection %}
+      ,{
+        "@type": "ListItem",
+        "position": 2,
+        "name": "{{ collection.title | escape }}",
+        "item": "{{ collection.url | prepend: shop.url }}"
+      }
+      {% elsif is_product_page and product and collection %}
+      ,{
+        "@type": "ListItem",
+        "position": 2,
+        "name": "{{ collection.title | escape }}",
+        "item": "{{ collection.url | prepend: shop.url }}"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "{{ product.title | escape }}",
+        "item": "{{ product.url | prepend: shop.url }}"
+      }
+      {% elsif is_blog_page and blog %}
+      ,{
+        "@type": "ListItem",
+        "position": 2,
+        "name": "{{ blog.title | escape }}",
+        "item": "{{ blog.url | prepend: shop.url }}"
+      }
+      {% elsif is_article_page and article %}
+      ,{
+        "@type": "ListItem",
+        "position": 2,
+        "name": "{{ blog.title | escape }}",
+        "item": "{{ blog.url | prepend: shop.url }}"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "{{ article.title | escape }}",
+        "item": "{{ article.url | prepend: shop.url }}"
+      }
+      {% elsif is_page_template and page %}
+      ,{
+        "@type": "ListItem",
+        "position": 2,
+        "name": "{{ page.title | escape }}",
+        "item": "{{ page.url | prepend: shop.url }}"
+      }
+      {% endif %}
+    ]
+  }
+  </script>
+{% endunless %}
+
+{% comment %} ADDITIONAL SEO ENHANCEMENTS {% endcomment %}
+
+{% comment %} Hreflang for international SEO {% endcomment %}
+{% if shop.enabled_locales.size > 1 %}
+  {% for locale in shop.enabled_locales %}
+    <link rel="alternate" hreflang="{{ locale.iso_code }}" href="{{ canonical_url | remove: request.locale.root_url | prepend: locale.root_url }}">
+  {% endfor %}
+  <link rel="alternate" hreflang="x-default" href="{{ canonical_url | remove: request.locale.root_url | prepend: shop.primary_locale.root_url }}">
+{% endif %}
+
+{% comment %} Pagination SEO {% endcomment %}
+{% if paginate %}
+  {% if paginate.previous %}
+    <link rel="prev" href="{{ paginate.previous.url }}">
+  {% endif %}
+  {% if paginate.next %}
+    <link rel="next" href="{{ paginate.next.url }}">
+  {% endif %}
+{% endif %}
+
+{% comment %} Theme Color for Mobile Browsers {% endcomment %}
+<meta name="theme-color" content="{{ settings.colors_accent_1 | default: '#000000' }}">
+<meta name="msapplication-TileColor" content="{{ settings.colors_accent_1 | default: '#000000' }}">
+
+{% comment %} Preload Important Resources for SEO {% endcomment %}
+{% if seo_image %}
+  <link rel="preload" as="image" href="{{ seo_image }}" imagesrcset="{{ seo_image | image_url: width: 400 }} 400w, {{ seo_image | image_url: width: 800 }} 800w, {{ seo_image | image_url: width: 1200 }} 1200w" imagesizes="(max-width: 400px) 400px, (max-width: 800px) 800px, 1200px">
+{% endif %}
+
+{% comment %} DNS Prefetch for External Resources {% endcomment %}
+<link rel="dns-prefetch" href="//www.google-analytics.com">
+<link rel="dns-prefetch" href="//www.googletagmanager.com">
+<link rel="dns-prefetch" href="//fonts.googleapis.com">
+
+{% comment %} SEO DEBUG MODE {% endcomment %}
+{% if debug_seo %}
+  <script>
+    console.group('🔍 SEO Debug Information');
+    console.log('📄 Page Type:', '{{ page_type }}');
+    console.log('📝 Title:', '{{ seo_title }}');
+    console.log('📖 Description:', '{{ seo_description }}');
+    console.log('🖼️ Image:', '{{ seo_image }}');
+    console.log('🏷️ Keywords:', '{{ seo_keywords }}');
+    console.log('🔗 Canonical:', '{{ canonical_url }}');
+    console.log('🌍 Locale:', '{{ request.locale.iso_code }}');
+    console.groupEnd();
+
+    // SEO Validation
+    if ('{{ seo_title | size }}' > 60) {
+      console.warn('⚠️ SEO Warning: Title is longer than 60 characters ({{ seo_title | size }} chars)');
+    }
+    if ('{{ seo_description | size }}' > 160) {
+      console.warn('⚠️ SEO Warning: Description is longer than 160 characters ({{ seo_description | size }} chars)');
+    }
+    if ('{{ seo_image }}' === '') {
+      console.warn('⚠️ SEO Warning: No social sharing image set');
+    }
+
+    // Performance SEO checks
+    window.addEventListener('load', function() {
+      // Check for missing alt attributes
+      const imagesWithoutAlt = document.querySelectorAll('img:not([alt])');
+      if (imagesWithoutAlt.length > 0) {
+        console.warn('⚠️ SEO Warning:', imagesWithoutAlt.length, 'images without alt attributes');
+      }
+
+      // Check heading structure
+      const headings = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+      const h1Count = document.querySelectorAll('h1').length;
+      if (h1Count === 0) {
+        console.warn('⚠️ SEO Warning: No H1 tag found on page');
+      } else if (h1Count > 1) {
+        console.warn('⚠️ SEO Warning: Multiple H1 tags found (', h1Count, ')');
+      }
+
+      console.log('📊 SEO Summary:', {
+        'H1 tags': h1Count,
+        'Total headings': headings.length,
+        'Images without alt': imagesWithoutAlt.length,
+        'Page load time': performance.timing.loadEventEnd - performance.timing.navigationStart + 'ms'
+      });
+    });
+  </script>
+{% endif %}
+
+{% comment %} PERFORMANCE SEO ENHANCEMENTS {% endcomment %}
+<style>
+  /* SEO-friendly CSS for Core Web Vitals */
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Prevent layout shifts */
+  .seo-optimized img:not([width]):not([height]) {
+    aspect-ratio: 16 / 9;
+  }
+
+  /* Optimize for mobile-first indexing */
+  @media (max-width: 767px) {
+    .seo-hidden-mobile {
+      display: none !important;
+    }
+  }
+
+  /* Print styles for SEO */
+  @media print {
+    .seo-no-print {
+      display: none !important;
+    }
+  }
+</style>
+
+{% comment %} ADDITIONAL META TAGS FOR E-COMMERCE {% endcomment %}
+{% if is_product_page and product %}
+  <meta name="product:price:amount" content="{{ product.price | money_without_currency }}">
+  <meta name="product:price:currency" content="{{ cart.currency.iso_code }}">
+  <meta name="product:availability" content="{% if product.available %}in stock{% else %}out of stock{% endif %}">
+  <meta name="product:condition" content="new">
+  <meta name="product:brand" content="{{ product.vendor | escape }}">
+  
+  {% comment %} Product Reviews Schema {% endcomment %}
+  {% if product.metafields.reviews.rating.value %}
+    <meta name="product:rating:value" content="{{ product.metafields.reviews.rating.value }}">
+    <meta name="product:rating:scale" content="5">
+    <meta name="product:rating:count" content="{{ product.metafields.reviews.rating_count.value | default: 1 }}">
+  {% endif %}
+{% endif %}

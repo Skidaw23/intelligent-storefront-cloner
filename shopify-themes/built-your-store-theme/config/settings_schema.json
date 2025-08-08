@@ -1,11 +1,213 @@
 [
   {
     "name": "theme_info",
-    "theme_name": "Dawn",
-    "theme_version": "15.2.0",
-    "theme_author": "Shopify",
-    "theme_documentation_url": "https:\/\/help.shopify.com\/manual\/online-store\/themes",
-    "theme_support_url": "https:\/\/support.shopify.com\/"
+    "theme_name": "Intelligent Storefront Cloner - Enhanced Theme",
+    "theme_version": "1.0.0",
+    "theme_author": "Intelligent Storefront Cloner",
+    "theme_documentation_url": "https://github.com/Skidaw23/intelligent-storefront-cloner",
+    "theme_support_url": "https://github.com/Skidaw23/intelligent-storefront-cloner/issues"
+  },
+  {
+    "name": "🚀 Architecture & Performance",
+    "settings": [
+      {
+        "type": "header",
+        "content": "🏗️ Advanced Architecture Settings"
+      },
+      {
+        "type": "checkbox",
+        "id": "debug_mode",
+        "label": "Enable Debug Mode",
+        "default": false,
+        "info": "Shows debug information for development. Disable for production."
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_architecture_core",
+        "label": "Enable Architecture Core",
+        "default": true,
+        "info": "Activates advanced dependency injection and factory patterns."
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_responsive_manager",
+        "label": "Enable Responsive Manager",
+        "default": true,
+        "info": "Activates advanced responsive design management system."
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_component_factory",
+        "label": "Enable Component Factory",
+        "default": true,
+        "info": "Uses factory pattern for consistent component creation."
+      },
+      {
+        "type": "header",
+        "content": "⚡ Performance Optimization"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_lazy_loading",
+        "label": "Enable Lazy Loading",
+        "default": true,
+        "info": "Improves page load speed by loading images on demand."
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_critical_css",
+        "label": "Inline Critical CSS",
+        "default": false,
+        "info": "Inlines critical CSS for faster first paint. Advanced users only."
+      },
+      {
+        "type": "range",
+        "id": "lazy_load_threshold",
+        "label": "Lazy Loading Threshold",
+        "min": 50,
+        "max": 500,
+        "step": 50,
+        "unit": "px",
+        "default": 100,
+        "info": "Distance from viewport when lazy loading triggers"
+      },
+      {
+        "type": "header",
+        "content": "🎨 Advanced Customization"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_advanced_animations",
+        "label": "Enable Advanced Animations",
+        "default": true,
+        "info": "Activates scroll-based animations and enhanced transitions."
+      },
+      {
+        "type": "select",
+        "id": "animation_speed",
+        "label": "Animation Speed",
+        "options": [
+          { "value": "slow", "label": "Slow (800ms)" },
+          { "value": "normal", "label": "Normal (400ms)" },
+          { "value": "fast", "label": "Fast (200ms)" }
+        ],
+        "default": "normal",
+        "info": "Global animation speed for theme transitions"
+      },
+      {
+        "type": "checkbox",
+        "id": "respect_reduced_motion",
+        "label": "Respect Reduced Motion Preference",
+        "default": true,
+        "info": "Automatically disables animations for users who prefer reduced motion."
+      },
+      {
+        "type": "header",
+        "content": "📱 Responsive & Mobile"
+      },
+      {
+        "type": "range",
+        "id": "mobile_breakpoint",
+        "label": "Mobile Breakpoint",
+        "min": 320,
+        "max": 600,
+        "step": 20,
+        "unit": "px",
+        "default": 480,
+        "info": "Screen width below which mobile styles apply"
+      },
+      {
+        "type": "range",
+        "id": "tablet_breakpoint",
+        "label": "Tablet Breakpoint",
+        "min": 600,
+        "max": 900,
+        "step": 20,
+        "unit": "px",
+        "default": 768,
+        "info": "Screen width below which tablet styles apply"
+      },
+      {
+        "type": "range",
+        "id": "desktop_breakpoint",
+        "label": "Desktop Breakpoint",
+        "min": 900,
+        "max": 1200,
+        "step": 20,
+        "unit": "px",
+        "default": 1024,
+        "info": "Screen width above which desktop styles apply"
+      },
+      {
+        "type": "header",
+        "content": "🔧 Developer Options"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_section_borders",
+        "label": "Show Section Borders (Debug)",
+        "default": false,
+        "info": "Adds visible borders around sections for layout debugging."
+      },
+      {
+        "type": "checkbox",
+        "id": "log_performance_metrics",
+        "label": "Log Performance Metrics",
+        "default": false,
+        "info": "Logs Core Web Vitals and other performance data to console."
+      },
+      {
+        "type": "textarea",
+        "id": "custom_css_global",
+        "label": "Global Custom CSS",
+        "info": "Add custom CSS that applies globally across the theme."
+      },
+      {
+        "type": "textarea",
+        "id": "custom_js_global",
+        "label": "Global Custom JavaScript",
+        "info": "Add custom JavaScript that loads globally across the theme."
+      },
+      {
+        "type": "header",
+        "content": "🧪 A/B Testing & Optimization"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_ab_testing",
+        "label": "Enable A/B Testing Framework",
+        "default": false,
+        "info": "Activate advanced A/B testing capabilities for optimization."
+      },
+      {
+        "type": "range",
+        "id": "ab_traffic_allocation",
+        "label": "Default Traffic Allocation",
+        "min": 10,
+        "max": 100,
+        "step": 10,
+        "unit": "%",
+        "default": 50,
+        "info": "Percentage of traffic to include in A/B tests by default."
+      },
+      {
+        "type": "range",
+        "id": "ab_confidence_threshold",
+        "label": "Statistical Confidence Threshold",
+        "min": 90,
+        "max": 99,
+        "step": 1,
+        "unit": "%",
+        "default": 95,
+        "info": "Required confidence level for test results."
+      },
+      {
+        "type": "text",
+        "id": "ab_analytics_endpoint",
+        "label": "Analytics Endpoint URL",
+        "info": "Custom endpoint for A/B test data collection (optional)."
+      }
+    ]
   },
   {
     "name": "t:settings_schema.logo.name",
