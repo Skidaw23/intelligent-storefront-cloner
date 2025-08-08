@@ -1,0 +1,377 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Royal Equips Pro",
+    "theme_version": "2.0.0",
+    "theme_author": "Royal Equips Development Team",
+    "theme_documentation_url": "https://royalequips.com/theme-docs",
+    "theme_support_url": "https://royalequips.com/support"
+  },
+  {
+    "name": "Royal Equips Brand Identity",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Logo & Branding"
+      },
+      {
+        "type": "image_picker",
+        "id": "logo",
+        "label": "Main Logo",
+        "info": "Recommended: SVG or PNG with transparent background"
+      },
+      {
+        "type": "image_picker",
+        "id": "logo_light",
+        "label": "Light Logo (for dark backgrounds)",
+        "info": "Optional: Alternative logo for dark sections"
+      },
+      {
+        "type": "range",
+        "id": "logo_width_desktop",
+        "min": 80,
+        "max": 400,
+        "step": 10,
+        "unit": "px",
+        "label": "Logo width (desktop)",
+        "default": 200
+      },
+      {
+        "type": "range",
+        "id": "logo_width_mobile",
+        "min": 60,
+        "max": 200,
+        "step": 5,
+        "unit": "px",
+        "label": "Logo width (mobile)",
+        "default": 140
+      },
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon",
+        "info": "32 x 32px .ico or .png recommended"
+      },
+      {
+        "type": "header",
+        "content": "Brand Colors"
+      },
+      {
+        "type": "color",
+        "id": "brand_primary",
+        "label": "Primary Dark",
+        "default": "#1a1a1a",
+        "info": "Main background color"
+      },
+      {
+        "type": "color",
+        "id": "brand_electric_blue",
+        "label": "Electric Blue",
+        "default": "#00bfff",
+        "info": "Primary accent color"
+      },
+      {
+        "type": "color",
+        "id": "brand_silver",
+        "label": "Metallic Silver",
+        "default": "#c0c0c0",
+        "info": "Secondary accent color"
+      },
+      {
+        "type": "color",
+        "id": "brand_gold",
+        "label": "Luxury Gold",
+        "default": "#ffd700",
+        "info": "Premium highlight color"
+      },
+      {
+        "type": "color",
+        "id": "text_color_primary",
+        "label": "Primary Text",
+        "default": "#ffffff",
+        "info": "Main text color"
+      },
+      {
+        "type": "color",
+        "id": "text_color_secondary",
+        "label": "Secondary Text",
+        "default": "#c0c0c0",
+        "info": "Subdued text color"
+      }
+    ]
+  },
+  {
+    "name": "Typography System",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Font Selection"
+      },
+      {
+        "type": "font_picker",
+        "id": "type_header_font",
+        "default": "assistant_n4",
+        "label": "Heading font",
+        "info": "Used for headings and important text"
+      },
+      {
+        "type": "font_picker",
+        "id": "type_body_font",
+        "default": "assistant_n4",
+        "label": "Body font",
+        "info": "Used for body text and descriptions"
+      },
+      {
+        "type": "header",
+        "content": "Typography Scale"
+      },
+      {
+        "type": "range",
+        "id": "font_size_base",
+        "min": 14,
+        "max": 20,
+        "step": 1,
+        "unit": "px",
+        "label": "Base font size",
+        "default": 16,
+        "info": "Foundation for all text sizes"
+      },
+      {
+        "type": "range",
+        "id": "font_scale_ratio",
+        "min": 1.1,
+        "max": 1.6,
+        "step": 0.05,
+        "label": "Typography scale",
+        "default": 1.25,
+        "info": "Ratio for heading size progression"
+      },
+      {
+        "type": "range",
+        "id": "line_height_base",
+        "min": 1.2,
+        "max": 2.0,
+        "step": 0.1,
+        "label": "Base line height",
+        "default": 1.6,
+        "info": "Line spacing for body text"
+      },
+      {
+        "type": "range",
+        "id": "letter_spacing_headings",
+        "min": -0.1,
+        "max": 0.2,
+        "step": 0.01,
+        "unit": "em",
+        "label": "Heading letter spacing",
+        "default": 0.02
+      }
+    ]
+  },
+  {
+    "name": "Animation & Effects",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Animation Settings"
+      },
+      {
+        "type": "checkbox",
+        "id": "animations_reveal_on_scroll",
+        "label": "Enable scroll animations",
+        "default": true,
+        "info": "Animate elements as they come into view"
+      },
+      {
+        "type": "checkbox",
+        "id": "animations_hover_effects",
+        "label": "Enable hover effects",
+        "default": true,
+        "info": "Interactive hover animations on buttons and cards"
+      },
+      {
+        "type": "checkbox",
+        "id": "animations_metallic_shine",
+        "label": "Metallic shine effects",
+        "default": true,
+        "info": "Luxury metallic shine animation on products"
+      },
+      {
+        "type": "select",
+        "id": "animation_speed",
+        "label": "Animation speed",
+        "options": [
+          { "value": "slow", "label": "Slow (0.8s)" },
+          { "value": "normal", "label": "Normal (0.5s)" },
+          { "value": "fast", "label": "Fast (0.3s)" }
+        ],
+        "default": "normal"
+      },
+      {
+        "type": "header",
+        "content": "Visual Effects"
+      },
+      {
+        "type": "checkbox",
+        "id": "effects_parallax",
+        "label": "Enable parallax effects",
+        "default": true,
+        "info": "Background parallax scrolling effects"
+      },
+      {
+        "type": "range",
+        "id": "blur_intensity",
+        "min": 0,
+        "max": 20,
+        "step": 1,
+        "unit": "px",
+        "label": "Backdrop blur intensity",
+        "default": 10,
+        "info": "Glass effect intensity"
+      },
+      {
+        "type": "range",
+        "id": "glow_intensity",
+        "min": 0,
+        "max": 1,
+        "step": 0.1,
+        "label": "Glow effect intensity",
+        "default": 0.4,
+        "info": "Electric blue glow strength"
+      }
+    ]
+  },
+  {
+    "name": "Performance & Accessibility",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Performance Settings"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_lazy_loading",
+        "label": "Enable lazy loading",
+        "default": true,
+        "info": "Load images and videos only when needed"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_webp",
+        "label": "Prefer WebP images",
+        "default": true,
+        "info": "Use WebP format when supported for better performance"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_critical_css",
+        "label": "Inline critical CSS",
+        "default": true,
+        "info": "Inline above-the-fold styles for faster rendering"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_preload_hints",
+        "label": "Resource preload hints",
+        "default": true,
+        "info": "Preload critical resources for better performance"
+      },
+      {
+        "type": "header",
+        "content": "Accessibility"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_high_contrast",
+        "label": "High contrast mode support",
+        "default": true,
+        "info": "Adapt colors for accessibility preferences"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_reduced_motion",
+        "label": "Respect reduced motion preference",
+        "default": true,
+        "info": "Disable animations for users who prefer reduced motion"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_skip_links",
+        "label": "Skip to content links",
+        "default": true,
+        "info": "Keyboard navigation shortcuts"
+      },
+      {
+        "type": "range",
+        "id": "focus_outline_width",
+        "min": 1,
+        "max": 4,
+        "step": 1,
+        "unit": "px",
+        "label": "Focus outline width",
+        "default": 2,
+        "info": "Thickness of focus indicators"
+      }
+    ]
+  },
+  {
+    "name": "Advanced Features",
+    "settings": [
+      {
+        "type": "header",
+        "content": "3D & AR Settings"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_3d_viewer",
+        "label": "Enable 3D product viewer",
+        "default": true,
+        "info": "Allow customers to view products in 3D"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_ar_viewer",
+        "label": "Enable AR viewing",
+        "default": true,
+        "info": "Augmented reality product preview"
+      },
+      {
+        "type": "select",
+        "id": "model_viewer_camera_position",
+        "label": "Default camera position",
+        "options": [
+          { "value": "auto", "label": "Auto" },
+          { "value": "front", "label": "Front view" },
+          { "value": "side", "label": "Side view" },
+          { "value": "top", "label": "Top view" }
+        ],
+        "default": "auto"
+      },
+      {
+        "type": "header",
+        "content": "E-commerce Features"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_quick_add",
+        "label": "Quick add to cart",
+        "default": true,
+        "info": "Add products to cart without leaving collection pages"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_wishlist",
+        "label": "Wishlist functionality",
+        "default": true,
+        "info": "Allow customers to save products for later"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_product_compare",
+        "label": "Product comparison",
+        "default": true,
+        "info": "Compare product features side by side"
+      }
+    ]
+  }
+]

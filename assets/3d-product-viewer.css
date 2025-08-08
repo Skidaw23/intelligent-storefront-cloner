@@ -1,0 +1,522 @@
+/* Royal Equips 3D Product Viewer */
+
+.royal-3d-showcase {
+  position: relative;
+  background: var(--gradient-metallic);
+  overflow: hidden;
+}
+
+.royal-3d-showcase__header {
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto var(--space-2xl);
+}
+
+.royal-3d-showcase__heading {
+  margin-bottom: var(--space-lg);
+  background: var(--gradient-blue);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 30px rgba(0, 191, 255, 0.3);
+}
+
+.royal-3d-showcase__description {
+  color: var(--color-royal-silver);
+  font-size: clamp(1rem, 2.5vw, 1.25rem);
+  line-height: 1.6;
+}
+
+.royal-3d-showcase__content {
+  position: relative;
+}
+
+.royal-3d-showcase__grid {
+  align-items: center;
+  gap: var(--space-2xl);
+}
+
+.royal-3d-showcase__viewer-container {
+  position: relative;
+}
+
+.royal-3d-viewer {
+  position: relative;
+  width: 100%;
+  height: 600px;
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+  background: var(--color-royal-charcoal);
+  border: 1px solid rgba(192, 192, 192, 0.1);
+  box-shadow: var(--shadow-xl);
+}
+
+.royal-3d-model {
+  width: 100%;
+  height: 100%;
+  border-radius: var(--border-radius-lg);
+  background: transparent;
+}
+
+.royal-3d-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+  color: var(--color-royal-silver);
+  gap: var(--space-md);
+}
+
+.royal-3d-placeholder svg {
+  opacity: 0.3;
+  color: var(--color-royal-blue);
+}
+
+/* Loading States */
+.royal-3d-loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(26, 26, 26, 0.95);
+  color: var(--color-royal-silver);
+  gap: var(--space-md);
+  z-index: 10;
+}
+
+.royal-loading-ring {
+  width: 50px;
+  height: 50px;
+  border: 3px solid rgba(0, 191, 255, 0.1);
+  border-top: 3px solid var(--color-royal-blue);
+  border-radius: 50%;
+  animation: royal-spin 1s linear infinite;
+}
+
+.royal-3d-error {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(26, 26, 26, 0.95);
+  color: var(--color-royal-silver);
+  text-align: center;
+  gap: var(--space-sm);
+  z-index: 10;
+}
+
+.royal-3d-error svg {
+  color: #ff6b6b;
+  margin-bottom: var(--space-sm);
+}
+
+/* AR Button */
+.royal-ar-button {
+  position: absolute;
+  bottom: var(--space-md);
+  left: var(--space-md);
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-sm) var(--space-md);
+  background: rgba(0, 191, 255, 0.9);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--border-radius-md);
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: var(--transition-base);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-lg);
+  z-index: 5;
+}
+
+.royal-ar-button:hover {
+  background: rgba(0, 191, 255, 1);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-xl);
+}
+
+/* 3D Controls */
+.royal-3d-controls {
+  position: absolute;
+  bottom: var(--space-md);
+  right: var(--space-md);
+  display: flex;
+  gap: var(--space-xs);
+  z-index: 5;
+}
+
+.royal-3d-control {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: var(--space-xs);
+  background: rgba(26, 26, 26, 0.8);
+  color: var(--color-royal-silver);
+  border: 1px solid rgba(192, 192, 192, 0.2);
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  transition: var(--transition-base);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  min-width: 40px;
+}
+
+.royal-3d-control:hover {
+  background: rgba(0, 191, 255, 0.2);
+  border-color: var(--color-royal-blue);
+  transform: translateY(-1px);
+}
+
+.royal-3d-control .royal-caption {
+  font-size: 0.7rem;
+  color: inherit;
+}
+
+/* Hotspots */
+.royal-3d-hotspots {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 4;
+}
+
+.royal-hotspot {
+  position: absolute;
+  pointer-events: all;
+  --hotspot-size: 20px;
+}
+
+.royal-hotspot-button {
+  position: relative;
+  width: var(--hotspot-size);
+  height: var(--hotspot-size);
+  background: var(--hotspot-color, var(--color-royal-blue));
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: var(--transition-base);
+  animation: pulse 2s infinite;
+}
+
+.royal-hotspot-button:hover {
+  transform: scale(1.2);
+  animation: none;
+}
+
+.royal-hotspot-pulse {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  border: 2px solid var(--hotspot-color, var(--color-royal-blue));
+  border-radius: 50%;
+  animation: pulseRing 2s infinite;
+  opacity: 0;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+@keyframes pulseRing {
+  0% {
+    transform: scale(0.1);
+    opacity: 1;
+  }
+  80%, 100% {
+    transform: scale(1.2);
+    opacity: 0;
+  }
+}
+
+.royal-hotspot-content {
+  position: absolute;
+  bottom: calc(var(--hotspot-size) + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 200px;
+  max-width: 300px;
+  padding: var(--space-sm) var(--space-md);
+  background: rgba(26, 26, 26, 0.95);
+  color: #ffffff;
+  border: 1px solid rgba(0, 191, 255, 0.3);
+  border-radius: var(--border-radius-md);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  box-shadow: var(--shadow-lg);
+  opacity: 0;
+  visibility: hidden;
+  transition: var(--transition-base);
+  pointer-events: none;
+  z-index: 10;
+}
+
+.royal-hotspot:hover .royal-hotspot-content {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: all;
+}
+
+.royal-hotspot-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: var(--space-xs);
+  color: var(--color-royal-blue);
+}
+
+.royal-hotspot-description {
+  font-size: 0.8rem;
+  line-height: 1.4;
+  margin-bottom: var(--space-sm);
+  color: var(--color-royal-silver);
+}
+
+.royal-hotspot-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-royal-blue);
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.royal-hotspot-link:hover {
+  color: #ffffff;
+}
+
+/* Product Information */
+.royal-3d-showcase__info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: var(--space-lg);
+}
+
+.royal-product-info__title {
+  margin-bottom: var(--space-md);
+}
+
+.royal-product-info__price {
+  margin-bottom: var(--space-lg);
+}
+
+.royal-product-info__description {
+  margin-bottom: var(--space-xl);
+  line-height: 1.7;
+}
+
+.royal-product-info__features {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  margin-bottom: var(--space-xl);
+}
+
+.royal-feature {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-sm);
+  background: rgba(192, 192, 192, 0.05);
+  border: 1px solid rgba(192, 192, 192, 0.1);
+  border-radius: var(--border-radius-md);
+  transition: var(--transition-base);
+}
+
+.royal-feature:hover {
+  background: rgba(0, 191, 255, 0.1);
+  border-color: rgba(0, 191, 255, 0.3);
+  transform: translateX(4px);
+}
+
+.royal-feature__icon {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--gradient-blue);
+  border-radius: var(--border-radius-sm);
+  flex-shrink: 0;
+}
+
+.royal-feature__icon img {
+  width: 20px;
+  height: 20px;
+  filter: brightness(0) invert(1);
+}
+
+.royal-feature__text {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-royal-silver);
+}
+
+.royal-product-info__actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.royal-btn--full-width {
+  width: 100%;
+}
+
+.royal-btn__icon {
+  margin-left: var(--space-xs);
+}
+
+/* Content Placeholder */
+.royal-3d-showcase__content-placeholder {
+  padding: var(--space-2xl);
+  text-align: center;
+}
+
+.royal-placeholder-features {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  margin-top: var(--space-xl);
+}
+
+.royal-placeholder-features .royal-feature {
+  justify-content: center;
+  text-align: left;
+}
+
+.royal-placeholder-features .royal-feature__icon {
+  background: transparent;
+  font-size: 1.5rem;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .royal-3d-showcase__grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-xl);
+  }
+  
+  .royal-3d-viewer {
+    height: 500px;
+  }
+}
+
+@media (max-width: 768px) {
+  .royal-3d-viewer {
+    height: 400px;
+  }
+  
+  .royal-3d-controls {
+    bottom: var(--space-sm);
+    right: var(--space-sm);
+  }
+  
+  .royal-ar-button {
+    bottom: var(--space-sm);
+    left: var(--space-sm);
+    font-size: 0.8rem;
+    padding: var(--space-xs) var(--space-sm);
+  }
+  
+  .royal-hotspot-content {
+    min-width: 150px;
+    max-width: 200px;
+    font-size: 0.8rem;
+  }
+  
+  .royal-3d-showcase__info {
+    padding: var(--space-md);
+  }
+  
+  .royal-product-info__features {
+    gap: var(--space-sm);
+  }
+}
+
+@media (max-width: 480px) {
+  .royal-3d-viewer {
+    height: 350px;
+  }
+  
+  .royal-3d-showcase__header {
+    margin-bottom: var(--space-xl);
+  }
+  
+  .royal-feature {
+    padding: var(--space-xs);
+  }
+  
+  .royal-feature__text {
+    font-size: 0.8rem;
+  }
+}
+
+/* Performance optimizations */
+.royal-3d-model {
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .royal-hotspot-button,
+  .royal-hotspot-pulse {
+    animation: none;
+  }
+  
+  .royal-loading-ring {
+    animation: none;
+    border-top-color: var(--color-royal-blue);
+  }
+}
+
+/* Focus states */
+.royal-3d-control:focus,
+.royal-ar-button:focus,
+.royal-hotspot-button:focus {
+  outline: 2px solid var(--color-royal-blue);
+  outline-offset: 2px;
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .royal-3d-viewer {
+    border: 2px solid var(--color-royal-silver);
+  }
+  
+  .royal-feature {
+    border: 2px solid var(--color-royal-silver);
+  }
+  
+  .royal-hotspot-button {
+    border: 3px solid #ffffff;
+  }
+}

@@ -1,0 +1,615 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Royal Equips",
+    "theme_version": "1.0.0",
+    "theme_author": "Royal Equips Team",
+    "theme_documentation_url": "https://royalequips.com/theme-docs",
+    "theme_support_url": "https://royalequips.com/support"
+  },
+  {
+    "name": "Royal Equips Brand",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Brand Identity"
+      },
+      {
+        "type": "image_picker",
+        "id": "logo",
+        "label": "Royal Equips Logo"
+      },
+      {
+        "type": "range",
+        "id": "logo_width",
+        "min": 50,
+        "max": 300,
+        "step": 10,
+        "unit": "px",
+        "label": "Logo width",
+        "default": 180
+      },
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon",
+        "info": "32 x 32px .png recommended"
+      },
+      {
+        "type": "color",
+        "id": "brand_primary",
+        "label": "Primary Brand Color",
+        "default": "#1a1a1a",
+        "info": "Dark metallic base"
+      },
+      {
+        "type": "color",
+        "id": "brand_accent_blue",
+        "label": "Electric Blue Accent",
+        "default": "#00bfff",
+        "info": "Electric blue for highlights"
+      },
+      {
+        "type": "color",
+        "id": "brand_silver",
+        "label": "Silver Accent",
+        "default": "#c0c0c0",
+        "info": "Metallic silver for details"
+      }
+    ]
+  },
+  {
+    "name": "Colors",
+    "settings": [
+      {
+        "type": "color_scheme_group",
+        "id": "color_schemes",
+        "label": "Color scheme groups",
+        "definition": [
+          {
+            "type": "color",
+            "id": "background",
+            "label": "Background",
+            "default": "#0a0a0a"
+          },
+          {
+            "type": "color_background",
+            "id": "background_gradient",
+            "label": "Background gradient"
+          },
+          {
+            "type": "color",
+            "id": "text",
+            "label": "Text",
+            "default": "#ffffff"
+          },
+          {
+            "type": "color",
+            "id": "button",
+            "label": "Button background",
+            "default": "#00bfff"
+          },
+          {
+            "type": "color",
+            "id": "button_label",
+            "label": "Button text",
+            "default": "#ffffff"
+          },
+          {
+            "type": "color",
+            "id": "shadow",
+            "label": "Shadow",
+            "default": "#121212"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Typography",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Headings"
+      },
+      {
+        "type": "font_picker",
+        "id": "type_header_font",
+        "default": "eurostile_extended_2",
+        "label": "Font",
+        "info": "Selecting a different font can affect the speed of your store. [Learn more about system fonts.](https://help.shopify.com/manual/online-store/os/store-speed/improving-speed#fonts)"
+      },
+      {
+        "type": "range",
+        "id": "heading_scale",
+        "min": 100,
+        "max": 150,
+        "step": 5,
+        "unit": "%",
+        "label": "Heading scale",
+        "default": 100
+      },
+      {
+        "type": "header",
+        "content": "Body text"
+      },
+      {
+        "type": "font_picker",
+        "id": "type_body_font",
+        "default": "roboto",
+        "label": "Font",
+        "info": "Selecting a different font can affect the speed of your store. [Learn more about system fonts.](https://help.shopify.com/manual/online-store/os/store-speed/improving-speed#fonts)"
+      },
+      {
+        "type": "range",
+        "id": "body_scale",
+        "min": 100,
+        "max": 130,
+        "step": 5,
+        "unit": "%",
+        "label": "Body scale",
+        "default": 100
+      }
+    ]
+  },
+  {
+    "name": "Layout",
+    "settings": [
+      {
+        "type": "select",
+        "id": "page_width",
+        "options": [
+          {
+            "value": "1200",
+            "label": "1200px"
+          },
+          {
+            "value": "1400",
+            "label": "1400px"
+          },
+          {
+            "value": "1600",
+            "label": "1600px"
+          },
+          {
+            "value": "1800",
+            "label": "1800px"
+          }
+        ],
+        "default": "1600",
+        "label": "Page width"
+      },
+      {
+        "type": "range",
+        "id": "spacing_sections",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "Spacing between sections",
+        "default": 80
+      },
+      {
+        "type": "header",
+        "content": "Grid"
+      },
+      {
+        "type": "range",
+        "id": "spacing_grid_horizontal",
+        "min": 4,
+        "max": 40,
+        "step": 2,
+        "unit": "px",
+        "label": "Horizontal spacing",
+        "default": 24
+      },
+      {
+        "type": "range",
+        "id": "spacing_grid_vertical",
+        "min": 4,
+        "max": 40,
+        "step": 2,
+        "unit": "px",
+        "label": "Vertical spacing",
+        "default": 24
+      }
+    ]
+  },
+  {
+    "name": "Animations",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Reveal animations"
+      },
+      {
+        "type": "checkbox",
+        "id": "animations_reveal_on_scroll",
+        "label": "Reveal sections on scroll",
+        "default": true,
+        "info": "Sections will animate into view as they're scrolled into the viewport"
+      },
+      {
+        "type": "select",
+        "id": "animations_hover_elements",
+        "options": [
+          {
+            "value": "none",
+            "label": "None"
+          },
+          {
+            "value": "fadeIn",
+            "label": "Fade in"
+          },
+          {
+            "value": "underline",
+            "label": "Underline"
+          }
+        ],
+        "default": "fadeIn",
+        "label": "Hover animations for buttons and links"
+      }
+    ]
+  },
+  {
+    "name": "Performance",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Image optimization"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_lazy_loading",
+        "label": "Enable lazy loading",
+        "default": true,
+        "info": "Images will load as they come into view"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_webp",
+        "label": "Enable WebP format",
+        "default": true,
+        "info": "Use modern image format for better performance"
+      },
+      {
+        "type": "header",
+        "content": "3D Models"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_3d_models",
+        "label": "Enable 3D model viewer",
+        "default": true,
+        "info": "Allow customers to view products in 3D and AR"
+      }
+    ]
+  },
+  {
+    "name": "Products",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Product cards"
+      },
+      {
+        "type": "select",
+        "id": "card_text_alignment",
+        "options": [
+          {
+            "value": "left",
+            "label": "Left"
+          },
+          {
+            "value": "center",
+            "label": "Center"
+          },
+          {
+            "value": "right",
+            "label": "Right"
+          }
+        ],
+        "default": "left",
+        "label": "Text alignment"
+      },
+      {
+        "type": "select",
+        "id": "card_color_scheme",
+        "options": [
+          {
+            "value": "background-1",
+            "label": "Scheme 1"
+          },
+          {
+            "value": "background-2",
+            "label": "Scheme 2"
+          },
+          {
+            "value": "inverse",
+            "label": "Inverse"
+          }
+        ],
+        "default": "background-2",
+        "label": "Color scheme"
+      },
+      {
+        "type": "checkbox",
+        "id": "card_show_vendor",
+        "default": false,
+        "label": "Show vendor"
+      },
+      {
+        "type": "checkbox",
+        "id": "card_show_rating",
+        "default": false,
+        "label": "Show product rating",
+        "info": "To display a rating, add a product rating app. [Learn more](https://help.shopify.com/manual/online-store/themes/theme-structure/theme-features#featured-product-rating)"
+      },
+      {
+        "type": "range",
+        "id": "card_image_padding",
+        "min": 0,
+        "max": 20,
+        "step": 2,
+        "unit": "px",
+        "label": "Image padding",
+        "default": 0
+      },
+      {
+        "type": "range",
+        "id": "card_corner_radius",
+        "min": 0,
+        "max": 40,
+        "step": 4,
+        "unit": "px",
+        "label": "Corner radius",
+        "default": 12
+      },
+      {
+        "type": "range",
+        "id": "card_border_thickness",
+        "min": 0,
+        "max": 24,
+        "step": 1,
+        "unit": "px",
+        "label": "Border thickness",
+        "default": 1
+      },
+      {
+        "type": "range",
+        "id": "card_border_opacity",
+        "min": 0,
+        "max": 100,
+        "step": 5,
+        "unit": "%",
+        "label": "Border opacity",
+        "default": 10
+      },
+      {
+        "type": "range",
+        "id": "card_shadow_opacity",
+        "min": 0,
+        "max": 100,
+        "step": 5,
+        "unit": "%",
+        "label": "Shadow opacity",
+        "default": 20
+      },
+      {
+        "type": "range",
+        "id": "card_shadow_horizontal_offset",
+        "min": -40,
+        "max": 40,
+        "step": 2,
+        "unit": "px",
+        "label": "Horizontal shadow offset",
+        "default": 0
+      },
+      {
+        "type": "range",
+        "id": "card_shadow_vertical_offset",
+        "min": -40,
+        "max": 40,
+        "step": 2,
+        "unit": "px",
+        "label": "Vertical shadow offset",
+        "default": 4
+      },
+      {
+        "type": "range",
+        "id": "card_shadow_blur",
+        "min": 0,
+        "max": 40,
+        "step": 2,
+        "unit": "px",
+        "label": "Shadow blur",
+        "default": 12
+      }
+    ]
+  },
+  {
+    "name": "Media",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Media style"
+      },
+      {
+        "type": "range",
+        "id": "media_padding",
+        "min": 0,
+        "max": 12,
+        "step": 1,
+        "unit": "px",
+        "label": "Padding",
+        "default": 0
+      },
+      {
+        "type": "range",
+        "id": "media_border_opacity",
+        "min": 0,
+        "max": 100,
+        "step": 5,
+        "unit": "%",
+        "label": "Border opacity",
+        "default": 5
+      },
+      {
+        "type": "range",
+        "id": "media_border_thickness",
+        "min": 0,
+        "max": 20,
+        "step": 1,
+        "unit": "px",
+        "label": "Border thickness",
+        "default": 1
+      },
+      {
+        "type": "range",
+        "id": "media_radius",
+        "min": 0,
+        "max": 40,
+        "step": 4,
+        "unit": "px",
+        "label": "Corner radius",
+        "default": 8
+      },
+      {
+        "type": "range",
+        "id": "media_shadow_opacity",
+        "min": 0,
+        "max": 100,
+        "step": 5,
+        "unit": "%",
+        "label": "Shadow opacity",
+        "default": 0
+      },
+      {
+        "type": "range",
+        "id": "media_shadow_horizontal_offset",
+        "min": -40,
+        "max": 40,
+        "step": 2,
+        "unit": "px",
+        "label": "Horizontal shadow offset",
+        "default": 0
+      },
+      {
+        "type": "range",
+        "id": "media_shadow_vertical_offset",
+        "min": -40,
+        "max": 40,
+        "step": 2,
+        "unit": "px",
+        "label": "Vertical shadow offset",
+        "default": 4
+      },
+      {
+        "type": "range",
+        "id": "media_shadow_blur",
+        "min": 0,
+        "max": 40,
+        "step": 2,
+        "unit": "px",
+        "label": "Shadow blur",
+        "default": 5
+      }
+    ]
+  },
+  {
+    "name": "Cart",
+    "settings": [
+      {
+        "type": "select",
+        "id": "cart_type",
+        "options": [
+          {
+            "value": "notification",
+            "label": "Notification"
+          },
+          {
+            "value": "drawer",
+            "label": "Drawer"
+          },
+          {
+            "value": "page",
+            "label": "Page"
+          }
+        ],
+        "default": "drawer",
+        "label": "Cart type"
+      },
+      {
+        "type": "color_scheme",
+        "id": "cart_notification_color_scheme",
+        "label": "Color scheme",
+        "default": "background-1"
+      }
+    ]
+  },
+  {
+    "name": "Social media",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Social accounts"
+      },
+      {
+        "type": "text",
+        "id": "social_twitter_link",
+        "label": "Twitter"
+      },
+      {
+        "type": "text",
+        "id": "social_facebook_link",
+        "label": "Facebook"
+      },
+      {
+        "type": "text",
+        "id": "social_pinterest_link",
+        "label": "Pinterest"
+      },
+      {
+        "type": "text",
+        "id": "social_instagram_link",
+        "label": "Instagram"
+      },
+      {
+        "type": "text",
+        "id": "social_tiktok_link",
+        "label": "TikTok"
+      },
+      {
+        "type": "text",
+        "id": "social_tumblr_link",
+        "label": "Tumblr"
+      },
+      {
+        "type": "text",
+        "id": "social_snapchat_link",
+        "label": "Snapchat"
+      },
+      {
+        "type": "text",
+        "id": "social_youtube_link",
+        "label": "YouTube"
+      },
+      {
+        "type": "text",
+        "id": "social_vimeo_link",
+        "label": "Vimeo"
+      }
+    ]
+  },
+  {
+    "name": "Search",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "predictive_search_enabled",
+        "default": true,
+        "label": "Enable predictive search"
+      }
+    ]
+  }
+]

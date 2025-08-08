@@ -1,0 +1,656 @@
+{{ 'section-lifestyle-imagery.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="royal-lifestyle-imagery section-{{ section.id }}-padding color-{{ section.settings.color_scheme }}">
+  <div class="{% if section.settings.full_width %}royal-container--full{% else %}page-width{% endif %}">
+    
+    {%- if section.settings.heading != blank or section.settings.description != blank -%}
+      <div class="royal-lifestyle-imagery__header" data-reveal="fade-in">
+        {%- if section.settings.heading != blank -%}
+          <h2 class="royal-heading-1 royal-lifestyle-imagery__heading">
+            {{ section.settings.heading }}
+          </h2>
+        {%- endif -%}
+        
+        {%- if section.settings.description != blank -%}
+          <div class="royal-body royal-lifestyle-imagery__description">
+            {{ section.settings.description }}
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="royal-lifestyle-imagery__content">
+      {%- if section.settings.layout == 'mosaic' -%}
+        <div class="royal-lifestyle-mosaic" data-reveal="slide-in-up" data-reveal-delay="200">
+          {%- for block in section.blocks -%}
+            {%- case block.type -%}
+              {%- when 'lifestyle_image' -%}
+                <div class="royal-lifestyle-item royal-lifestyle-item--{{ block.settings.size }}" 
+                     data-block-id="{{ block.id }}"
+                     data-animate-delay="{{ forloop.index | times: 150 }}">
+                  
+                  <div class="royal-lifestyle-item__media" data-parallax="{{ block.settings.parallax_speed }}">
+                    {%- if block.settings.image != blank -%}
+                      <img
+                        srcset="
+                          {%- if block.settings.image.width >= 375 -%}{{ block.settings.image | image_url: width: 375 }} 375w,{%- endif -%}
+                          {%- if block.settings.image.width >= 750 -%}{{ block.settings.image | image_url: width: 750 }} 750w,{%- endif -%}
+                          {%- if block.settings.image.width >= 1100 -%}{{ block.settings.image | image_url: width: 1100 }} 1100w,{%- endif -%}
+                          {%- if block.settings.image.width >= 1500 -%}{{ block.settings.image | image_url: width: 1500 }} 1500w,{%- endif -%}
+                          {{ block.settings.image | image_url }} {{ block.settings.image.width }}w
+                        "
+                        src="{{ block.settings.image | image_url: width: 1100 }}"
+                        alt="{{ block.settings.image.alt | default: block.settings.title | escape }}"
+                        class="royal-lifestyle-item__image"
+                        loading="lazy"
+                        width="{{ block.settings.image.width }}"
+                        height="{{ block.settings.image.height }}"
+                      >
+                    {%- else -%}
+                      {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg royal-lifestyle-item__placeholder' }}
+                    {%- endif -%}
+
+                    {%- if section.settings.show_overlay -%}
+                      <div class="royal-lifestyle-item__overlay" 
+                           style="opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};"></div>
+                    {%- endif -%}
+                  </div>
+
+                  {%- if block.settings.title != blank or block.settings.description != blank -%}
+                    <div class="royal-lifestyle-item__content">
+                      {%- if block.settings.title != blank -%}
+                        <h3 class="royal-lifestyle-item__title royal-heading-3">
+                          {{ block.settings.title }}
+                        </h3>
+                      {%- endif -%}
+                      
+                      {%- if block.settings.description != blank -%}
+                        <div class="royal-lifestyle-item__description royal-body">
+                          {{ block.settings.description }}
+                        </div>
+                      {%- endif -%}
+                      
+                      {%- if block.settings.button_text != blank -%}
+                        <div class="royal-lifestyle-item__action">
+                          <a href="{{ block.settings.button_url }}" 
+                             class="royal-btn royal-btn--{{ block.settings.button_style }}">
+                            {{ block.settings.button_text }}
+                            <svg class="royal-btn__arrow" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                              <path d="M8.22 2.97a.75.75 0 011.06 0L13.53 7.22a.75.75 0 010 1.06L9.28 12.53a.75.75 0 01-1.06-1.06L11.69 8 8.22 4.53a.75.75 0 010-1.06z"/>
+                            </svg>
+                          </a>
+                        </div>
+                      {%- endif -%}
+                    </div>
+                  {%- endif -%}
+
+                  {%- if block.settings.show_play_button and block.settings.video_url != blank -%}
+                    <button class="royal-lifestyle-item__play-btn" 
+                            data-video-url="{{ block.settings.video_url }}"
+                            aria-label="Play video">
+                      <svg width="60" height="60" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M8 5v14l11-7z"/>
+                      </svg>
+                    </button>
+                  {%- endif -%}
+                </div>
+            {%- endcase -%}
+          {%- endfor -%}
+        </div>
+      {%- else -%}
+        {%- comment -%} Slider Layout {%- endcomment -%}
+        <div class="royal-lifestyle-slider" 
+             data-reveal="slide-in-up" 
+             data-reveal-delay="200"
+             data-autoplay="{{ section.settings.autoplay }}"
+             data-autoplay-delay="{{ section.settings.autoplay_delay }}">
+          
+          <div class="royal-lifestyle-slider__track">
+            {%- for block in section.blocks -%}
+              {%- case block.type -%}
+                {%- when 'lifestyle_image' -%}
+                  <div class="royal-lifestyle-slide{% if forloop.first %} active{% endif %}" 
+                       data-slide-index="{{ forloop.index0 }}"
+                       data-block-id="{{ block.id }}">
+                    
+                    <div class="royal-lifestyle-slide__media" data-parallax="{{ block.settings.parallax_speed }}">
+                      {%- if block.settings.image != blank -%}
+                        <img
+                          srcset="
+                            {%- if block.settings.image.width >= 750 -%}{{ block.settings.image | image_url: width: 750 }} 750w,{%- endif -%}
+                            {%- if block.settings.image.width >= 1100 -%}{{ block.settings.image | image_url: width: 1100 }} 1100w,{%- endif -%}
+                            {%- if block.settings.image.width >= 1500 -%}{{ block.settings.image | image_url: width: 1500 }} 1500w,{%- endif -%}
+                            {%- if block.settings.image.width >= 2000 -%}{{ block.settings.image | image_url: width: 2000 }} 2000w,{%- endif -%}
+                            {%- if block.settings.image.width >= 3000 -%}{{ block.settings.image | image_url: width: 3000 }} 3000w,{%- endif -%}
+                            {{ block.settings.image | image_url }} {{ block.settings.image.width }}w
+                          "
+                          src="{{ block.settings.image | image_url: width: 1500 }}"
+                          alt="{{ block.settings.image.alt | default: block.settings.title | escape }}"
+                          class="royal-lifestyle-slide__image"
+                          loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+                          width="{{ block.settings.image.width }}"
+                          height="{{ block.settings.image.height }}"
+                        >
+                      {%- else -%}
+                        {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg royal-lifestyle-slide__placeholder' }}
+                      {%- endif -%}
+
+                      {%- if section.settings.show_overlay -%}
+                        <div class="royal-lifestyle-slide__overlay" 
+                             style="opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};"></div>
+                      {%- endif -%}
+                    </div>
+
+                    {%- if block.settings.title != blank or block.settings.description != blank -%}
+                      <div class="royal-lifestyle-slide__content">
+                        <div class="royal-lifestyle-slide__content-inner">
+                          {%- if block.settings.title != blank -%}
+                            <h3 class="royal-lifestyle-slide__title royal-heading-1">
+                              {{ block.settings.title }}
+                            </h3>
+                          {%- endif -%}
+                          
+                          {%- if block.settings.description != blank -%}
+                            <div class="royal-lifestyle-slide__description royal-body">
+                              {{ block.settings.description }}
+                            </div>
+                          {%- endif -%}
+                          
+                          {%- if block.settings.button_text != blank -%}
+                            <div class="royal-lifestyle-slide__action">
+                              <a href="{{ block.settings.button_url }}" 
+                                 class="royal-btn royal-btn--{{ block.settings.button_style }}"
+                                 data-magnetic>
+                                {{ block.settings.button_text }}
+                                <svg class="royal-btn__arrow" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                                  <path d="M8.22 2.97a.75.75 0 011.06 0L13.53 7.22a.75.75 0 010 1.06L9.28 12.53a.75.75 0 01-1.06-1.06L11.69 8 8.22 4.53a.75.75 0 010-1.06z"/>
+                                </svg>
+                              </a>
+                            </div>
+                          {%- endif -%}
+                        </div>
+                      </div>
+                    {%- endif -%}
+                  </div>
+              {%- endcase -%}
+            {%- endfor -%}
+          </div>
+
+          {%- if section.settings.show_navigation and section.blocks.size > 1 -%}
+            <div class="royal-lifestyle-slider__navigation">
+              <button class="royal-lifestyle-slider__nav-btn royal-lifestyle-slider__nav-btn--prev" 
+                      aria-label="Previous slide">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                </svg>
+              </button>
+              
+              <button class="royal-lifestyle-slider__nav-btn royal-lifestyle-slider__nav-btn--next" 
+                      aria-label="Next slide">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+                </svg>
+              </button>
+            </div>
+          {%- endif -%}
+
+          {%- if section.settings.show_pagination and section.blocks.size > 1 -%}
+            <div class="royal-lifestyle-slider__pagination">
+              {%- for block in section.blocks -%}
+                <button class="royal-lifestyle-slider__pagination-dot{% if forloop.first %} active{% endif %}" 
+                        data-slide-index="{{ forloop.index0 }}"
+                        aria-label="Go to slide {{ forloop.index }}">
+                </button>
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const lifestyleSection = document.querySelector('.royal-lifestyle-imagery');
+    if (!lifestyleSection) return;
+
+    // Initialize parallax effects
+    const parallaxElements = lifestyleSection.querySelectorAll('[data-parallax]');
+    let ticking = false;
+
+    const updateParallax = () => {
+      const scrollY = window.pageYOffset;
+      
+      parallaxElements.forEach(element => {
+        const speed = parseFloat(element.dataset.parallax) || 0.1;
+        const rect = element.getBoundingClientRect();
+        const elementTop = rect.top + scrollY;
+        const elementHeight = rect.height;
+        const windowHeight = window.innerHeight;
+        
+        // Only apply parallax when element is in viewport
+        if (rect.bottom >= 0 && rect.top <= windowHeight) {
+          const yPos = (scrollY - elementTop) * speed;
+          element.style.transform = `translate3d(0, ${yPos}px, 0)`;
+        }
+      });
+      
+      ticking = false;
+    };
+
+    const requestParallaxUpdate = () => {
+      if (!ticking) {
+        requestAnimationFrame(updateParallax);
+        ticking = true;
+      }
+    };
+
+    window.addEventListener('scroll', requestParallaxUpdate, { passive: true });
+
+    // Initialize slider functionality
+    const slider = lifestyleSection.querySelector('.royal-lifestyle-slider');
+    if (slider) {
+      const slides = slider.querySelectorAll('.royal-lifestyle-slide');
+      const prevBtn = slider.querySelector('.royal-lifestyle-slider__nav-btn--prev');
+      const nextBtn = slider.querySelector('.royal-lifestyle-slider__nav-btn--next');
+      const paginationDots = slider.querySelectorAll('.royal-lifestyle-slider__pagination-dot');
+      let currentSlide = 0;
+      let autoplayInterval;
+
+      const showSlide = (index) => {
+        slides.forEach((slide, i) => {
+          slide.classList.toggle('active', i === index);
+        });
+        
+        paginationDots.forEach((dot, i) => {
+          dot.classList.toggle('active', i === index);
+        });
+        
+        currentSlide = index;
+        
+        // Update navigation buttons
+        if (prevBtn) prevBtn.disabled = index === 0;
+        if (nextBtn) nextBtn.disabled = index === slides.length - 1;
+      };
+
+      const nextSlide = () => {
+        const next = (currentSlide + 1) % slides.length;
+        showSlide(next);
+      };
+
+      const prevSlide = () => {
+        const prev = (currentSlide - 1 + slides.length) % slides.length;
+        showSlide(prev);
+      };
+
+      // Navigation button handlers
+      if (nextBtn) {
+        nextBtn.addEventListener('click', nextSlide);
+      }
+      
+      if (prevBtn) {
+        prevBtn.addEventListener('click', prevSlide);
+      }
+
+      // Pagination dot handlers
+      paginationDots.forEach((dot, index) => {
+        dot.addEventListener('click', () => showSlide(index));
+      });
+
+      // Autoplay
+      if (slider.dataset.autoplay === 'true') {
+        const autoplayDelay = parseInt(slider.dataset.autoplayDelay) || 5000;
+        
+        const startAutoplay = () => {
+          autoplayInterval = setInterval(nextSlide, autoplayDelay);
+        };
+
+        const stopAutoplay = () => {
+          clearInterval(autoplayInterval);
+        };
+
+        startAutoplay();
+
+        // Pause on hover
+        slider.addEventListener('mouseenter', stopAutoplay);
+        slider.addEventListener('mouseleave', startAutoplay);
+
+        // Pause when tab is not visible
+        document.addEventListener('visibilitychange', () => {
+          if (document.hidden) {
+            stopAutoplay();
+          } else {
+            startAutoplay();
+          }
+        });
+      }
+
+      // Initialize
+      showSlide(0);
+    }
+
+    // Video play button functionality
+    const playButtons = lifestyleSection.querySelectorAll('.royal-lifestyle-item__play-btn');
+    playButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        const videoUrl = this.dataset.videoUrl;
+        if (videoUrl && window.RoyalEquips) {
+          // Open video modal (implement in main theme JS)
+          console.log('Play video:', videoUrl);
+        }
+      });
+    });
+
+    // Intersection Observer for fade effects
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, {
+      threshold: 0.1,
+      rootMargin: '50px 0px -50px 0px'
+    });
+
+    const fadeElements = lifestyleSection.querySelectorAll('[data-fade-scroll]');
+    fadeElements.forEach(element => {
+      element.style.opacity = '0';
+      element.style.transform = 'translateY(30px)';
+      element.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+      observer.observe(element);
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Lifestyle Imagery",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "default": "Lifestyle Excellence",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "default": "<p>Experience the Royal Equips lifestyle through stunning automotive imagery and premium experiences.</p>",
+      "label": "Description"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "options": [
+        {
+          "value": "slider",
+          "label": "Slider"
+        },
+        {
+          "value": "mosaic",
+          "label": "Mosaic"
+        }
+      ],
+      "default": "slider",
+      "label": "Layout style"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "default": true,
+      "label": "Full width layout"
+    },
+    {
+      "type": "header",
+      "content": "Slider Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "default": true,
+      "label": "Autoplay slides"
+    },
+    {
+      "type": "range",
+      "id": "autoplay_delay",
+      "min": 3000,
+      "max": 10000,
+      "step": 500,
+      "unit": "ms",
+      "label": "Autoplay delay",
+      "default": 5000
+    },
+    {
+      "type": "checkbox",
+      "id": "show_navigation",
+      "default": true,
+      "label": "Show navigation arrows"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_pagination",
+      "default": true,
+      "label": "Show pagination dots"
+    },
+    {
+      "type": "header",
+      "content": "Visual Effects"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_overlay",
+      "default": true,
+      "label": "Show image overlay"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "unit": "%",
+      "label": "Overlay opacity",
+      "default": 30
+    },
+    {
+      "type": "header",
+      "content": "Section Settings"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "background-1"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 80
+    }
+  ],
+  "blocks": [
+    {
+      "type": "lifestyle_image",
+      "name": "Lifestyle Image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "select",
+          "id": "size",
+          "options": [
+            {
+              "value": "small",
+              "label": "Small"
+            },
+            {
+              "value": "medium",
+              "label": "Medium"
+            },
+            {
+              "value": "large",
+              "label": "Large"
+            }
+          ],
+          "default": "medium",
+          "label": "Size (mosaic layout only)"
+        },
+        {
+          "type": "range",
+          "id": "parallax_speed",
+          "min": 0,
+          "max": 1,
+          "step": 0.1,
+          "label": "Parallax speed",
+          "default": 0.2,
+          "info": "0 = no parallax, 1 = maximum parallax"
+        },
+        {
+          "type": "header",
+          "content": "Content"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "title",
+          "default": "Premium Experience",
+          "label": "Title"
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "default": "<p>Discover the epitome of automotive luxury and performance.</p>",
+          "label": "Description"
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button text"
+        },
+        {
+          "type": "url",
+          "id": "button_url",
+          "label": "Button URL"
+        },
+        {
+          "type": "select",
+          "id": "button_style",
+          "options": [
+            {
+              "value": "primary",
+              "label": "Primary"
+            },
+            {
+              "value": "secondary",
+              "label": "Secondary"
+            },
+            {
+              "value": "metallic",
+              "label": "Metallic"
+            }
+          ],
+          "default": "primary",
+          "label": "Button style"
+        },
+        {
+          "type": "header",
+          "content": "Video"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_play_button",
+          "default": false,
+          "label": "Show video play button"
+        },
+        {
+          "type": "video_url",
+          "id": "video_url",
+          "accept": ["youtube", "vimeo"],
+          "label": "Video URL"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Lifestyle Imagery",
+      "blocks": [
+        {
+          "type": "lifestyle_image",
+          "settings": {
+            "title": "Premium Performance",
+            "description": "<p>Experience unmatched automotive excellence.</p>",
+            "button_text": "Explore",
+            "size": "large"
+          }
+        },
+        {
+          "type": "lifestyle_image",
+          "settings": {
+            "title": "Cutting-Edge Technology",
+            "description": "<p>Innovation meets luxury in every detail.</p>",
+            "button_text": "Learn More",
+            "size": "medium"
+          }
+        },
+        {
+          "type": "lifestyle_image",
+          "settings": {
+            "title": "Exclusive Design",
+            "description": "<p>Crafted for the most discerning drivers.</p>",
+            "button_text": "Shop Now",
+            "size": "medium"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

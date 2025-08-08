@@ -1,6 +1,6 @@
-﻿# Intelligent Storefront Cloner
+# Royal Equips - Premium Car-Tech Shopify Theme
 
-Een geavanceerde tool voor het analyseren, repliceren en deployen van e-commerce storefronts met behulp van AI-technologie.
+A luxury Shopify theme designed specifically for the automotive technology niche, inspired by the sophisticated architecture and interaction patterns of premium brands like Rolex, but fully adapted for high-end car-tech products and accessories.
 
 ##  Features
 

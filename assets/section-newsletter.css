@@ -1,0 +1,436 @@
+/* Royal Equips Newsletter Section */
+
+.royal-newsletter {
+  position: relative;
+  background: var(--gradient-metallic);
+  overflow: hidden;
+}
+
+.royal-newsletter__container {
+  position: relative;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: var(--space-2xl);
+  background: var(--gradient-metallic);
+  border: 1px solid rgba(0, 191, 255, 0.2);
+  border-radius: var(--border-radius-xl);
+  box-shadow: var(--shadow-xl);
+  text-align: center;
+}
+
+.royal-newsletter__container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--gradient-blue);
+  border-radius: var(--border-radius-xl) var(--border-radius-xl) 0 0;
+}
+
+/* Background Elements */
+.royal-newsletter__bg-elements {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.royal-bg-element {
+  position: absolute;
+  background: rgba(0, 191, 255, 0.1);
+  border: 1px solid rgba(0, 191, 255, 0.2);
+  border-radius: 50%;
+  animation: float 8s ease-in-out infinite;
+}
+
+.royal-bg-element--1 {
+  width: 120px;
+  height: 120px;
+  top: 10%;
+  left: -60px;
+  animation-delay: 0s;
+}
+
+.royal-bg-element--2 {
+  width: 80px;
+  height: 80px;
+  bottom: 20%;
+  right: -40px;
+  animation-delay: 2s;
+}
+
+.royal-bg-element--3 {
+  width: 60px;
+  height: 60px;
+  top: 60%;
+  left: -30px;
+  animation-delay: 4s;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+    opacity: 0.3;
+  }
+  25% {
+    transform: translateY(-10px) rotate(90deg);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateY(-20px) rotate(180deg);
+    opacity: 0.4;
+  }
+  75% {
+    transform: translateY(-10px) rotate(270deg);
+    opacity: 0.6;
+  }
+}
+
+/* Content */
+.royal-newsletter__content {
+  position: relative;
+  z-index: 2;
+}
+
+.royal-newsletter__icon {
+  margin-bottom: var(--space-lg);
+}
+
+.royal-newsletter__icon img {
+  filter: brightness(0) invert(1);
+  opacity: 0.8;
+}
+
+.royal-newsletter__heading {
+  margin-bottom: var(--space-lg);
+  background: var(--gradient-blue);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 30px rgba(0, 191, 255, 0.3);
+}
+
+.royal-newsletter__description {
+  margin-bottom: var(--space-xl);
+  color: var(--color-royal-silver);
+  font-size: clamp(1rem, 2.2vw, 1.125rem);
+  line-height: 1.6;
+}
+
+/* Form */
+.royal-newsletter__form {
+  margin-bottom: var(--space-xl);
+}
+
+.royal-newsletter__form-group {
+  display: flex;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+.royal-newsletter__input-wrapper {
+  position: relative;
+  flex: 1;
+}
+
+.royal-newsletter__input {
+  width: 100%;
+  padding: var(--space-md) var(--space-lg);
+  background: rgba(26, 26, 26, 0.6);
+  color: #ffffff;
+  border: 2px solid rgba(192, 192, 192, 0.2);
+  border-radius: var(--border-radius-md);
+  font-size: 1rem;
+  transition: var(--transition-base);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.royal-newsletter__input::placeholder {
+  color: rgba(192, 192, 192, 0.6);
+}
+
+.royal-newsletter__input:focus {
+  outline: none;
+  border-color: var(--color-royal-blue);
+  box-shadow: 0 0 0 3px rgba(0, 191, 255, 0.2);
+  background: rgba(26, 26, 26, 0.8);
+}
+
+.royal-newsletter__input-focus {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--gradient-blue);
+  transition: width 0.3s ease;
+  border-radius: 0 0 var(--border-radius-md) var(--border-radius-md);
+}
+
+.royal-newsletter__input-wrapper.focused .royal-newsletter__input-focus {
+  width: 100%;
+}
+
+.royal-newsletter__input-wrapper.valid .royal-newsletter__input {
+  border-color: #28a745;
+}
+
+.royal-newsletter__input-wrapper.invalid .royal-newsletter__input {
+  border-color: #dc3545;
+}
+
+.royal-newsletter__submit {
+  position: relative;
+  min-width: 140px;
+  padding: var(--space-md) var(--space-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  transition: var(--transition-base);
+}
+
+.royal-newsletter__submit-loading {
+  display: none;
+}
+
+.royal-newsletter__submit.loading .royal-newsletter__submit-text,
+.royal-newsletter__submit.loading .royal-newsletter__submit-icon {
+  display: none;
+}
+
+.royal-newsletter__submit.loading .royal-newsletter__submit-loading {
+  display: block;
+}
+
+.royal-loading-spinner {
+  animation: spin 1s linear infinite;
+}
+
+.royal-newsletter__submit-icon {
+  transition: transform 0.3s ease;
+}
+
+.royal-newsletter__submit:hover .royal-newsletter__submit-icon {
+  transform: translateX(4px);
+}
+
+/* Success & Error Messages */
+.royal-newsletter__success,
+.royal-newsletter__error {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  border-radius: var(--border-radius-md);
+  font-weight: 500;
+  animation: slideInUp 0.5s ease;
+}
+
+.royal-newsletter__success {
+  background: rgba(40, 167, 69, 0.1);
+  color: #28a745;
+  border: 1px solid rgba(40, 167, 69, 0.3);
+}
+
+.royal-newsletter__error {
+  background: rgba(220, 53, 69, 0.1);
+  color: #dc3545;
+  border: 1px solid rgba(220, 53, 69, 0.3);
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Privacy Notice */
+.royal-newsletter__privacy {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-lg);
+  font-size: 0.875rem;
+  color: rgba(192, 192, 192, 0.7);
+}
+
+.royal-newsletter__privacy svg {
+  opacity: 0.6;
+}
+
+/* Social Links */
+.royal-newsletter__social {
+  text-align: center;
+}
+
+.royal-newsletter__social-label {
+  display: block;
+  margin-bottom: var(--space-md);
+  color: var(--color-royal-silver);
+}
+
+.royal-newsletter__social-links {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-md);
+}
+
+.royal-newsletter__social-link {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(26, 26, 26, 0.6);
+  color: var(--color-royal-silver);
+  border: 1px solid rgba(192, 192, 192, 0.2);
+  border-radius: 50%;
+  text-decoration: none;
+  transition: var(--transition-base);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.royal-newsletter__social-link:hover {
+  background: rgba(0, 191, 255, 0.2);
+  color: var(--color-royal-blue);
+  border-color: var(--color-royal-blue);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .royal-newsletter__container {
+    padding: var(--space-xl) var(--space-lg);
+  }
+  
+  .royal-newsletter__form-group {
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+  
+  .royal-newsletter__submit {
+    width: 100%;
+    min-width: auto;
+  }
+  
+  .royal-newsletter__social-links {
+    gap: var(--space-sm);
+  }
+  
+  .royal-newsletter__social-link {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+@media (max-width: 480px) {
+  .royal-newsletter__container {
+    padding: var(--space-lg);
+    margin: 0 var(--space-md);
+  }
+  
+  .royal-newsletter__input {
+    padding: var(--space-sm) var(--space-md);
+  }
+  
+  .royal-newsletter__submit {
+    padding: var(--space-sm) var(--space-md);
+  }
+  
+  .royal-bg-element {
+    display: none; /* Hide floating elements on very small screens */
+  }
+}
+
+/* Performance optimizations */
+.royal-newsletter__input-focus {
+  will-change: width;
+}
+
+.royal-newsletter__submit-icon {
+  will-change: transform;
+}
+
+/* Accessibility */
+.royal-newsletter__input:focus {
+  outline: 2px solid var(--color-royal-blue);
+  outline-offset: 2px;
+}
+
+.royal-newsletter__submit:focus {
+  outline: 2px solid var(--color-royal-blue);
+  outline-offset: 2px;
+}
+
+.royal-newsletter__social-link:focus {
+  outline: 2px solid var(--color-royal-blue);
+  outline-offset: 2px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .royal-bg-element {
+    animation: none;
+  }
+  
+  .royal-loading-spinner {
+    animation: none;
+  }
+  
+  .royal-newsletter__submit-icon {
+    transition: none;
+  }
+  
+  .royal-newsletter__success,
+  .royal-newsletter__error {
+    animation: none;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .royal-newsletter__container {
+    border: 2px solid var(--color-royal-silver);
+  }
+  
+  .royal-newsletter__input,
+  .royal-newsletter__social-link {
+    border: 2px solid currentColor;
+  }
+  
+  .royal-newsletter__success,
+  .royal-newsletter__error {
+    border: 2px solid currentColor;
+  }
+}
+
+/* Print styles */
+@media print {
+  .royal-newsletter__bg-elements,
+  .royal-newsletter__social {
+    display: none;
+  }
+  
+  .royal-newsletter__container {
+    background: none;
+    border: 1px solid #000;
+    box-shadow: none;
+    color: #000;
+  }
+}
