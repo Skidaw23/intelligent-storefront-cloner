@@ -1,4 +1,5 @@
 {{ 'elite-hero.css' | asset_url | stylesheet_tag }}
+{{ 'royal-equips-placeholders.css' | asset_url | stylesheet_tag }}
 
 {%- liquid
   assign hero_height = section.settings.hero_height | default: 'medium'
@@ -79,8 +80,12 @@
         loading: 'eager',
         alt: section.settings.hero_image.alt | default: 'Hero background' }}
     {%- else -%}
-      <div class="elite-hero__placeholder">
-        {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg' }}
+      <div class="elite-hero__placeholder royal-equips-hero-placeholder">
+        <div class="royal-equips-hero-content">
+          <div class="royal-equips-crown"></div>
+          <h2 class="royal-equips-hero-title">Royal Equips</h2>
+          <p class="royal-equips-hero-subtitle">Luxury Automotive Technology</p>
+        </div>
       </div>
     {%- endif -%}
 

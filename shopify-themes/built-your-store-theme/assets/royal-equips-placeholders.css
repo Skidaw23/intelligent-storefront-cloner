@@ -1,0 +1,348 @@
+/* Royal Equips Brand Placeholders */
+/* Luxury Automotive Theme Placeholder Images */
+
+.royal-equips-placeholder {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 25%, #2d2d2d 75%, #0a0a0a 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.royal-equips-placeholder::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle at 20% 80%, rgba(212, 175, 55, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(0, 100, 0, 0.08) 0%, transparent 50%),
+    linear-gradient(45deg, rgba(212, 175, 55, 0.03) 25%, transparent 25%, transparent 75%, rgba(212, 175, 55, 0.03) 75%);
+  background-size: 600px 600px, 800px 800px, 60px 60px;
+  animation: royalShimmer 8s ease-in-out infinite;
+}
+
+@keyframes royalShimmer {
+  0%, 100% {
+    opacity: 0.6;
+    transform: translateX(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateX(20px);
+  }
+}
+
+.royal-equips-logo-placeholder {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  color: #d4af37;
+}
+
+.royal-equips-crown {
+  width: 80px;
+  height: 60px;
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.royal-equips-crown::before,
+.royal-equips-crown::after {
+  content: '';
+  position: absolute;
+  background: linear-gradient(135deg, #d4af37, #f4e479);
+}
+
+/* Crown base */
+.royal-equips-crown::before {
+  bottom: 0;
+  left: 10%;
+  right: 10%;
+  height: 20px;
+  border-radius: 0 0 4px 4px;
+}
+
+/* Crown peaks */
+.royal-equips-crown::after {
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-bottom: 40px solid #d4af37;
+}
+
+.royal-equips-brand-text {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-weight: 300;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+.royal-equips-brand-title {
+  font-size: 2rem;
+  margin: 0 0 0.5rem 0;
+  background: linear-gradient(135deg, #d4af37, #f4e479);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.royal-equips-brand-subtitle {
+  font-size: 0.875rem;
+  color: #888;
+  margin: 0;
+  font-weight: 400;
+}
+
+/* Hero Banner Placeholder */
+.royal-equips-hero-placeholder {
+  width: 100%;
+  height: 70vh;
+  min-height: 500px;
+  background: linear-gradient(135deg, 
+    #0a0a0a 0%, 
+    #1a1a1a 20%,
+    #2d2d2d 40%,
+    #1a1a1a 60%,
+    #0a0a0a 100%
+  );
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.royal-equips-hero-placeholder::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background-image: 
+    radial-gradient(circle at 30% 70%, rgba(212, 175, 55, 0.15) 0%, transparent 40%),
+    radial-gradient(circle at 70% 30%, rgba(0, 100, 0, 0.1) 0%, transparent 40%);
+  animation: royalPulse 6s ease-in-out infinite alternate;
+}
+
+@keyframes royalPulse {
+  0% {
+    transform: rotate(0deg) scale(1);
+    opacity: 0.6;
+  }
+  100% {
+    transform: rotate(5deg) scale(1.1);
+    opacity: 0.9;
+  }
+}
+
+.royal-equips-hero-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  max-width: 600px;
+  padding: 2rem;
+}
+
+.royal-equips-hero-content .royal-equips-crown {
+  margin-bottom: 2rem;
+}
+
+.royal-equips-hero-title {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 300;
+  margin: 0 0 1rem 0;
+  background: linear-gradient(135deg, #d4af37, #f4e479, #d4af37);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.royal-equips-hero-subtitle {
+  font-size: 1.25rem;
+  color: #ccc;
+  margin: 0 0 2rem 0;
+  font-weight: 300;
+  line-height: 1.4;
+}
+
+/* Technology Section Placeholder */
+.royal-equips-tech-placeholder {
+  width: 100%;
+  height: 400px;
+  background: radial-gradient(ellipse at center, #1a2332 0%, #0a0a0a 100%);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.royal-equips-tech-placeholder::before {
+  content: '';
+  position: absolute;
+  top: 20%;
+  left: 20%;
+  right: 20%;
+  bottom: 20%;
+  background: linear-gradient(45deg, 
+    transparent 25%, 
+    rgba(212, 175, 55, 0.1) 25%, 
+    rgba(212, 175, 55, 0.1) 50%, 
+    transparent 50%, 
+    transparent 75%, 
+    rgba(212, 175, 55, 0.1) 75%
+  );
+  background-size: 20px 20px;
+  animation: techGrid 4s linear infinite;
+}
+
+@keyframes techGrid {
+  0% {
+    transform: translateX(0) translateY(0);
+  }
+  100% {
+    transform: translateX(20px) translateY(20px);
+  }
+}
+
+.royal-equips-tech-icon {
+  position: relative;
+  z-index: 2;
+  width: 100px;
+  height: 100px;
+  border: 3px solid #d4af37;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(212, 175, 55, 0.1);
+}
+
+.royal-equips-tech-icon::before {
+  content: '⚙';
+  font-size: 3rem;
+  color: #d4af37;
+  animation: techRotate 3s linear infinite;
+}
+
+@keyframes techRotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Exclusivity Section Placeholder */
+.royal-equips-exclusive-placeholder {
+  width: 100%;
+  height: 400px;
+  background: linear-gradient(135deg, #2d1b1b 0%, #1a1a1a 50%, #1b2d1b 100%);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.royal-equips-exclusive-placeholder::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 10px,
+      rgba(212, 175, 55, 0.05) 10px,
+      rgba(212, 175, 55, 0.05) 20px
+    );
+  animation: exclusiveShine 5s ease-in-out infinite;
+}
+
+@keyframes exclusiveShine {
+  0%, 100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.royal-equips-exclusive-badge {
+  position: relative;
+  z-index: 2;
+  width: 120px;
+  height: 120px;
+  border: 2px solid #d4af37;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.2) 0%, transparent 70%);
+  text-align: center;
+  color: #d4af37;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.royal-equips-exclusive-badge::before {
+  content: '★';
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  animation: exclusivePulse 2s ease-in-out infinite;
+}
+
+@keyframes exclusivePulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .royal-equips-hero-placeholder {
+    height: 50vh;
+    min-height: 400px;
+  }
+  
+  .royal-equips-hero-title {
+    font-size: 2rem;
+  }
+  
+  .royal-equips-hero-subtitle {
+    font-size: 1rem;
+  }
+  
+  .royal-equips-crown {
+    width: 60px;
+    height: 45px;
+  }
+  
+  .royal-equips-brand-title {
+    font-size: 1.5rem;
+  }
+}
