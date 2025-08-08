@@ -1,0 +1,33 @@
+// =============================================================================
+// ROLEX PRODUCT CARD STYLES
+// =============================================================================
+
+.rolex-product-card {
+  @include rolex-card(default);
+  overflow: hidden;
+  cursor: pointer;
+  
+  .rolex-product-image {
+    position: relative;
+    overflow: hidden;
+    @include rolex-aspect-ratio(1);
+    
+    img {
+      transition: transform map-get($rolex-transitions, luxury);
+    }
+  }
+  
+  .rolex-product-content {
+    padding: map-get($rolex-spacing, 4);
+  }
+  
+  .rolex-product-title {
+    font-weight: map-get($rolex-font-weights, medium);
+    margin-bottom: map-get($rolex-spacing, 2);
+  }
+  
+  .rolex-product-price {
+    font-weight: map-get($rolex-font-weights, bold);
+    color: var(--rolex-gold);
+  }
+}

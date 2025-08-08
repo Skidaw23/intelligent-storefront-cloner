@@ -1,0 +1,942 @@
+<!-- 
+=============================================================================
+ROLEX CINEMATIC HERO SECTION - Premium Video Background with 3D Integration
+=============================================================================
+-->
+
+<div class="rolex-cinematic-hero" 
+     id="section-{{ section.id }}"
+     data-section-type="rolex-cinematic-hero"
+     data-section-id="{{ section.id }}">
+  
+  <!-- Background Video/Image -->
+  <div class="rolex-hero-background">
+    {%- if section.settings.hero_video != blank -%}
+      <div class="rolex-hero-video-container">
+        <video 
+          class="rolex-hero-video" 
+          autoplay 
+          muted 
+          loop 
+          playsinline
+          poster="{{ section.settings.hero_image | image_url: width: 1920 }}"
+          data-animate="parallax" 
+          data-speed="0.3">
+          <source src="{{ section.settings.hero_video }}" type="video/mp4">
+          <source src="{{ section.settings.hero_video_webm }}" type="video/webm">
+        </video>
+        <div class="rolex-video-overlay" style="background: linear-gradient({{ section.settings.overlay_angle }}deg, 
+          {{ section.settings.overlay_color_1 | color_modify: 'alpha', section.settings.overlay_opacity_1 }},
+          {{ section.settings.overlay_color_2 | color_modify: 'alpha', section.settings.overlay_opacity_2 }});"></div>
+      </div>
+    {%- elsif section.settings.hero_image != blank -%}
+      <div class="rolex-hero-image-container">
+        {%- liquid
+          assign image_height = section.settings.hero_image.width | divided_by: section.settings.hero_image.aspect_ratio | round
+          assign sizes = '100vw'
+        -%}
+        {{ section.settings.hero_image | image_url: width: 1920 | image_tag: 
+           loading: 'eager',
+           fetchpriority: 'high',
+           width: section.settings.hero_image.width,
+           height: image_height,
+           sizes: sizes,
+           alt: section.settings.hero_image.alt | default: section.settings.hero_title,
+           class: 'rolex-hero-image',
+           data-animate: 'parallax',
+           data-speed: '0.5'
+        }}
+        <div class="rolex-image-overlay" style="background: linear-gradient({{ section.settings.overlay_angle }}deg, 
+          {{ section.settings.overlay_color_1 | color_modify: 'alpha', section.settings.overlay_opacity_1 }},
+          {{ section.settings.overlay_color_2 | color_modify: 'alpha', section.settings.overlay_opacity_2 }});"></div>
+      </div>
+    {%- endif -%}
+  </div>
+
+  <!-- 3D Watch Model Container (if enabled) -->
+  {%- if section.settings.enable_3d_model and section.settings.watch_3d_model != blank -%}
+    <div class="rolex-3d-container" 
+         data-3d-model="{{ section.settings.watch_3d_model }}"
+         data-3d-environment="{{ section.settings.environment_map | default: '' }}"
+         data-3d-quality="{{ section.settings.model_quality | default: 'high' }}"
+         data-3d-autorotate="{{ section.settings.auto_rotate | default: true }}"
+         data-animate="fade-in">
+      <div id="rolex-3d-viewer-{{ section.id }}" class="rolex-3d-viewer"></div>
+      
+      <!-- 3D Model Loading Indicator -->
+      <div class="rolex-3d-loading">
+        <div class="rolex-loading-spinner"></div>
+        <p class="rolex-loading-text">{{ section.settings.loading_text | default: 'Loading Premium Experience...' }}</p>
+        <div class="rolex-loading-progress">
+          <div class="rolex-progress-bar"></div>
+        </div>
+      </div>
+    </div>
+  {%- endif -%}
+
+  <!-- Hero Content -->
+  <div class="rolex-hero-content">
+    <div class="rolex-container">
+      <div class="rolex-hero-inner" data-animate="fade-in">
+        
+        {%- if section.settings.hero_eyebrow != blank -%}
+          <p class="rolex-hero-eyebrow" data-animate="slide-luxury" data-direction="up">
+            {{ section.settings.hero_eyebrow }}
+          </p>
+        {%- endif -%}
+
+        {%- if section.settings.hero_title != blank -%}
+          <h1 class="rolex-hero-title" data-animate="slide-luxury" data-direction="left">
+            {%- liquid
+              assign title_parts = section.settings.hero_title | split: '[highlight]'
+              if title_parts.size > 1
+                assign before_highlight = title_parts[0]
+                assign highlight_parts = title_parts[1] | split: '[/highlight]'
+                assign highlighted_text = highlight_parts[0]
+                assign after_highlight = highlight_parts[1]
+                
+                echo before_highlight
+                echo '<span class="rolex-text-highlight">' | append: highlighted_text | append: '</span>'
+                echo after_highlight
+              else
+                echo section.settings.hero_title
+              endif
+            -%}
+          </h1>
+        {%- endif -%}
+
+        {%- if section.settings.hero_subtitle != blank -%}
+          <p class="rolex-hero-subtitle" data-animate="slide-luxury" data-direction="right">
+            {{ section.settings.hero_subtitle }}
+          </p>
+        {%- endif -%}
+
+        {%- if section.settings.hero_description != blank -%}
+          <div class="rolex-hero-description" data-animate="fade-in">
+            {{ section.settings.hero_description }}
+          </div>
+        {%- endif -%}
+
+        <!-- Call-to-Action Buttons -->
+        {%- if section.settings.primary_button_text != blank or section.settings.secondary_button_text != blank -%}
+          <div class="rolex-hero-buttons" data-animate="stagger" data-stagger="0.2">
+            
+            {%- if section.settings.primary_button_text != blank -%}
+              <a href="{{ section.settings.primary_button_url | default: '#' }}" 
+                 class="rolex-button rolex-button--primary rolex-button--{{ section.settings.primary_button_style | default: 'luxury' }}">
+                <span class="rolex-button-text">{{ section.settings.primary_button_text }}</span>
+                {%- if section.settings.primary_button_icon != blank -%}
+                  <span class="rolex-button-icon">
+                    {%- render 'rolex-icon', icon: section.settings.primary_button_icon -%}
+                  </span>
+                {%- endif -%}
+              </a>
+            {%- endif -%}
+
+            {%- if section.settings.secondary_button_text != blank -%}
+              <a href="{{ section.settings.secondary_button_url | default: '#' }}" 
+                 class="rolex-button rolex-button--secondary rolex-button--{{ section.settings.secondary_button_style | default: 'outline' }}">
+                <span class="rolex-button-text">{{ section.settings.secondary_button_text }}</span>
+                {%- if section.settings.secondary_button_icon != blank -%}
+                  <span class="rolex-button-icon">
+                    {%- render 'rolex-icon', icon: section.settings.secondary_button_icon -%}
+                  </span>
+                {%- endif -%}
+              </a>
+            {%- endif -%}
+
+          </div>
+        {%- endif -%}
+
+        <!-- Trust Indicators -->
+        {%- if section.settings.show_trust_indicators -%}
+          <div class="rolex-trust-indicators" data-animate="fade-in">
+            {%- for block in section.blocks -%}
+              {%- case block.type -%}
+                {%- when 'trust_indicator' -%}
+                  <div class="rolex-trust-item" {{ block.shopify_attributes }}>
+                    {%- if block.settings.trust_icon != blank -%}
+                      <div class="rolex-trust-icon">
+                        {%- render 'rolex-icon', icon: block.settings.trust_icon -%}
+                      </div>
+                    {%- endif -%}
+                    {%- if block.settings.trust_text != blank -%}
+                      <span class="rolex-trust-text">{{ block.settings.trust_text }}</span>
+                    {%- endif -%}
+                  </div>
+              {%- endcase -%}
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Scroll Indicator -->
+  {%- if section.settings.show_scroll_indicator -%}
+    <div class="rolex-scroll-indicator" data-animate="fade-in">
+      <div class="rolex-scroll-icon">
+        {%- render 'rolex-icon', icon: 'chevron-down' -%}
+      </div>
+      <p class="rolex-scroll-text">{{ section.settings.scroll_text | default: 'Discover More' }}</p>
+    </div>
+  {%- endif -%}
+
+</div>
+
+<!-- Section Styles -->
+<style>
+.rolex-cinematic-hero {
+  position: relative;
+  min-height: {{ section.settings.section_height }}vh;
+  display: flex;
+  align-items: {{ section.settings.content_alignment }};
+  justify-content: center;
+  overflow: hidden;
+  color: {{ section.settings.text_color | default: '#ffffff' }};
+  background-color: {{ section.settings.fallback_color | default: '#0c0c0c' }};
+}
+
+.rolex-hero-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.rolex-hero-video-container,
+.rolex-hero-image-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.rolex-hero-video,
+.rolex-hero-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: {{ section.settings.focal_point | default: 'center center' }};
+}
+
+.rolex-video-overlay,
+.rolex-image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.rolex-3d-container {
+  position: absolute;
+  top: 50%;
+  right: {{ section.settings.model_position_x | default: 10 }}%;
+  transform: translateY(-50%);
+  width: {{ section.settings.model_width | default: 40 }}%;
+  height: {{ section.settings.model_height | default: 60 }}vh;
+  z-index: 5;
+}
+
+.rolex-3d-viewer {
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 32px 64px rgba(0,0,0,0.15);
+}
+
+.rolex-hero-content {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  padding: 2rem 0;
+}
+
+.rolex-hero-inner {
+  max-width: {{ section.settings.content_width | default: 600 }}px;
+  text-align: {{ section.settings.text_alignment | default: 'left' }};
+}
+
+.rolex-hero-eyebrow {
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: {{ section.settings.eyebrow_color | default: 'var(--rolex-gold)' }};
+  margin-bottom: 1rem;
+}
+
+.rolex-hero-title {
+  font-size: clamp(2.5rem, 5vw, {{ section.settings.title_size | default: 4 }}rem);
+  font-weight: {{ section.settings.title_weight | default: 700 }};
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+  text-shadow: {{ section.settings.text_shadow | default: '0 2px 10px rgba(0,0,0,0.3)' }};
+}
+
+.rolex-text-highlight {
+  background: linear-gradient(135deg, var(--rolex-gold), var(--rolex-champagne));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.rolex-hero-subtitle {
+  font-size: clamp(1.25rem, 2.5vw, {{ section.settings.subtitle_size | default: 1.5 }}rem);
+  font-weight: {{ section.settings.subtitle_weight | default: 400 }};
+  margin-bottom: 2rem;
+  opacity: 0.9;
+}
+
+.rolex-hero-description {
+  font-size: 1.125rem;
+  line-height: 1.6;
+  margin-bottom: 2.5rem;
+  opacity: 0.8;
+}
+
+.rolex-hero-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 3rem;
+}
+
+.rolex-trust-indicators {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  opacity: 0.7;
+}
+
+.rolex-trust-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.rolex-scroll-indicator {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  z-index: 10;
+  animation: rolex-bounce 2s infinite;
+}
+
+@keyframes rolex-bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateX(-50%) translateY(0);
+  }
+  40% {
+    transform: translateX(-50%) translateY(-10px);
+  }
+  60% {
+    transform: translateX(-50%) translateY(-5px);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .rolex-cinematic-hero {
+    min-height: {{ section.settings.mobile_height | default: 80 }}vh;
+  }
+  
+  .rolex-3d-container {
+    display: {{ section.settings.hide_3d_mobile | default: false }};
+    position: static;
+    width: 100%;
+    height: 40vh;
+    margin-bottom: 2rem;
+    transform: none;
+  }
+  
+  .rolex-hero-inner {
+    text-align: center;
+  }
+  
+  .rolex-hero-buttons {
+    justify-content: center;
+  }
+  
+  .rolex-trust-indicators {
+    justify-content: center;
+  }
+}
+
+/* 3D Loading Styles */
+.rolex-3d-loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: var(--rolex-deep-black);
+}
+
+.rolex-loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(163, 126, 44, 0.3);
+  border-top: 3px solid var(--rolex-gold);
+  border-radius: 50%;
+  animation: rolex-spin 1s linear infinite;
+  margin: 0 auto 1rem;
+}
+
+@keyframes rolex-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.rolex-loading-progress {
+  width: 200px;
+  height: 2px;
+  background: rgba(163, 126, 44, 0.2);
+  border-radius: 1px;
+  overflow: hidden;
+  margin: 1rem auto 0;
+}
+
+.rolex-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--rolex-gold), var(--rolex-green));
+  width: 0%;
+  transition: width 0.3s ease;
+}
+</style>
+
+<!-- Section JavaScript -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const section = document.getElementById('section-{{ section.id }}');
+  const viewer3D = section.querySelector('.rolex-3d-container');
+  
+  if (viewer3D && typeof createWatch3DViewer !== 'undefined') {
+    const modelUrl = viewer3D.dataset['3dModel'];
+    const environmentUrl = viewer3D.dataset['3dEnvironment'];
+    const quality = viewer3D.dataset['3dQuality'];
+    const autoRotate = viewer3D.dataset['3dAutorotate'] === 'true';
+    
+    const viewerContainer = viewer3D.querySelector('.rolex-3d-viewer');
+    const loadingContainer = viewer3D.querySelector('.rolex-3d-loading');
+    const progressBar = loadingContainer.querySelector('.rolex-progress-bar');
+    
+    // Initialize 3D viewer
+    const watch3D = createWatch3DViewer(viewerContainer, modelUrl, {
+      environmentUrl: environmentUrl || undefined,
+      quality: quality,
+      autoRotate: autoRotate,
+      enableControls: true
+    }, {
+      onProgress: (progress) => {
+        progressBar.style.width = progress + '%';
+      },
+      onLoad: () => {
+        loadingContainer.style.opacity = '0';
+        setTimeout(() => {
+          loadingContainer.style.display = 'none';
+        }, 300);
+      },
+      onError: (error) => {
+        console.error('3D Model loading failed:', error);
+        loadingContainer.innerHTML = '<p>Unable to load 3D model</p>';
+      }
+    });
+  }
+  
+  // Optimize video performance
+  const video = section.querySelector('.rolex-hero-video');
+  if (video) {
+    // Pause video when not visible to save bandwidth
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          video.play();
+        } else {
+          video.pause();
+        }
+      });
+    });
+    observer.observe(section);
+  }
+});
+</script>
+
+{%- schema -%}
+{
+  "name": "🎬 Rolex Cinematic Hero",
+  "tag": "section",
+  "class": "rolex-section rolex-hero-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "🎥 Background Media"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Hero Background Image",
+      "info": "Recommended: 1920x1080px for best quality"
+    },
+    {
+      "type": "text",
+      "id": "hero_video",
+      "label": "Hero Background Video (MP4 URL)",
+      "info": "Upload video to Shopify Files and paste URL here"
+    },
+    {
+      "type": "text",
+      "id": "hero_video_webm",
+      "label": "Hero Background Video (WebM URL)",
+      "info": "Optional WebM version for better browser support"
+    },
+    {
+      "type": "select",
+      "id": "focal_point",
+      "label": "Image/Video Focal Point",
+      "options": [
+        { "value": "center center", "label": "Center" },
+        { "value": "top center", "label": "Top Center" },
+        { "value": "bottom center", "label": "Bottom Center" },
+        { "value": "center left", "label": "Center Left" },
+        { "value": "center right", "label": "Center Right" }
+      ],
+      "default": "center center"
+    },
+    {
+      "type": "header",
+      "content": "🎨 Overlay Settings"
+    },
+    {
+      "type": "color",
+      "id": "overlay_color_1",
+      "label": "Overlay Color 1",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity_1",
+      "label": "Overlay Opacity 1",
+      "min": 0,
+      "max": 1,
+      "step": 0.1,
+      "default": 0.4
+    },
+    {
+      "type": "color",
+      "id": "overlay_color_2",
+      "label": "Overlay Color 2",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity_2",
+      "label": "Overlay Opacity 2",
+      "min": 0,
+      "max": 1,
+      "step": 0.1,
+      "default": 0.2
+    },
+    {
+      "type": "range",
+      "id": "overlay_angle",
+      "label": "Overlay Gradient Angle",
+      "min": 0,
+      "max": 360,
+      "step": 15,
+      "default": 135,
+      "unit": "deg"
+    },
+    {
+      "type": "header",
+      "content": "🏗️ Section Layout"
+    },
+    {
+      "type": "range",
+      "id": "section_height",
+      "label": "Section Height (Desktop)",
+      "min": 50,
+      "max": 120,
+      "step": 5,
+      "default": 100,
+      "unit": "vh"
+    },
+    {
+      "type": "range",
+      "id": "mobile_height",
+      "label": "Section Height (Mobile)",
+      "min": 50,
+      "max": 120,
+      "step": 5,
+      "default": 80,
+      "unit": "vh"
+    },
+    {
+      "type": "select",
+      "id": "content_alignment",
+      "label": "Content Vertical Alignment",
+      "options": [
+        { "value": "flex-start", "label": "Top" },
+        { "value": "center", "label": "Center" },
+        { "value": "flex-end", "label": "Bottom" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "color",
+      "id": "fallback_color",
+      "label": "Fallback Background Color",
+      "default": "#0c0c0c"
+    },
+    {
+      "type": "header",
+      "content": "📝 Content Settings"
+    },
+    {
+      "type": "text",
+      "id": "hero_eyebrow",
+      "label": "Eyebrow Text",
+      "default": "A Crown for Every Achievement"
+    },
+    {
+      "type": "textarea",
+      "id": "hero_title",
+      "label": "Hero Title",
+      "default": "The [highlight]Crown[/highlight] Collection",
+      "info": "Use [highlight] and [/highlight] to add gold gradient text"
+    },
+    {
+      "type": "textarea",
+      "id": "hero_subtitle",
+      "label": "Hero Subtitle",
+      "default": "Discover the pinnacle of Swiss watchmaking craftsmanship"
+    },
+    {
+      "type": "richtext",
+      "id": "hero_description",
+      "label": "Hero Description"
+    },
+    {
+      "type": "range",
+      "id": "content_width",
+      "label": "Content Max Width",
+      "min": 400,
+      "max": 800,
+      "step": 50,
+      "default": 600,
+      "unit": "px"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text Alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "header",
+      "content": "🎨 Typography Styling"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "eyebrow_color",
+      "label": "Eyebrow Text Color",
+      "default": "#A37E2C"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "label": "Title Size (Desktop)",
+      "min": 2,
+      "max": 8,
+      "step": 0.5,
+      "default": 4,
+      "unit": "rem"
+    },
+    {
+      "type": "range",
+      "id": "subtitle_size",
+      "label": "Subtitle Size",
+      "min": 1,
+      "max": 3,
+      "step": 0.1,
+      "default": 1.5,
+      "unit": "rem"
+    },
+    {
+      "type": "select",
+      "id": "title_weight",
+      "label": "Title Font Weight",
+      "options": [
+        { "value": "300", "label": "Light" },
+        { "value": "400", "label": "Regular" },
+        { "value": "500", "label": "Medium" },
+        { "value": "700", "label": "Bold" },
+        { "value": "900", "label": "Black" }
+      ],
+      "default": "700"
+    },
+    {
+      "type": "text",
+      "id": "text_shadow",
+      "label": "Text Shadow CSS",
+      "default": "0 2px 10px rgba(0,0,0,0.3)",
+      "info": "CSS text-shadow property"
+    },
+    {
+      "type": "header",
+      "content": "🔘 Primary Button"
+    },
+    {
+      "type": "text",
+      "id": "primary_button_text",
+      "label": "Primary Button Text",
+      "default": "Explore Collection"
+    },
+    {
+      "type": "url",
+      "id": "primary_button_url",
+      "label": "Primary Button URL"
+    },
+    {
+      "type": "select",
+      "id": "primary_button_style",
+      "label": "Primary Button Style",
+      "options": [
+        { "value": "luxury", "label": "Luxury Gradient" },
+        { "value": "primary", "label": "Primary Solid" },
+        { "value": "premium", "label": "Premium Gold" }
+      ],
+      "default": "luxury"
+    },
+    {
+      "type": "select",
+      "id": "primary_button_icon",
+      "label": "Primary Button Icon",
+      "options": [
+        { "value": "", "label": "None" },
+        { "value": "arrow-right", "label": "Arrow Right" },
+        { "value": "play", "label": "Play" },
+        { "value": "crown", "label": "Crown" }
+      ],
+      "default": "arrow-right"
+    },
+    {
+      "type": "header",
+      "content": "🔘 Secondary Button"
+    },
+    {
+      "type": "text",
+      "id": "secondary_button_text",
+      "label": "Secondary Button Text",
+      "default": "Watch Story"
+    },
+    {
+      "type": "url",
+      "id": "secondary_button_url",
+      "label": "Secondary Button URL"
+    },
+    {
+      "type": "select",
+      "id": "secondary_button_style",
+      "label": "Secondary Button Style",
+      "options": [
+        { "value": "outline", "label": "Outline" },
+        { "value": "ghost", "label": "Ghost" },
+        { "value": "secondary", "label": "Secondary" }
+      ],
+      "default": "outline"
+    },
+    {
+      "type": "select",
+      "id": "secondary_button_icon",
+      "label": "Secondary Button Icon",
+      "options": [
+        { "value": "", "label": "None" },
+        { "value": "play", "label": "Play" },
+        { "value": "film", "label": "Film" },
+        { "value": "external-link", "label": "External Link" }
+      ],
+      "default": "play"
+    },
+    {
+      "type": "header",
+      "content": "🥇 3D Model Integration"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_3d_model",
+      "label": "Enable 3D Watch Model",
+      "default": false,
+      "info": "Requires 3D model file uploaded to Shopify Files"
+    },
+    {
+      "type": "text",
+      "id": "watch_3d_model",
+      "label": "3D Model URL (.glb/.gltf)",
+      "info": "Upload 3D model to Shopify Files and paste URL here"
+    },
+    {
+      "type": "text",
+      "id": "environment_map",
+      "label": "Environment Map URL (.hdr/.exr)",
+      "info": "Optional: HDR environment map for realistic reflections"
+    },
+    {
+      "type": "select",
+      "id": "model_quality",
+      "label": "3D Model Quality",
+      "options": [
+        { "value": "low", "label": "Low (Better Performance)" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "high", "label": "High" },
+        { "value": "ultra", "label": "Ultra (Best Quality)" }
+      ],
+      "default": "high"
+    },
+    {
+      "type": "checkbox",
+      "id": "auto_rotate",
+      "label": "Auto Rotate 3D Model",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "model_width",
+      "label": "3D Model Width",
+      "min": 20,
+      "max": 60,
+      "step": 5,
+      "default": 40,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "model_height",
+      "label": "3D Model Height",
+      "min": 40,
+      "max": 80,
+      "step": 5,
+      "default": 60,
+      "unit": "vh"
+    },
+    {
+      "type": "range",
+      "id": "model_position_x",
+      "label": "3D Model Horizontal Position",
+      "min": 0,
+      "max": 50,
+      "step": 5,
+      "default": 10,
+      "unit": "%"
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_3d_mobile",
+      "label": "Hide 3D Model on Mobile",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "loading_text",
+      "label": "3D Loading Text",
+      "default": "Loading Premium Experience..."
+    },
+    {
+      "type": "header",
+      "content": "✨ Additional Features"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_trust_indicators",
+      "label": "Show Trust Indicators",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_scroll_indicator",
+      "label": "Show Scroll Indicator",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "scroll_text",
+      "label": "Scroll Indicator Text",
+      "default": "Discover More"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "trust_indicator",
+      "name": "Trust Indicator",
+      "settings": [
+        {
+          "type": "select",
+          "id": "trust_icon",
+          "label": "Trust Icon",
+          "options": [
+            { "value": "shield", "label": "Shield" },
+            { "value": "award", "label": "Award" },
+            { "value": "clock", "label": "Clock" },
+            { "value": "star", "label": "Star" },
+            { "value": "truck", "label": "Delivery" },
+            { "value": "lock", "label": "Security" }
+          ],
+          "default": "shield"
+        },
+        {
+          "type": "text",
+          "id": "trust_text",
+          "label": "Trust Text",
+          "default": "Swiss Made Excellence"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "🎬 Rolex Cinematic Hero",
+      "blocks": [
+        {
+          "type": "trust_indicator",
+          "settings": {
+            "trust_icon": "shield",
+            "trust_text": "Swiss Made Excellence"
+          }
+        },
+        {
+          "type": "trust_indicator",
+          "settings": {
+            "trust_icon": "award",
+            "trust_text": "Since 1905"
+          }
+        },
+        {
+          "type": "trust_indicator",
+          "settings": {
+            "trust_icon": "clock",
+            "trust_text": "Perpetual Precision"
+          }
+        }
+      ]
+    }
+  ]
+}
+{%- endschema -%}

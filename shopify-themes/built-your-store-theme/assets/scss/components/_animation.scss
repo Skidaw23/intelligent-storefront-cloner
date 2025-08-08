@@ -1,0 +1,43 @@
+// =============================================================================
+// ROLEX ANIMATION COMPONENT STYLES
+// =============================================================================
+
+// Animation utilities for GSAP integration
+.rolex-animate {
+  will-change: transform, opacity;
+}
+
+// 3D optimizations
+.rolex-3d-optimized {
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+// Loading animations
+@keyframes rolex-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes rolex-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes rolex-fade-in {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.rolex-loading {
+  animation: rolex-spin 1s linear infinite;
+}
+
+.rolex-pulse {
+  animation: rolex-pulse 2s ease-in-out infinite;
+}
+
+.rolex-fade-in {
+  animation: rolex-fade-in 0.6s ease-out;
+}

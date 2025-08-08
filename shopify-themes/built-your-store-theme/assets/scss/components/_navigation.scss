@@ -1,0 +1,27 @@
+// =============================================================================
+// ROLEX NAVIGATION STYLES
+// =============================================================================
+
+.rolex-nav-link {
+  position: relative;
+  color: var(--rolex-deep-black);
+  text-decoration: none;
+  font-weight: map-get($rolex-font-weights, medium);
+  transition: color map-get($rolex-transitions, base);
+  
+  .rolex-nav-underline {
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--rolex-gold);
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform map-get($rolex-transitions, base);
+  }
+  
+  &:hover {
+    color: var(--rolex-gold);
+  }
+}

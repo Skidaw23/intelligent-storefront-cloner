@@ -1,0 +1,9 @@
+// =============================================================================
+// ROLEX FOOTER STYLES  
+// =============================================================================
+
+.rolex-footer {
+  background: var(--rolex-deep-black);
+  color: var(--rolex-pearl-white);
+  padding: map-get($rolex-spacing, 16) 0;
+}
