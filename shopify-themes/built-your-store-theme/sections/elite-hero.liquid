@@ -1,0 +1,524 @@
+{{ 'elite-hero.css' | asset_url | stylesheet_tag }}
+{{ 'royal-equips-placeholders.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign hero_height = section.settings.hero_height | default: 'medium'
+  assign overlay_opacity = section.settings.overlay_opacity | default: 30
+  assign text_alignment = section.settings.text_alignment | default: 'center'
+  assign enable_parallax = section.settings.enable_parallax | default: false
+  assign animation_type = section.settings.animation_type | default: 'fade'
+-%}
+
+<section 
+  id="elite-hero-{{ section.id }}" 
+  class="elite-hero elite-hero--{{ hero_height }} elite-hero--{{ text_alignment }}{% if enable_parallax %} elite-hero--parallax{% endif %}"
+  data-section-id="{{ section.id }}"
+  data-animation="{{ animation_type }}"
+>
+  {%- style -%}
+    #elite-hero-{{ section.id }} {
+      --elite-hero-overlay-opacity: {{ overlay_opacity }}%;
+      --elite-hero-text-color: {{ section.settings.text_color | default: '#ffffff' }};
+      --elite-hero-accent-color: {{ section.settings.accent_color | default: '#d4af37' }};
+      --elite-hero-button-bg: {{ section.settings.button_background | default: '#d4af37' }};
+      --elite-hero-button-text: {{ section.settings.button_text_color | default: '#000000' }};
+    }
+
+    .elite-hero--small { height: 50vh; min-height: 400px; }
+    .elite-hero--medium { height: 70vh; min-height: 500px; }
+    .elite-hero--large { height: 90vh; min-height: 600px; }
+    .elite-hero--fullscreen { height: 100vh; min-height: 600px; }
+
+    @media (max-width: 749px) {
+      .elite-hero--small { height: 40vh; min-height: 300px; }
+      .elite-hero--medium { height: 50vh; min-height: 400px; }
+      .elite-hero--large { height: 60vh; min-height: 450px; }
+      .elite-hero--fullscreen { height: 70vh; min-height: 500px; }
+    }
+  {%- endstyle -%}
+
+  <div class="elite-hero__media">
+    {%- if section.settings.video_url != blank -%}
+      <div class="elite-hero__video-wrapper">
+        {%- if section.settings.video_url contains 'youtube.com' or section.settings.video_url contains 'youtu.be' -%}
+          {%- assign video_id = section.settings.video_url | split: 'v=' | last | split: '&' | first -%}
+          {%- if section.settings.video_url contains 'youtu.be' -%}
+            {%- assign video_id = section.settings.video_url | split: '/' | last | split: '?' | first -%}
+          {%- endif -%}
+          <iframe 
+            src="https://www.youtube.com/embed/{{ video_id }}?autoplay=1&mute=1&loop=1&controls=0&playlist={{ video_id }}&rel=0&modestbranding=1"
+            frameborder="0" 
+            allow="autoplay; encrypted-media" 
+            allowfullscreen
+            class="elite-hero__video"
+          ></iframe>
+        {%- elsif section.settings.video_url contains 'vimeo.com' -%}
+          {%- assign video_id = section.settings.video_url | split: '/' | last -%}
+          <iframe 
+            src="https://player.vimeo.com/video/{{ video_id }}?autoplay=1&muted=1&loop=1&background=1&controls=0"
+            frameborder="0" 
+            allow="autoplay; fullscreen" 
+            allowfullscreen
+            class="elite-hero__video"
+          ></iframe>
+        {%- endif -%}
+        
+        {%- if section.settings.fallback_image != blank -%}
+          {{ section.settings.fallback_image | image_url: width: 1920 | image_tag: 
+            class: 'elite-hero__fallback-image',
+            sizes: '100vw',
+            widths: '375, 550, 750, 1100, 1500, 1920',
+            loading: 'eager',
+            alt: section.settings.fallback_image.alt | default: 'Hero background' }}
+        {%- endif -%}
+      </div>
+    {%- elsif section.settings.hero_image != blank -%}
+      {{ section.settings.hero_image | image_url: width: 1920 | image_tag: 
+        class: 'elite-hero__image',
+        sizes: '100vw',
+        widths: '375, 550, 750, 1100, 1500, 1920',
+        loading: 'eager',
+        alt: section.settings.hero_image.alt | default: 'Hero background' }}
+    {%- else -%}
+      <div class="elite-hero__placeholder royal-equips-hero-placeholder">
+        <div class="royal-equips-hero-content">
+          <div class="royal-equips-crown"></div>
+          <h2 class="royal-equips-hero-title">Royal Equips</h2>
+          <p class="royal-equips-hero-subtitle">Luxury Automotive Technology</p>
+        </div>
+      </div>
+    {%- endif -%}
+
+    <div class="elite-hero__overlay"></div>
+  </div>
+
+  <div class="elite-hero__content">
+    <div class="elite-hero__content-wrapper page-width">
+      {%- if section.settings.preheading != blank -%}
+        <p class="elite-hero__preheading" data-aos="{{ animation_type }}" data-aos-delay="100">
+          {{ section.settings.preheading }}
+        </p>
+      {%- endif -%}
+
+      {%- if section.settings.heading != blank -%}
+        <h1 class="elite-hero__heading {{ section.settings.heading_size }}" data-aos="{{ animation_type }}" data-aos-delay="200">
+          {{ section.settings.heading }}
+        </h1>
+      {%- endif -%}
+
+      {%- if section.settings.subheading != blank -%}
+        <div class="elite-hero__subheading" data-aos="{{ animation_type }}" data-aos-delay="300">
+          {{ section.settings.subheading }}
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.button_label != blank -%}
+        <div class="elite-hero__buttons" data-aos="{{ animation_type }}" data-aos-delay="400">
+          <a 
+            href="{{ section.settings.button_link | default: '#' }}"
+            class="elite-hero__btn btn btn--primary{% if section.settings.button_style == 'outline' %} btn--outline{% endif %}{% if section.settings.button_size != blank %} btn--{{ section.settings.button_size }}{% endif %}"
+            {% if section.settings.button_link == blank %}role="button"{% endif %}
+            {% if section.settings.button_link contains 'http' %}target="_blank" rel="noopener"{% endif %}
+          >
+            {{ section.settings.button_label }}
+          </a>
+
+          {%- if section.settings.secondary_button_label != blank -%}
+            <a 
+              href="{{ section.settings.secondary_button_link | default: '#' }}"
+              class="elite-hero__btn elite-hero__btn--secondary btn btn--secondary{% if section.settings.secondary_button_style == 'outline' %} btn--outline{% endif %}{% if section.settings.button_size != blank %} btn--{{ section.settings.button_size }}{% endif %}"
+              {% if section.settings.secondary_button_link == blank %}role="button"{% endif %}
+              {% if section.settings.secondary_button_link contains 'http' %}target="_blank" rel="noopener"{% endif %}
+            >
+              {{ section.settings.secondary_button_label }}
+            </a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.enable_scroll_indicator -%}
+        <div class="elite-hero__scroll-indicator" data-aos="fade-up" data-aos-delay="500">
+          <span class="elite-hero__scroll-text">{{ section.settings.scroll_text | default: 'Scroll down' }}</span>
+          <div class="elite-hero__scroll-arrow">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M7 14L12 19L17 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M7 5L12 10L17 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{%- if enable_parallax -%}
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const heroSection = document.getElementById('elite-hero-{{ section.id }}');
+      const heroImage = heroSection.querySelector('.elite-hero__image, .elite-hero__video');
+      
+      if (heroImage && window.innerWidth > 768) {
+        window.addEventListener('scroll', function() {
+          const scrolled = window.pageYOffset;
+          const rate = scrolled * -0.5;
+          heroImage.style.transform = `translateY(${rate}px)`;
+        });
+      }
+    });
+  </script>
+{%- endif -%}
+
+<script src="{{ 'elite-hero.js' | asset_url }}" defer="defer"></script>
+
+{% schema %}
+{
+  "name": "Elite Hero Section",
+  "tag": "section",
+  "class": "section elite-hero-section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "🏎️ Hero Media Settings"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Hero Background Image",
+      "info": "Recommended: 1920x1080px for best quality"
+    },
+    {
+      "type": "url",
+      "id": "video_url",
+      "label": "Background Video URL",
+      "info": "YouTube or Vimeo URL. Video will take priority over image."
+    },
+    {
+      "type": "image_picker",
+      "id": "fallback_image",
+      "label": "Video Fallback Image",
+      "info": "Shown when video cannot be loaded (mobile, slow connection)"
+    },
+    {
+      "type": "select",
+      "id": "hero_height",
+      "label": "Hero Height",
+      "options": [
+        {
+          "value": "small",
+          "label": "Small (50vh)"
+        },
+        {
+          "value": "medium",
+          "label": "Medium (70vh)"
+        },
+        {
+          "value": "large",
+          "label": "Large (90vh)"
+        },
+        {
+          "value": "fullscreen",
+          "label": "Full Screen (100vh)"
+        }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Overlay Opacity",
+      "min": 0,
+      "max": 80,
+      "step": 10,
+      "unit": "%",
+      "default": 30
+    },
+    {
+      "type": "header",
+      "content": "📝 Content Settings"
+    },
+    {
+      "type": "text",
+      "id": "preheading",
+      "label": "Preheading",
+      "placeholder": "Royal Equips Premium Collection",
+      "info": "Small text above main heading"
+    },
+    {
+      "type": "richtext",
+      "id": "heading",
+      "label": "Main Heading",
+      "default": "<p>Elevate Your Drive</p>",
+      "info": "Main hero headline"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading Size",
+      "options": [
+        {
+          "value": "h3",
+          "label": "Small"
+        },
+        {
+          "value": "h2",
+          "label": "Medium"
+        },
+        {
+          "value": "h1",
+          "label": "Large"
+        },
+        {
+          "value": "h0",
+          "label": "Extra Large"
+        }
+      ],
+      "default": "h1"
+    },
+    {
+      "type": "richtext",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "<p>Experience luxury automotive technology that transforms every journey into an extraordinary adventure.</p>",
+      "info": "Supporting text below main heading"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text Alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "🔗 Primary Button Settings"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button Text",
+      "default": "Explore Collection"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "Button Style",
+      "options": [
+        {
+          "value": "solid",
+          "label": "Solid"
+        },
+        {
+          "value": "outline",
+          "label": "Outline"
+        }
+      ],
+      "default": "solid"
+    },
+    {
+      "type": "select",
+      "id": "button_size",
+      "label": "Button Size",
+      "options": [
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "header",
+      "content": "🔗 Secondary Button Settings"
+    },
+    {
+      "type": "text",
+      "id": "secondary_button_label",
+      "label": "Secondary Button Text",
+      "placeholder": "Learn More"
+    },
+    {
+      "type": "url",
+      "id": "secondary_button_link",
+      "label": "Secondary Button Link"
+    },
+    {
+      "type": "select",
+      "id": "secondary_button_style",
+      "label": "Secondary Button Style",
+      "options": [
+        {
+          "value": "solid",
+          "label": "Solid"
+        },
+        {
+          "value": "outline",
+          "label": "Outline"
+        }
+      ],
+      "default": "outline"
+    },
+    {
+      "type": "header",
+      "content": "🎨 Color Settings"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent Color (Gold)",
+      "default": "#d4af37",
+      "info": "Used for preheading and decorative elements"
+    },
+    {
+      "type": "color",
+      "id": "button_background",
+      "label": "Primary Button Background",
+      "default": "#d4af37"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Primary Button Text",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "✨ Animation & Effects"
+    },
+    {
+      "type": "select",
+      "id": "animation_type",
+      "label": "Animation Type",
+      "options": [
+        {
+          "value": "fade",
+          "label": "Fade In"
+        },
+        {
+          "value": "fade-up",
+          "label": "Fade Up"
+        },
+        {
+          "value": "fade-down",
+          "label": "Fade Down"
+        },
+        {
+          "value": "slide-left",
+          "label": "Slide Left"
+        },
+        {
+          "value": "slide-right",
+          "label": "Slide Right"
+        },
+        {
+          "value": "zoom-in",
+          "label": "Zoom In"
+        }
+      ],
+      "default": "fade-up"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_parallax",
+      "label": "Enable Parallax Effect",
+      "default": false,
+      "info": "Subtle parallax scrolling effect (desktop only)"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_scroll_indicator",
+      "label": "Show Scroll Indicator",
+      "default": true,
+      "info": "Animated scroll indicator at bottom of hero"
+    },
+    {
+      "type": "text",
+      "id": "scroll_text",
+      "label": "Scroll Indicator Text",
+      "default": "Discover More",
+      "info": "Text shown with scroll indicator"
+    },
+    {
+      "type": "header",
+      "content": "📱 Responsive Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "mobile_text_below",
+      "label": "Mobile Text Below Image",
+      "default": false,
+      "info": "Move text content below image on mobile devices"
+    },
+    {
+      "type": "select",
+      "id": "mobile_text_alignment",
+      "label": "Mobile Text Alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Elite Hero",
+      "settings": {
+        "preheading": "Royal Equips Premium Collection",
+        "heading": "<p>Elevate Your Drive</p>",
+        "subheading": "<p>Experience luxury automotive technology that transforms every journey into an extraordinary adventure.</p>",
+        "button_label": "Explore Collection",
+        "secondary_button_label": "Learn More",
+        "hero_height": "medium",
+        "text_alignment": "center",
+        "animation_type": "fade-up",
+        "enable_scroll_indicator": true
+      }
+    }
+  ]
+}
+{% endschema %}
