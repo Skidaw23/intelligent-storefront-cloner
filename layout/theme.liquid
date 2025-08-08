@@ -32,6 +32,7 @@
 
   <script src="{{ 'constants.js' | asset_url }}" defer="defer"></script>
   <script src="{{ 'pubsub.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'modern-core.js' | asset_url }}" defer="defer"></script>
   <script src="{{ 'global.js' | asset_url }}" defer="defer"></script>
 
   {%- if settings.animations_reveal_on_scroll -%}
@@ -39,6 +40,13 @@
   {%- endif -%}
 
   {{ content_for_header }}
+
+  <!-- Preload critical resources -->
+  <link rel="preload" href="{{ 'modern-base.css' | asset_url }}" as="style">
+  <link rel="preload" href="{{ 'modern-core.js' | asset_url }}" as="script">
+  
+  <!-- Load modern base styles -->
+  <link rel="stylesheet" href="{{ 'modern-base.css' | asset_url }}">
 
   {%- liquid
     assign body_font_bold = settings.type_body_font | font_modify: 'weight', 'bold'

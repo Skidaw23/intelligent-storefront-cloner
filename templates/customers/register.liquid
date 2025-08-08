@@ -1,0 +1,143 @@
+---
+layout: theme
+---
+
+<div class="template-customers-register section-template--16px-space-bottom">
+  <div class="page-width">
+    <h1 class="main-page-title">
+      {{ 'customer.register.title' | t }}
+    </h1>
+    
+    <div class="customer-register">
+      {%- form 'create_customer', novalidate: 'novalidate', class: 'customer-register__form' -%}
+        {%- if form.errors -%}
+          <div class="form__message form__message--error" role="alert">
+            <h3 class="form-status__title" tabindex="-1" autofocus>{{ 'templates.contact.form.error_heading' | t }}</h3>
+            {%- for error in form.errors -%}
+              <p class="form-status__message">
+                {%- if error == 'form' -%}
+                  {{ form.errors.messages[error] }}
+                {%- else -%}
+                  {{ form.errors.translated_fields[error] | capitalize }} {{ form.errors.messages[error] }}
+                {%- endif -%}
+              </p>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+
+        <div class="customer-register__fields">
+          <div class="field">
+            <input
+              type="text"
+              name="customer[first_name]"
+              id="RegisterForm-FirstName"
+              class="field__input"
+              autocomplete="given-name"
+              placeholder="{{ 'customer.register_form.first_name' | t }}"
+              value="{% if form.first_name %}{{ form.first_name }}{% endif %}"
+              {%- if form.errors contains 'first_name' -%}
+                aria-invalid="true"
+                aria-describedby="RegisterForm-FirstName-error"
+              {%- endif -%}
+            >
+            <label for="RegisterForm-FirstName" class="field__label">
+              {{ 'customer.register_form.first_name' | t }}
+            </label>
+            {%- if form.errors contains 'first_name' -%}
+              <small id="RegisterForm-FirstName-error" class="form__message">
+                <span class="visually-hidden">{{ 'accessibility.error' | t }}</span>
+                {{ form.errors.translated_fields['first_name'] | capitalize }} {{ form.errors.messages['first_name'] }}
+              </small>
+            {%- endif -%}
+          </div>
+
+          <div class="field">
+            <input
+              type="text"
+              name="customer[last_name]"
+              id="RegisterForm-LastName"
+              class="field__input"
+              autocomplete="family-name"
+              placeholder="{{ 'customer.register_form.last_name' | t }}"
+              value="{% if form.last_name %}{{ form.last_name }}{% endif %}"
+              {%- if form.errors contains 'last_name' -%}
+                aria-invalid="true"
+                aria-describedby="RegisterForm-LastName-error"
+              {%- endif -%}
+            >
+            <label for="RegisterForm-LastName" class="field__label">
+              {{ 'customer.register_form.last_name' | t }}
+            </label>
+            {%- if form.errors contains 'last_name' -%}
+              <small id="RegisterForm-LastName-error" class="form__message">
+                <span class="visually-hidden">{{ 'accessibility.error' | t }}</span>
+                {{ form.errors.translated_fields['last_name'] | capitalize }} {{ form.errors.messages['last_name'] }}
+              </small>
+            {%- endif -%}
+          </div>
+
+          <div class="field field--full-width">
+            <input
+              type="email"
+              name="customer[email]"
+              id="RegisterForm-email"
+              class="field__input"
+              autocomplete="email"
+              autocorrect="off"
+              autocapitalize="off"
+              placeholder="{{ 'customer.register_form.email' | t }}"
+              value="{% if form.email %}{{ form.email }}{% endif %}"
+              {%- if form.errors contains 'email' -%}
+                aria-invalid="true"
+                aria-describedby="RegisterForm-email-error"
+              {%- endif -%}
+            >
+            <label for="RegisterForm-email" class="field__label">
+              {{ 'customer.register_form.email' | t }}
+            </label>
+            {%- if form.errors contains 'email' -%}
+              <small id="RegisterForm-email-error" class="form__message">
+                <span class="visually-hidden">{{ 'accessibility.error' | t }}</span>
+                {{ form.errors.translated_fields['email'] | capitalize }} {{ form.errors.messages['email'] }}
+              </small>
+            {%- endif -%}
+          </div>
+
+          <div class="field field--full-width">
+            <input
+              type="password"
+              name="customer[password]"
+              id="RegisterForm-password"
+              class="field__input"
+              autocomplete="new-password"
+              placeholder="{{ 'customer.register_form.password' | t }}"
+              {%- if form.errors contains 'password' -%}
+                aria-invalid="true"
+                aria-describedby="RegisterForm-password-error"
+              {%- endif -%}
+            >
+            <label for="RegisterForm-password" class="field__label">
+              {{ 'customer.register_form.password' | t }}
+            </label>
+            {%- if form.errors contains 'password' -%}
+              <small id="RegisterForm-password-error" class="form__message">
+                <span class="visually-hidden">{{ 'accessibility.error' | t }}</span>
+                {{ form.errors.translated_fields['password'] | capitalize }} {{ form.errors.messages['password'] }}
+              </small>
+            {%- endif -%}
+          </div>
+        </div>
+
+        <div class="customer-register__actions">
+          <button type="submit" class="button royal-button royal-button--full-width">
+            {{ 'customer.register_form.submit' | t }}
+          </button>
+          
+          <p class="customer-register__login-link">
+            {{ 'customer.register.login_html' | t: url: routes.account_login_url }}
+          </p>
+        </div>
+      {%- endform -%}
+    </div>
+  </div>
+</div>
